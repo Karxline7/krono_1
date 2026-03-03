@@ -30,7 +30,7 @@ public class AsignacionController {
     }
 
     // =========================
-    // Asignar turno
+    // ASIGNAR TURNO
     // =========================
     @PostMapping
     public ResponseEntity<AsignacionTurno> asignar(@RequestBody AsignarTurnoRequest request) {

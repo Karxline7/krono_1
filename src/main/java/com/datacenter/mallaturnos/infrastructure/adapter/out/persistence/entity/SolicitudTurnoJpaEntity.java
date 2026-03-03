@@ -16,14 +16,14 @@ public class SolicitudTurnoJpaEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "tipo_solicitud", nullable = false)
     private TipoSolicitud tipo;
 
     @Column(name = "motivo_solicitud")
     private String motivoSolicitud;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "estado", nullable = false)
     private EstadoSolicitud estado;
 
     @ManyToOne
