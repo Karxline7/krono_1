@@ -14,8 +14,7 @@ public class DenegarSolicitudUseCase {
         this.solicitudRepository = solicitudRepository;
     }
 
-    public SolicitudTurno ejecutar(Long solicitudId, Long supervisorId,
-                                   String motivoRespuesta) {
+    public SolicitudTurno ejecutar(Long solicitudId) {
         
         var solicitud = solicitudRepository.findById(solicitudId);
         

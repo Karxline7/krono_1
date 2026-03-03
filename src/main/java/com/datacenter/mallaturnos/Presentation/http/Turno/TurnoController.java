@@ -32,6 +32,9 @@ public class TurnoController {
         this.eliminarTurnoUseCase = eliminarTurnoUseCase;
     }
 
+    // =========================
+    // CrEAR TURNO
+    // =========================
     @PostMapping
     public ResponseEntity<Turno> crear(@RequestBody CrearTurnoRequest request) {
         Turno turno = crearTurnoUseCase.ejecutar(
@@ -44,6 +47,9 @@ public class TurnoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(turno);
     }
 
+    // =========================
+    // OBTENER TURNO
+    // =========================
     @GetMapping("/{id}")
     public ResponseEntity<Turno> obtener(@PathVariable Long id) {
         Optional<Turno> turno = obtenerTurnoUseCase.ejecutar(id);
@@ -51,12 +57,18 @@ public class TurnoController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // =========================
+    // LISTAR TURNOS
+    // =========================
     @GetMapping
     public ResponseEntity<List<Turno>> listar() {
         List<Turno> turnos = listarTurnosUseCase.ejecutar();
         return ResponseEntity.ok(turnos);
     }
 
+    // =========================
+    // EDITAR TURNO
+    // =========================
     @PutMapping("/{id}")
     public ResponseEntity<Turno> editar(@PathVariable Long id,
                                         @RequestBody EditarTurnoRequest request) {
@@ -71,6 +83,9 @@ public class TurnoController {
         return ResponseEntity.ok(turno);
     }
 
+    // =========================
+    // ELIMINAR TURNO
+    // =========================
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         eliminarTurnoUseCase.ejecutar(id);

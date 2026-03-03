@@ -32,6 +32,9 @@ public class UsuarioController {
         this.eliminarUsuarioUseCase = eliminarUsuarioUseCase;
     }
 
+    // =========================
+    // CREAR USUARIO
+    // =========================
     @PostMapping
     public ResponseEntity<Usuario> crear(@RequestBody CrearUsuarioRequest request) {
         Usuario usuario = crearUsuarioUseCase.ejecutar(
@@ -46,6 +49,9 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
     }
 
+    // =========================
+    // OBTENER USUARIO
+    // =========================
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> obtener(@PathVariable Long id) {
         Optional<Usuario> usuario = obtenerUsuarioUseCase.ejecutar(id);
@@ -53,12 +59,18 @@ public class UsuarioController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // =========================
+    // LISTAR USUARIOS POR ÁREA
+    // =========================
     @GetMapping("/area/{areaId}")
     public ResponseEntity<List<Usuario>> listarPorArea(@PathVariable Long areaId) {
         List<Usuario> usuarios = listarUsuariosUseCase.listarPorArea(areaId);
         return ResponseEntity.ok(usuarios);
     }
 
+    // =========================
+    // LISTAR USUARIOS POR ROL
+    // =========================
     @GetMapping("/area/{areaId}/rol/{rol}")
     public ResponseEntity<List<Usuario>> listarPorAreaYRol(@PathVariable Long areaId,
                                                            @PathVariable RolType rol) {
@@ -66,6 +78,9 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
+    // =========================
+    // EDITAR USUARIO
+    // =========================
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> editar(@PathVariable Long id,
                                           @RequestBody EditarUsuarioRequest request) {
@@ -82,6 +97,9 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
+    // =========================
+    // ELIMINAR USUARIO
+    // =========================
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         eliminarUsuarioUseCase.ejecutar(id);
