@@ -2,7 +2,7 @@ package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
-import com.datacenter.mallaturnos.domain.model.RolType;
+import com.datacenter.mallaturnos.domain.model.Rol;
 
 import org.springframework.stereotype.Service;
 
@@ -43,7 +43,7 @@ public class ListarUsuariosUseCase {
      * @param rol Rol a filtrar
      * @return Lista de usuarios con ese rol en el área
      */
-    public List<Usuario> listarPorAreaYRol(Long areaId, RolType rol) {
+    public List<Usuario> listarPorAreaYRol(Long areaId, Rol rol) {
         return usuarioRepository.findByAreaIdAndRol(areaId, rol);
     }
 }

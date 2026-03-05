@@ -2,7 +2,7 @@ package com.datacenter.mallaturnos.Presentation.http.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.application.UseCase.Usuario.*;
-import com.datacenter.mallaturnos.domain.model.RolType;
+import com.datacenter.mallaturnos.domain.model.Rol;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,7 +74,7 @@ public class UsuarioController {
     // =========================
     @GetMapping("/area/{areaId}/rol/{rol}")
     public ResponseEntity<List<Usuario>> listarPorAreaYRol(@PathVariable Long areaId,
-                                                           @PathVariable RolType rol) {
+                                                           @PathVariable Rol rol) {
         List<Usuario> usuarios = listarUsuariosUseCase.listarPorAreaYRol(areaId, rol);
         return ResponseEntity.ok(usuarios);
     }
@@ -113,7 +113,7 @@ class CrearUsuarioRequest {
     private Integer numeroDocumento;
     private String tipoDocumento;
     private Integer contrasena;
-    private RolType rol;
+    private Rol rol;
     private Long cargoId;
     private Long areaId;
 
@@ -130,8 +130,8 @@ class CrearUsuarioRequest {
     public Integer getContrasena() { return contrasena; }
     public void setContrasena(Integer contrasena) { this.contrasena = contrasena; }
 
-    public RolType getRol() { return rol; }
-    public void setRol(RolType rol) { this.rol = rol; }
+    public Rol getRol() { return rol; }
+    public void setRol(Rol rol) { this.rol = rol; }
 
     public Long getCargoId() { return cargoId; }
     public void setCargoId(Long cargoId) { this.cargoId = cargoId; }
@@ -144,7 +144,7 @@ class EditarUsuarioRequest {
     private String nombres;
     private String tipoDocumento;
     private Integer contrasena;
-    private RolType rol;
+    private Rol rol;
     private Long cargoId;
     private Long areaId;
     private Boolean activo;
@@ -159,8 +159,8 @@ class EditarUsuarioRequest {
     public Integer getContrasena() { return contrasena; }
     public void setContrasena(Integer contrasena) { this.contrasena = contrasena; }
 
-    public RolType getRol() { return rol; }
-    public void setRol(RolType rol) { this.rol = rol; }
+    public Rol getRol() { return rol; }
+    public void setRol(Rol rol) { this.rol = rol; }
 
     public Long getCargoId() { return cargoId; }
     public void setCargoId(Long cargoId) { this.cargoId = cargoId; }

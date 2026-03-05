@@ -1,9 +1,9 @@
 package com.datacenter.mallaturnos.application.UseCase.Solicitud;
 
 import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
-import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
 import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.port.out.SolicitudRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.out.TipoSolicitudRepositoryPort;
 import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
 
 import org.springframework.stereotype.Service;
@@ -13,16 +13,17 @@ public class SolicitarCambioTurnoUseCase {
 
     private final SolicitudRepositoryPort solicitudRepository;
     private final AsignacionRepositoryPort asignacionRepository;
-
     public SolicitarCambioTurnoUseCase(SolicitudRepositoryPort solicitudRepository,
-                                       AsignacionRepositoryPort asignacionRepository) {
+                                       AsignacionRepositoryPort asignacionRepository,
+                                       TipoSolicitudRepositoryPort tipoSolicitudRepository) {
         this.solicitudRepository = solicitudRepository;
         this.asignacionRepository = asignacionRepository;
     }
 
     public SolicitudTurno ejecutar(Long asignacionId,
-                                   Long funcionarioId,
-                                   String motivoSolicitud) {
+                               Long funcionarioId,
+                               Long tipoSolicitudId,
+                               String motivoSolicitud) {
 
         // Validar que la asignación exista
         var asignacion = asignacionRepository.findById(asignacionId)
@@ -50,7 +51,7 @@ public class SolicitarCambioTurnoUseCase {
         // Crear nueva solicitud
         SolicitudTurno nuevaSolicitud = new SolicitudTurno();
         nuevaSolicitud.setAsignacionTurnoId(asignacionId);
-        nuevaSolicitud.setTipo(TipoSolicitud.CAMBIO);
+        nuevaSolicitud.setTipoSolicitudId(tipoSolicitudId);
         nuevaSolicitud.setMotivoSolicitud(motivoSolicitud);
         nuevaSolicitud.setEstado(EstadoSolicitud.PENDIENTE);
 

@@ -1,6 +1,14 @@
 package com.datacenter.mallaturnos.domain.model;
 
-public enum TipoSolicitud {
-    CAMBIO,
-    ELIMINACION
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class TipoSolicitud {
+    public Long id;
+    private String nombre;
+    private String descripcion;
 }

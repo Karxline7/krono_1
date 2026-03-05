@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/api/solicitudes")
 public class SolicitudController {
@@ -38,6 +39,7 @@ public class SolicitudController {
         SolicitudTurno solicitud = solicitarCambioTurnoUseCase.ejecutar(
                 request.getAsignacionId(),
                 request.getFuncionarioId(),
+                request.getTipoSolicitudId(),
                 request.getMotivoSolicitud()
         );
 
@@ -54,6 +56,7 @@ public class SolicitudController {
         SolicitudTurno solicitud = solicitarEliminacionTurnoUseCase.ejecutar(
                 request.getAsignacionId(),
                 request.getFuncionarioId(),
+                request.getTipoSolicitudId(),
                 request.getMotivoSolicitud()
         );
 
@@ -87,6 +90,7 @@ public class SolicitudController {
     public static class SolicitarCambioRequest {
         private Long asignacionId;
         private Long funcionarioId;
+        private Long tipoSolicitudId;
         private String motivoSolicitud;
 
         public Long getAsignacionId() { return asignacionId; }
@@ -94,6 +98,9 @@ public class SolicitudController {
 
         public Long getFuncionarioId() { return funcionarioId; }
         public void setFuncionarioId(Long funcionarioId) { this.funcionarioId = funcionarioId; }
+
+        public Long getTipoSolicitudId() { return tipoSolicitudId; }
+        public void setTipoSolicitudId(Long tipoSolicitudId) { this.tipoSolicitudId = tipoSolicitudId; }
 
         public String getMotivoSolicitud() { return motivoSolicitud; }
         public void setMotivoSolicitud(String motivoSolicitud) { this.motivoSolicitud = motivoSolicitud; }
@@ -102,6 +109,7 @@ public class SolicitudController {
     public static class SolicitarEliminacionRequest {
         private Long asignacionId;
         private Long funcionarioId;
+        private Long tipoSolicitudId;
         private String motivoSolicitud;
 
         public Long getAsignacionId() { return asignacionId; }
@@ -109,6 +117,9 @@ public class SolicitudController {
 
         public Long getFuncionarioId() { return funcionarioId; }
         public void setFuncionarioId(Long funcionarioId) { this.funcionarioId = funcionarioId; }
+
+        public Long getTipoSolicitudId() { return tipoSolicitudId; }
+        public void setTipoSolicitudId(Long tipoSolicitudId) { this.tipoSolicitudId = tipoSolicitudId; }
 
         public String getMotivoSolicitud() { return motivoSolicitud; }
         public void setMotivoSolicitud(String motivoSolicitud) { this.motivoSolicitud = motivoSolicitud; }

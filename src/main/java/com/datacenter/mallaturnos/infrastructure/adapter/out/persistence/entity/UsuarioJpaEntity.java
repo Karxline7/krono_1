@@ -1,6 +1,6 @@
 package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity;
 
-import com.datacenter.mallaturnos.domain.model.RolType;
+import com.datacenter.mallaturnos.domain.model.Rol;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +35,7 @@ public class UsuarioJpaEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RolType rol;
+    private Rol rol;
 
     @Column(name = "cargo_id", nullable = false)
     private Long cargoId;

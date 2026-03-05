@@ -1,6 +1,6 @@
 package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.usuario;
 
-import com.datacenter.mallaturnos.domain.model.RolType;
+import com.datacenter.mallaturnos.domain.model.Rol;
 import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.UsuarioJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.UsuarioJpaRepository;
@@ -41,7 +41,7 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
     }
 
     @Override
-    public List<Usuario> findByAreaIdAndRol(Long areaId, RolType rol) {
+    public List<Usuario> findByAreaIdAndRol(Long areaId, Rol rol) {
         return jpaRepository.findByAreaIdAndRol(areaId, rol)
                 .stream()
                 .map(this::toDomain)

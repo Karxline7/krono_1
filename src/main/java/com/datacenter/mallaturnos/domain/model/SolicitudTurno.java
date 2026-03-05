@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class SolicitudTurno {
     private Long id;
     private Long asignacionTurnoId;
-    private TipoSolicitud tipo;
+    private Long tipoSolicitudId;
     private String motivoSolicitud;
     private EstadoSolicitud estado;
 }

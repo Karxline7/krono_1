@@ -15,7 +15,7 @@ public class Usuario {
     private String TipoDocumento;
     private Integer NumeroDocumento;
     private Integer contrasena;
-    private RolType rol;
+    private Rol rol;
     private Long cargoId;
     private Long areaId;
     private Boolean activo;

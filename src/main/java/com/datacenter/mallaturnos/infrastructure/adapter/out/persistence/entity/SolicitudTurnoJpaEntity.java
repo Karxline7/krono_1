@@ -1,6 +1,5 @@
 package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity;
 
-import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
 import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,9 +21,12 @@ public class SolicitudTurnoJpaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_solicitud", nullable = false)
-    private TipoSolicitud tipo;
+    @Column(name = "tipo_solicitud_id")
+    private Long tipoSolicitudId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tipo_solicitud_id", insertable = false, updatable = false)
+    private TipoSolicitudJpaEntity tipoSolicitud;
 
     @Column(name = "motivo_solicitud")
     private String motivoSolicitud;

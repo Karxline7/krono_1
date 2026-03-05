@@ -1,7 +1,7 @@
 package com.datacenter.mallaturnos.infrastructure.port.out;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
-import com.datacenter.mallaturnos.domain.model.RolType;
+import com.datacenter.mallaturnos.domain.model.Rol;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +14,7 @@ public interface UsuarioRepositoryPort {
     Optional<Usuario> findById(Long id);
     Optional<Usuario> findByNumeroDocumento(Integer numeroDocumento);
     boolean existsByNumeroDocumento(Integer numeroDocumento);
-    List<Usuario> findByAreaIdAndRol(Long areaId, RolType rol);
+    List<Usuario> findByAreaIdAndRol(Long areaId, Rol rol);
     List<Usuario> findByAreaId(Long areaId);
     List<Usuario> findByCargoId(Long cargoId);
     void delete(Long id);

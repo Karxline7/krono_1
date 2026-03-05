@@ -5,6 +5,7 @@ import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.SolicitudTurnoJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.AsignacionTurnoJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.SolicitudJpaRepository;
+import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.TipoSolicitudJpaRepository;
 import com.datacenter.mallaturnos.infrastructure.port.out.SolicitudRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.AsignacionJpaRepository;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,8 @@ public class SolicitudPersistenceAdapter implements SolicitudRepositoryPort {
     private final AsignacionJpaRepository asignacionRepository;
 
     public SolicitudPersistenceAdapter(SolicitudJpaRepository jpaRepository,
-                                       AsignacionJpaRepository asignacionRepository) {
+                                       AsignacionJpaRepository asignacionRepository,
+                                       TipoSolicitudJpaRepository tipoSolicitudRepository) {
         this.jpaRepository = jpaRepository;
         this.asignacionRepository = asignacionRepository;
     }
@@ -57,27 +59,29 @@ public class SolicitudPersistenceAdapter implements SolicitudRepositoryPort {
     }
 
     private SolicitudTurno toDomain(SolicitudTurnoJpaEntity entity) {
-        return new SolicitudTurno(
-                entity.getId(),
-                entity.getAsignacionTurno().getId(), // relación
-                entity.getTipo(),
-                entity.getMotivoSolicitud(),
-                entity.getEstado()
-        );
-    }
+
+    return new SolicitudTurno(
+        entity.getId(),
+        entity.getAsignacionTurno().getId(),
+        entity.getTipoSolicitud().getId(),
+        entity.getMotivoSolicitud(),
+        entity.getEstado()
+    );
+}
 
     private SolicitudTurnoJpaEntity toEntity(SolicitudTurno domain) {
 
-        AsignacionTurnoJpaEntity asignacion =
-                asignacionRepository.findById(domain.getAsignacionTurnoId())
-                        .orElseThrow(() -> new RuntimeException("Asignación no encontrada"));
+    AsignacionTurnoJpaEntity asignacion =
+            asignacionRepository.findById(domain.getAsignacionTurnoId())
+                    .orElseThrow(() -> new RuntimeException("Asignación no encontrada"));
 
-        return new SolicitudTurnoJpaEntity(
-                domain.getId(),
-                domain.getTipo(),
-                domain.getMotivoSolicitud(),
-                domain.getEstado(),
-                asignacion
-        );
-    }
+    return new SolicitudTurnoJpaEntity(
+            domain.getId(),
+            domain.getTipoSolicitudId(),
+            null,
+            domain.getMotivoSolicitud(),
+            domain.getEstado(),
+            asignacion
+    );
+}
 }

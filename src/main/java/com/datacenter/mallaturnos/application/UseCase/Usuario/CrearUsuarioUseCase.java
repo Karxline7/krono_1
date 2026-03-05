@@ -2,7 +2,7 @@ package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
-import com.datacenter.mallaturnos.domain.model.RolType;
+import com.datacenter.mallaturnos.domain.model.Rol;
 
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,7 @@ public class CrearUsuarioUseCase {
      * @return Usuario creado
      */
     public Usuario ejecutar(String nombre,  String tipoDocumento, Integer numeroDocumento,
-                            Integer contrasena, RolType rol, Long cargoId, Long areaId) {
+                            Integer contrasena, Rol rol, Long cargoId, Long areaId) {
         
         // Validar que el número de documento no exista
         if (usuarioRepository.existsByNumeroDocumento(numeroDocumento)) {
