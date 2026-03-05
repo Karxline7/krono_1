@@ -1,8 +1,9 @@
-package com.datacenter.mallaturnos.application.Usuario;
+package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
+import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
 import com.datacenter.mallaturnos.domain.model.RolType;
-import com.datacenter.mallaturnos.domain.port.out.UsuarioRepositoryPort;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -46,7 +47,7 @@ public class EditarUsuarioUseCase {
 
         // Actualizar campos
         usuario.setNombre(nombre);
-        usuario.setTipodocumento(tipodocumento);
+        usuario.setTipoDocumento(tipodocumento);
         usuario.setContrasena(contrasena);
         usuario.setRol(rol);
         usuario.setCargoId(cargoid);

@@ -2,9 +2,10 @@ package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.usuari
 
 import com.datacenter.mallaturnos.domain.model.RolType;
 import com.datacenter.mallaturnos.domain.model.Usuario;
-import com.datacenter.mallaturnos.domain.port.out.UsuarioRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.UsuarioJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.UsuarioJpaRepository;
+import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
+
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -81,9 +82,9 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
         return new Usuario(
                 entity.getId(),
                 entity.getNombres(),
-                entity.getNumeroDocumento(),
                 entity.getTipoDocumento(),
-                entity.getContraseña(),
+                entity.getNumeroDocumento(),
+                entity.getContrasena(),
                 entity.getRol(),
                 entity.getCargoId(),
                 entity.getAreaId(),
@@ -98,8 +99,8 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
         return new UsuarioJpaEntity(
                 domain.getId(),
                 domain.getNombre(),
-                domain.getTipodocumento(),
-                domain.getNumerodocumento(),
+                domain.getTipoDocumento(),
+                domain.getNumeroDocumento(),
                 domain.getContrasena(),
                 domain.getRol(),
                 domain.getCargoId(),

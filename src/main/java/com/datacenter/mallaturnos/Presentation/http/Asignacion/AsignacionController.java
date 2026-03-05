@@ -1,8 +1,10 @@
 package com.datacenter.mallaturnos.Presentation.http.Asignacion;
 
+import com.datacenter.mallaturnos.application.UseCase.asignacion.*;
 import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
 import com.datacenter.mallaturnos.domain.model.Usuario;
-import com.datacenter.mallaturnos.application.asignacion.*;
+
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

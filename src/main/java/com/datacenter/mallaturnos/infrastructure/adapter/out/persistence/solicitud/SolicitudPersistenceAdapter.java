@@ -2,10 +2,10 @@ package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.solici
 
 import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
 import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
-import com.datacenter.mallaturnos.domain.port.out.SolicitudRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.SolicitudTurnoJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.AsignacionTurnoJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.SolicitudJpaRepository;
+import com.datacenter.mallaturnos.infrastructure.port.out.SolicitudRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.AsignacionJpaRepository;
 import org.springframework.stereotype.Component;
 

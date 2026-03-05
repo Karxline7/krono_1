@@ -1,10 +1,11 @@
-package com.datacenter.mallaturnos.application.Solicitud;
+package com.datacenter.mallaturnos.application.UseCase.Solicitud;
 
 import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
 import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
+import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.out.SolicitudRepositoryPort;
 import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
-import com.datacenter.mallaturnos.domain.port.out.SolicitudRepositoryPort;
-import com.datacenter.mallaturnos.domain.port.out.AsignacionRepositoryPort;
+
 import org.springframework.stereotype.Service;
 
 @Service

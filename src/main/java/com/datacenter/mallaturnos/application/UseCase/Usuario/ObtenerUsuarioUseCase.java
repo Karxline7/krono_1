@@ -1,7 +1,8 @@
-package com.datacenter.mallaturnos.application.Usuario;
+package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
-import com.datacenter.mallaturnos.domain.port.out.UsuarioRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

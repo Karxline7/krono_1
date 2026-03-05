@@ -1,7 +1,8 @@
-package com.datacenter.mallaturnos.application.Usuario;
+package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
-import com.datacenter.mallaturnos.domain.port.out.UsuarioRepositoryPort;
 import org.springframework.stereotype.Service;
+
+import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
 
 /**
  * Use Case: Eliminar un usuario (hard delete)

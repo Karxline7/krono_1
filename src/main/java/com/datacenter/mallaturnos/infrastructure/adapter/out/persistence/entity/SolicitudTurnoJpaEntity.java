@@ -3,12 +3,19 @@ package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity
 import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
 import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
- * Entidad JPA: Mapea a la tabla solicitudes_turno
+ * Entidad JPA: Mapea a la tabla solicitudes_turno, se usa lombok para generar getters, setters y
+ * constructores de forma automática.
  */
 @Entity
 @Table(name = "solicitudes_turno")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SolicitudTurnoJpaEntity {
 
     @Id
@@ -29,39 +36,4 @@ public class SolicitudTurnoJpaEntity {
     @ManyToOne
     @JoinColumn(name = "asignacion_turno_id", nullable = false)
     private AsignacionTurnoJpaEntity asignacionTurno;
-
-    // Constructor vacío
-    public SolicitudTurnoJpaEntity() {}
-
-    // Constructor con todos los parámetros
-    public SolicitudTurnoJpaEntity(
-            Long id,
-            TipoSolicitud tipo,
-            String motivoSolicitud,
-            EstadoSolicitud estado,
-            AsignacionTurnoJpaEntity asignacionTurno) {
-        this.id = id;
-        this.tipo = tipo;
-        this.motivoSolicitud = motivoSolicitud;
-        this.estado = estado;
-        this.asignacionTurno = asignacionTurno;
-    }
-
-    // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public TipoSolicitud getTipo() { return tipo; }
-    public void setTipo(TipoSolicitud tipo) { this.tipo = tipo; }
-
-    public String getMotivoSolicitud() { return motivoSolicitud; }
-    public void setMotivoSolicitud(String motivoSolicitud) { this.motivoSolicitud = motivoSolicitud; }
-
-    public EstadoSolicitud getEstado() { return estado; }
-    public void setEstado(EstadoSolicitud estado) { this.estado = estado; }
-
-    public AsignacionTurnoJpaEntity getAsignacionTurno() { return asignacionTurno; }
-    public void setAsignacionTurno(AsignacionTurnoJpaEntity asignacionTurno) { 
-        this.asignacionTurno = asignacionTurno; 
-    }
 }

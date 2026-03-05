@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.domain.port.out;
+package com.datacenter.mallaturnos.infrastructure.port.out;
 
 import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
 

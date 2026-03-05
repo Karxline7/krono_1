@@ -1,7 +1,8 @@
 package com.datacenter.mallaturnos.Presentation.http.Turno;
 
+import com.datacenter.mallaturnos.application.UseCase.turno.*;
 import com.datacenter.mallaturnos.domain.model.Turno;
-import com.datacenter.mallaturnos.application.turno.*;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

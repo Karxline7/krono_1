@@ -1,13 +1,21 @@
 package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 /**
- * Entidad JPA: Mapea a la tabla asignaciones_turno
+ * Entidad JPA: Mapea a la tabla asignaciones_turno se usa lombok para generar getters, setters y
+ * constructores de forma automática.
  */
 @Entity
 @Table(name = "asignaciones_turno")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AsignacionTurnoJpaEntity {
     
     @Id
@@ -23,29 +31,4 @@ public class AsignacionTurnoJpaEntity {
     @ManyToOne
     @JoinColumn(name = "funcionario_id", nullable = false)
     private UsuarioJpaEntity funcionario;
-
-    public AsignacionTurnoJpaEntity() {
-    }
-
-    public AsignacionTurnoJpaEntity(Long id,
-                                    UsuarioJpaEntity funcionario,
-                                    Long turnoId,
-                                    LocalDate fecha) {
-        this.id = id;
-        this.funcionario = funcionario;
-        this.turnoId = turnoId;
-        this.fecha = fecha;
-    }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public UsuarioJpaEntity getFuncionario() { return funcionario; }
-    public void setFuncionario(UsuarioJpaEntity funcionario) { this.funcionario = funcionario; }
-
-    public Long getTurnoId() { return turnoId; }
-    public void setTurnoId(Long turnoId) { this.turnoId = turnoId; }
-
-    public LocalDate getFecha() { return fecha; }
-    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
 }

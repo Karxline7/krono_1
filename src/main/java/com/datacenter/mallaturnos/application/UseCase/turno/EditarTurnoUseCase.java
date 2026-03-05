@@ -1,7 +1,8 @@
-package com.datacenter.mallaturnos.application.turno;
+package com.datacenter.mallaturnos.application.UseCase.turno;
 
 import com.datacenter.mallaturnos.domain.model.Turno;
-import com.datacenter.mallaturnos.domain.port.out.TurnoRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.out.TurnoRepositoryPort;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
