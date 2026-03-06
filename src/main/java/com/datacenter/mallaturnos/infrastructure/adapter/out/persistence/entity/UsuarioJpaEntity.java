@@ -1,6 +1,5 @@
 package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity;
 
-import com.datacenter.mallaturnos.domain.model.Rol;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,9 +32,9 @@ public class UsuarioJpaEntity {
     @Column(name = "contraseña", nullable = false)
     private Integer contrasena;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Rol rol;
+    @ManyToOne
+    @JoinColumn(name = "rol_id", nullable = false)
+    private RolJpaEntity rol;
 
     @Column(name = "cargo_id", nullable = false)
     private Long cargoId;

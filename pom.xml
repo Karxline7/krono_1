@@ -46,12 +46,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Flyway (Migraciones de BD) -->
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
-
         <!-- Lombok (reduce código repetitivo) -->
         <dependency>
             <groupId>org.projectlombok</groupId>

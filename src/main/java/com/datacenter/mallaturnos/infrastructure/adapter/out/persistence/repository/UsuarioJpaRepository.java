@@ -1,6 +1,5 @@
 package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository;
 
-import com.datacenter.mallaturnos.domain.model.Rol;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.UsuarioJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -18,7 +17,7 @@ public interface UsuarioJpaRepository extends JpaRepository<UsuarioJpaEntity, Lo
     
     boolean existsByNumeroDocumento(Integer numeroDocumento);
     
-    List<UsuarioJpaEntity> findByAreaIdAndRol(Long areaId, Rol rol);
+    List<UsuarioJpaEntity> findByAreaIdAndRolId(Long areaId, Long rolId);
     
     List<UsuarioJpaEntity> findByAreaId(Long areaId);
 

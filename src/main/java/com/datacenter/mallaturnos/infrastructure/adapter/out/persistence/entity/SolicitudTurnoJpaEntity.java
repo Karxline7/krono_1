@@ -21,11 +21,8 @@ public class SolicitudTurnoJpaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "tipo_solicitud_id")
-    private Long tipoSolicitudId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tipo_solicitud_id", insertable = false, updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "tipo_solicitud_id", nullable = false)
     private TipoSolicitudJpaEntity tipoSolicitud;
 
     @Column(name = "motivo_solicitud")

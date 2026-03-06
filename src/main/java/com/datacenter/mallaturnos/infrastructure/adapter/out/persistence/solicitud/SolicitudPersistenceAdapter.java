@@ -3,6 +3,7 @@ package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.solici
 import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
 import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.SolicitudTurnoJpaEntity;
+import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.TipoSolicitudJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.AsignacionTurnoJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.SolicitudJpaRepository;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.TipoSolicitudJpaRepository;
@@ -75,10 +76,12 @@ public class SolicitudPersistenceAdapter implements SolicitudRepositoryPort {
             asignacionRepository.findById(domain.getAsignacionTurnoId())
                     .orElseThrow(() -> new RuntimeException("Asignación no encontrada"));
 
+    TipoSolicitudJpaEntity tipo = new TipoSolicitudJpaEntity();
+    tipo.setId(domain.getTipoSolicitudId());
+
     return new SolicitudTurnoJpaEntity(
             domain.getId(),
-            domain.getTipoSolicitudId(),
-            null,
+            tipo,
             domain.getMotivoSolicitud(),
             domain.getEstado(),
             asignacion

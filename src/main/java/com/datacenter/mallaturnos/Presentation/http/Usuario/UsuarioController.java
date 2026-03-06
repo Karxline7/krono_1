@@ -2,7 +2,6 @@ package com.datacenter.mallaturnos.Presentation.http.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.application.UseCase.Usuario.*;
-import com.datacenter.mallaturnos.domain.model.Rol;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +42,7 @@ public class UsuarioController {
                 request.getTipoDocumento(),
                 request.getNumeroDocumento(),
                 request.getContrasena(),
-                request.getRol(),
+                request.getRolId(),
                 request.getCargoId(),
                 request.getAreaId()
         );
@@ -74,8 +73,8 @@ public class UsuarioController {
     // =========================
     @GetMapping("/area/{areaId}/rol/{rol}")
     public ResponseEntity<List<Usuario>> listarPorAreaYRol(@PathVariable Long areaId,
-                                                           @PathVariable Rol rol) {
-        List<Usuario> usuarios = listarUsuariosUseCase.listarPorAreaYRol(areaId, rol);
+                                                           @PathVariable Long rolId) {
+        List<Usuario> usuarios = listarUsuariosUseCase.listarPorAreaYRol(areaId, rolId);
         return ResponseEntity.ok(usuarios);
     }
 
@@ -90,7 +89,7 @@ public class UsuarioController {
                 request.getNombres(),
                 request.getTipoDocumento(),
                 request.getContrasena(),
-                request.getRol(),
+                request.getRolId(),
                 request.getCargoId(),
                 request.getAreaId(),
                 request.getActivo()
@@ -113,7 +112,7 @@ class CrearUsuarioRequest {
     private Integer numeroDocumento;
     private String tipoDocumento;
     private Integer contrasena;
-    private Rol rol;
+    private Long rolId;
     private Long cargoId;
     private Long areaId;
 
@@ -130,8 +129,8 @@ class CrearUsuarioRequest {
     public Integer getContrasena() { return contrasena; }
     public void setContrasena(Integer contrasena) { this.contrasena = contrasena; }
 
-    public Rol getRol() { return rol; }
-    public void setRol(Rol rol) { this.rol = rol; }
+    public Long getRolId() { return rolId; }
+    public void setRolId(Long rolId) { this.rolId = rolId; }
 
     public Long getCargoId() { return cargoId; }
     public void setCargoId(Long cargoId) { this.cargoId = cargoId; }
@@ -144,7 +143,7 @@ class EditarUsuarioRequest {
     private String nombres;
     private String tipoDocumento;
     private Integer contrasena;
-    private Rol rol;
+    private Long rolId;
     private Long cargoId;
     private Long areaId;
     private Boolean activo;
@@ -159,8 +158,8 @@ class EditarUsuarioRequest {
     public Integer getContrasena() { return contrasena; }
     public void setContrasena(Integer contrasena) { this.contrasena = contrasena; }
 
-    public Rol getRol() { return rol; }
-    public void setRol(Rol rol) { this.rol = rol; }
+    public Long getRolId() { return rolId; }
+    public void setRolId(Long rolId) { this.rolId = rolId; }
 
     public Long getCargoId() { return cargoId; }
     public void setCargoId(Long cargoId) { this.cargoId = cargoId; }

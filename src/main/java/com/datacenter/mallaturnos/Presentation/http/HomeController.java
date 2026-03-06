@@ -8,6 +8,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "API Malla Turnos funcionando 🚀";
+        return "API Malla Turnos funcionando y operativa xd";
     }
 }

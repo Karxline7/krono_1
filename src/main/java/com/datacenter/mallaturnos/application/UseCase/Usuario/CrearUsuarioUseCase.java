@@ -2,7 +2,6 @@ package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
-import com.datacenter.mallaturnos.domain.model.Rol;
 
 import org.springframework.stereotype.Service;
 
@@ -24,13 +23,13 @@ public class CrearUsuarioUseCase {
      * @param numeroDocumento Número de documento (único)
      * @param tipoDocumento Tipo de documento (CC, CE, etc)
      * @param contrasena  Contraseña de 6 dígitos
-     * @param rol Rol del usuario (ADMIN, SUPERVISOR, FUNCIONARIO)
+     * @param rolId ID del rol del usuario (ADMIN, SUPERVISOR, FUNCIONARIO)
      * @param cargo Cargo del usuario
      * @param areaId ID del área (puede ser null para ADMIN)
      * @return Usuario creado
      */
     public Usuario ejecutar(String nombre,  String tipoDocumento, Integer numeroDocumento,
-                            Integer contrasena, Rol rol, Long cargoId, Long areaId) {
+                            Integer contrasena, Long rolId, Long cargoId, Long areaId) {
         
         // Validar que el número de documento no exista
         if (usuarioRepository.existsByNumeroDocumento(numeroDocumento)) {
@@ -43,7 +42,7 @@ public class CrearUsuarioUseCase {
         nuevoUsuario.setTipoDocumento(tipoDocumento);
         nuevoUsuario.setNumeroDocumento(numeroDocumento);
         nuevoUsuario.setContrasena(contrasena);
-        nuevoUsuario.setRol(rol);
+        nuevoUsuario.setRolId(rolId);
         nuevoUsuario.setCargoId(cargoId);
         nuevoUsuario.setAreaId(areaId);
         nuevoUsuario.setActivo(true);  // activo por defecto

@@ -14,7 +14,7 @@ public interface UsuarioRepositoryPort {
     Optional<Usuario> findById(Long id);
     Optional<Usuario> findByNumeroDocumento(Integer numeroDocumento);
     boolean existsByNumeroDocumento(Integer numeroDocumento);
-    List<Usuario> findByAreaIdAndRol(Long areaId, Rol rol);
+    List<Usuario> findByAreaIdAndRolId(Long areaId, Long rolId);
     List<Usuario> findByAreaId(Long areaId);
     List<Usuario> findByCargoId(Long cargoId);
     void delete(Long id);

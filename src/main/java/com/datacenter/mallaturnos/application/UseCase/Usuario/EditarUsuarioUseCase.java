@@ -2,7 +2,6 @@ package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
-import com.datacenter.mallaturnos.domain.model.Rol;
 
 import org.springframework.stereotype.Service;
 
@@ -26,14 +25,14 @@ public class EditarUsuarioUseCase {
      * @param nombre Nuevos nombres
      * @param tipodocumento Nuevo tipo de documento
      * @param contrasena Nueva contraseña
-     * @param rol Nuevo rol
+     * @param rolId ID del nuevo rol
      * @param cargoId Nuevo cargo ID
      * @param areaId Nuevo área ID
      * @param activo Nuevo estado
      * @return Usuario editado
      */
     public Usuario ejecutar(Long id, String nombre, String tipodocumento,
-                            Integer contrasena, Rol rol, Long cargoid, 
+                            Integer contrasena, Long rolId, Long cargoId, 
                             Long areaId, Boolean activo) {
         
         // Obtener usuario existente
@@ -49,8 +48,8 @@ public class EditarUsuarioUseCase {
         usuario.setNombre(nombre);
         usuario.setTipoDocumento(tipodocumento);
         usuario.setContrasena(contrasena);
-        usuario.setRol(rol);
-        usuario.setCargoId(cargoid);
+        usuario.setRolId(rolId);
+        usuario.setCargoId(cargoId);
         usuario.setAreaId(areaId);
         usuario.setActivo(activo);
 
