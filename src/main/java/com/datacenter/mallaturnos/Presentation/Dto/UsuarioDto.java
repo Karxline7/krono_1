@@ -12,7 +12,7 @@ public class UsuarioDto {
     private String nombre;
     private String tipoDocumento;
     private Integer numeroDocumento;
-    private Long rolId;
+    private Long rolId;                                                              
     private Long cargoId;
     private Long areaId;
     private Boolean activo;

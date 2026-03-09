@@ -16,7 +16,7 @@ public class CrearRolUseCase {
     public Rol ejecutar(String nombre, String descripcion) {
         
         if (rolRepository.findByNombre(nombre).isPresent()) {
-            throw new IllegalArgumentException("El rol ya existe");
+            throw new IllegalArgumentException("Este rol ya existe");
         }
 
         Rol nuevoRol = new Rol();

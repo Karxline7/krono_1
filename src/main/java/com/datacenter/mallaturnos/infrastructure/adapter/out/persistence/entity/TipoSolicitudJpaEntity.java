@@ -26,7 +26,4 @@ public class TipoSolicitudJpaEntity {
 
     @Column(nullable = false)
     private String descripcion;
-
-    @Column(nullable = false)
-    private Boolean activo;
 }

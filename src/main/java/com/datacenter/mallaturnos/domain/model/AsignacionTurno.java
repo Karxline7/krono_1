@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AsignacionTurno {
-
     private Long id;
     private Long funcionarioId;  
     private Long turnoId;
