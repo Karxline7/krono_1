@@ -6,11 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Entidad JPA: Mapea a la tabla turnos se usa lombok para generar getters, setters y
+ * Entidad JPA: Mapea a la tabla usuario se usa lombok para generar getters, setters y
  * constructores de forma automática.
  */
 @Entity
-@Table(name = "usuarios")
+@Table(name = "usuario")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

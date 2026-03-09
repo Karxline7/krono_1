@@ -1,7 +1,6 @@
 package com.datacenter.mallaturnos.infrastructure.port.out;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
-import com.datacenter.mallaturnos.domain.model.Rol;
 
 import java.util.List;
 import java.util.Optional;

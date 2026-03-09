@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Repository JPA: Spring Data genera automáticamente las consultas
+ * Repository JPA para usuarios
  */
 @Repository
 public interface UsuarioJpaRepository extends JpaRepository<UsuarioJpaEntity, Long> {

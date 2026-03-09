@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Entidad JPA: Mapea a la tabla rol, se usa lombok para generar getters, setters y
+ * constructores de forma automática.
+ */
 @Entity
 @Table(name = "Rol")
 @Data

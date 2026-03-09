@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 /**
- * Entidad JPA: Mapea a la tabla asignaciones_turno se usa lombok para generar getters, setters y
+ * Entidad JPA: Mapea a la tabla asignaciones_turno, se usa lombok para generar getters, setters y
  * constructores de forma automática.
  */
 @Entity
