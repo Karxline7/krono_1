@@ -1,7 +1,7 @@
 package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.tiposolicitud;
 
 import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
-import com.datacenter.mallaturnos.domain.port.out.TipoSolicitudRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.out.TipoSolicitudRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.TipoSolicitudJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.TipoSolicitudJpaRepository;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ public class TipoSolicitudPersistenceAdapter implements TipoSolicitudRepositoryP
 
     @Override
     public Optional<TipoSolicitud> findById(Long id) {
-        return jpaRepository.findById(id).map(this::toDomain);
+    return jpaRepository.findById(id).map(this::toDomain);
     }
 
     @Override

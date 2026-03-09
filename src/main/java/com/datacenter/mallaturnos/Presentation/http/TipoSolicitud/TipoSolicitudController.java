@@ -53,7 +53,7 @@ public class TipoSolicitudController {
     @PutMapping("/{id}")
     public ResponseEntity<TipoSolicitud> editar(@PathVariable Long id,
                                                 @RequestBody EditarTipoSolicitudRequest request) {
-        TipoSolicitud tipo = editarTipoSolicitudUseCase.ejecutar(id, request.getNombre(), request.getDescripcion(), request.getActivo());
+        TipoSolicitud tipo = editarTipoSolicitudUseCase.ejecutar(id, request.getNombre(), request.getDescripcion());
         return ResponseEntity.ok(tipo);
     }
 

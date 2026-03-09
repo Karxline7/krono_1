@@ -53,7 +53,7 @@ public class RolController {
     @PutMapping("/{id}")
     public ResponseEntity<Rol> editar(@PathVariable Long id,
                                       @RequestBody EditarRolRequest request) {
-        Rol rol = editarRolUseCase.ejecutar(id, request.getNombre(), request.getDescripcion(), request.getActivo());
+        Rol rol = editarRolUseCase.ejecutar(id, request.getNombre(), request.getDescripcion());
         return ResponseEntity.ok(rol);
     }
 

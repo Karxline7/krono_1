@@ -15,7 +15,7 @@ public class EditarTipoSolicitudUseCase {
         this.tipoSolicitudRepository = tipoSolicitudRepository;
     }
 
-    public TipoSolicitud ejecutar(Long id, String nombre, String descripcion, Boolean activo) {
+    public TipoSolicitud ejecutar(Long id, String nombre, String descripcion) {
         
         Optional<TipoSolicitud> tipoExistente = tipoSolicitudRepository.findById(id);
         

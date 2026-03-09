@@ -11,7 +11,5 @@ import java.util.Optional;
  */
 @Repository
 public interface TipoSolicitudJpaRepository extends JpaRepository<TipoSolicitudJpaEntity, Long> {
-
     Optional<TipoSolicitudJpaEntity> findByNombre(String nombre);
-
 }

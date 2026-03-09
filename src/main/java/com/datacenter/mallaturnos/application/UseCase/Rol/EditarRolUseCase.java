@@ -15,7 +15,7 @@ public class EditarRolUseCase {
         this.rolRepository = rolRepository;
     }
 
-    public Rol ejecutar(Long id, String nombre, String descripcion, Boolean activo) {
+    public Rol ejecutar(Long id, String nombre, String descripcion) {
         
         Optional<Rol> rolExistente = rolRepository.findById(id);
         
