@@ -9,11 +9,11 @@ import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SolicitarCambioTurnoUseCase {
+public class SolicitudTurnoUseCase {
 
     private final SolicitudRepositoryPort solicitudRepository;
     private final AsignacionRepositoryPort asignacionRepository;
-    public SolicitarCambioTurnoUseCase(SolicitudRepositoryPort solicitudRepository,
+    public SolicitudTurnoUseCase(SolicitudRepositoryPort solicitudRepository,
                                        AsignacionRepositoryPort asignacionRepository,
                                        TipoSolicitudRepositoryPort tipoSolicitudRepository) {
         this.solicitudRepository = solicitudRepository;
@@ -21,16 +21,16 @@ public class SolicitarCambioTurnoUseCase {
     }
 
     public SolicitudTurno ejecutar(Long asignacionId,
-                               Long funcionarioId,
                                Long tipoSolicitudId,
-                               String motivoSolicitud) {
+                               String motivoSolicitud,
+                               EstadoSolicitud estado) {
 
         // Validar que la asignación exista
         var asignacion = asignacionRepository.findById(asignacionId)
                 .orElseThrow(() -> new IllegalArgumentException("Asignación no encontrada"));
 
         // Validar que la asignación pertenezca al funcionario
-        if (!asignacion.getFuncionarioId().equals(funcionarioId)) {
+        if (!asignacion.getFuncionarioId().equals(asignacion.getFuncionarioId())) {
             throw new IllegalArgumentException("La asignación no pertenece al funcionario");
         }
 

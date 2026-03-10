@@ -1,6 +1,7 @@
 package com.datacenter.mallaturnos.Presentation.http.Solicitud;
 
 import com.datacenter.mallaturnos.application.UseCase.Solicitud.*;
+import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
 import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
 
 import org.springframework.http.HttpStatus;
@@ -12,19 +13,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/solicitudes")
 public class SolicitudController {
 
-    private final SolicitarCambioTurnoUseCase solicitarCambioTurnoUseCase;
-    private final SolicitarEliminacionTurnoUseCase solicitarEliminacionTurnoUseCase;
+    private final SolicitudTurnoUseCase solicitudTurnoUseCase;
     private final AprobarSolicitudUseCase aprobarSolicitudUseCase;
     private final DenegarSolicitudUseCase denegarSolicitudUseCase;
 
     public SolicitudController(
-            SolicitarCambioTurnoUseCase solicitarCambioTurnoUseCase,
-            SolicitarEliminacionTurnoUseCase solicitarEliminacionTurnoUseCase,
+            SolicitudTurnoUseCase solicitudTurnoUseCase,
             AprobarSolicitudUseCase aprobarSolicitudUseCase,
             DenegarSolicitudUseCase denegarSolicitudUseCase) {
 
-        this.solicitarCambioTurnoUseCase = solicitarCambioTurnoUseCase;
-        this.solicitarEliminacionTurnoUseCase = solicitarEliminacionTurnoUseCase;
+        this.solicitudTurnoUseCase = solicitudTurnoUseCase;
         this.aprobarSolicitudUseCase = aprobarSolicitudUseCase;
         this.denegarSolicitudUseCase = denegarSolicitudUseCase;
     }
@@ -33,31 +31,14 @@ public class SolicitudController {
     // SOLICITAR CAMBIO
     // =========================
     @PostMapping("/cambio")
-    public ResponseEntity<SolicitudTurno> solicitarCambio(
-            @RequestBody SolicitarCambioRequest request) {
+    public ResponseEntity<SolicitudTurno> solicitudTurno(
+            @RequestBody SolicitudTurnoRequest request) {
 
-        SolicitudTurno solicitud = solicitarCambioTurnoUseCase.ejecutar(
+        SolicitudTurno solicitud = solicitudTurnoUseCase.ejecutar(
                 request.getAsignacionId(),
-                request.getFuncionarioId(),
                 request.getTipoSolicitudId(),
-                request.getMotivoSolicitud()
-        );
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(solicitud);
-    }
-
-    // =========================
-    // SOLICITAR ELIMINACIÓN
-    // =========================
-    @PostMapping("/eliminacion")
-    public ResponseEntity<SolicitudTurno> solicitarEliminacion(
-            @RequestBody SolicitarEliminacionRequest request) {
-
-        SolicitudTurno solicitud = solicitarEliminacionTurnoUseCase.ejecutar(
-                request.getAsignacionId(),
-                request.getFuncionarioId(),
-                request.getTipoSolicitudId(),
-                request.getMotivoSolicitud()
+                request.getMotivoSolicitud(),
+                request.getEstado()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(solicitud);
@@ -84,60 +65,41 @@ public class SolicitudController {
     }
 
     // =====================================================
-    // ========= CLASES INTERNAS (IMPORTANTÍSIMO) =========
+    // ========= CLASES INTERNAS =========
     // =====================================================
 
-    public static class SolicitarCambioRequest {
+    public static class SolicitudTurnoRequest {
         private Long asignacionId;
-        private Long funcionarioId;
         private Long tipoSolicitudId;
         private String motivoSolicitud;
+        private EstadoSolicitud estado;
 
         public Long getAsignacionId() { return asignacionId; }
         public void setAsignacionId(Long asignacionId) { this.asignacionId = asignacionId; }
-
-        public Long getFuncionarioId() { return funcionarioId; }
-        public void setFuncionarioId(Long funcionarioId) { this.funcionarioId = funcionarioId; }
 
         public Long getTipoSolicitudId() { return tipoSolicitudId; }
         public void setTipoSolicitudId(Long tipoSolicitudId) { this.tipoSolicitudId = tipoSolicitudId; }
 
         public String getMotivoSolicitud() { return motivoSolicitud; }
         public void setMotivoSolicitud(String motivoSolicitud) { this.motivoSolicitud = motivoSolicitud; }
-    }
 
-    public static class SolicitarEliminacionRequest {
-        private Long asignacionId;
-        private Long funcionarioId;
-        private Long tipoSolicitudId;
-        private String motivoSolicitud;
-
-        public Long getAsignacionId() { return asignacionId; }
-        public void setAsignacionId(Long asignacionId) { this.asignacionId = asignacionId; }
-
-        public Long getFuncionarioId() { return funcionarioId; }
-        public void setFuncionarioId(Long funcionarioId) { this.funcionarioId = funcionarioId; }
-
-        public Long getTipoSolicitudId() { return tipoSolicitudId; }
-        public void setTipoSolicitudId(Long tipoSolicitudId) { this.tipoSolicitudId = tipoSolicitudId; }
-
-        public String getMotivoSolicitud() { return motivoSolicitud; }
-        public void setMotivoSolicitud(String motivoSolicitud) { this.motivoSolicitud = motivoSolicitud; }
+        public EstadoSolicitud getEstado() { return estado; }
+        public void setEstado(EstadoSolicitud estado) { this.estado = estado; }
     }
 
     public static class AprobarSolicitudRequest {
-        private Long supervisorId;
+        private Long solicitudId;
 
-        public Long getSupervisorId() { return supervisorId; }
-        public void setSupervisorId(Long supervisorId) { this.supervisorId = supervisorId; }
+        public Long getSolicitudId() { return solicitudId; }
+        public void setSolicitudId(Long solicitudId) { this.solicitudId = solicitudId; }
     }
 
     public static class DenegarSolicitudRequest {
-        private Long supervisorId;
+        private Long solicitudId;
         private String motivoRespuesta;
 
-        public Long getSupervisorId() { return supervisorId; }
-        public void setSupervisorId(Long supervisorId) { this.supervisorId = supervisorId; }
+        public Long getSolicitudId() { return solicitudId; }
+        public void setSolicitudId(Long solicitudId) { this.solicitudId = solicitudId; }
 
         public String getMotivoRespuesta() { return motivoRespuesta; }
         public void setMotivoRespuesta(String motivoRespuesta) { this.motivoRespuesta = motivoRespuesta; }
