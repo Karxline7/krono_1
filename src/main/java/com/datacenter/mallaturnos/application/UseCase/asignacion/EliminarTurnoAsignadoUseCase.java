@@ -2,7 +2,7 @@ package com.datacenter.mallaturnos.application.UseCase.asignacion;
 
 import org.springframework.stereotype.Service;
 
-import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPort;
+import com.datacenter.mallaturnos.port.out.AsignacionRepositoryPort;
 
 @Service
 public class EliminarTurnoAsignadoUseCase {

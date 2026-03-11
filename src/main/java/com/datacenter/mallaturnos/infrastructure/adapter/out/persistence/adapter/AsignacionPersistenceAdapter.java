@@ -4,7 +4,7 @@ import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.AsignacionTurnoJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.UsuarioJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.AsignacionJpaRepository;
-import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPort;
+import com.datacenter.mallaturnos.port.out.AsignacionRepositoryPort;
 
 import org.springframework.stereotype.Component;
 

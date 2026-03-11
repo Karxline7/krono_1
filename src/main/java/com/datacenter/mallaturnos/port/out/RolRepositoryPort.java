@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.infrastructure.port.out;
+package com.datacenter.mallaturnos.port.out;
 
 import com.datacenter.mallaturnos.domain.model.Rol;
 

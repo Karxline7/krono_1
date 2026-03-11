@@ -1,7 +1,8 @@
 package com.datacenter.mallaturnos.application.UseCase.tiposolicitud;
 
-import com.datacenter.mallaturnos.infrastructure.port.out.TipoSolicitudRepositoryPort;
 import org.springframework.stereotype.Service;
+
+import com.datacenter.mallaturnos.port.out.TipoSolicitudRepositoryPort;
 
 @Service
 public class EliminarTipoSolicitudUseCase {

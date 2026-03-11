@@ -1,7 +1,8 @@
 package com.datacenter.mallaturnos.application.UseCase.Rol;
 
 import com.datacenter.mallaturnos.domain.model.Rol;
-import com.datacenter.mallaturnos.infrastructure.port.out.RolRepositoryPort;
+import com.datacenter.mallaturnos.port.out.RolRepositoryPort;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
