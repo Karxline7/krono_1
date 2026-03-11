@@ -21,13 +21,13 @@ public class UsuarioJpaEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String nombres;
+    private String nombre;
 
     @Column(name = "tipo_documento", nullable = false)
-    private String TipoDocumento;
+    private String tipoDocumento;
 
     @Column(name = "numero_documento", nullable = false, unique = true)
-    private Integer NumeroDocumento;
+    private Integer numeroDocumento;
 
     @Column(name = "contraseña", nullable = false)
     private Integer contrasena;
@@ -41,7 +41,4 @@ public class UsuarioJpaEntity {
 
     @Column(name = "area_id")
     private Long areaId;
-
-    @Column(nullable = false)
-    private Boolean activo;
 }

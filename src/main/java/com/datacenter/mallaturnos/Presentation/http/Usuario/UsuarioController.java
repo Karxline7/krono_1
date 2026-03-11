@@ -2,11 +2,13 @@ package com.datacenter.mallaturnos.Presentation.http.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.application.UseCase.Usuario.*;
-
+import com.datacenter.mallaturnos.Presentation.Dto.UsuarioDto;
+import com.datacenter.mallaturnos.Presentation.mappers.UsuarioMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,26 +21,26 @@ public class UsuarioController {
     private final ListarUsuariosUseCase listarUsuariosUseCase;
     private final EditarUsuarioUseCase editarUsuarioUseCase;
     private final EliminarUsuarioUseCase eliminarUsuarioUseCase;
+    private final UsuarioMapper usuarioMapper;
 
     public UsuarioController(CrearUsuarioUseCase crearUsuarioUseCase,
                              ObtenerUsuarioUseCase obtenerUsuarioUseCase,
                              ListarUsuariosUseCase listarUsuariosUseCase,
                              EditarUsuarioUseCase editarUsuarioUseCase,
-                             EliminarUsuarioUseCase eliminarUsuarioUseCase) {
+                             EliminarUsuarioUseCase eliminarUsuarioUseCase,
+                             UsuarioMapper usuarioMapper) {
         this.crearUsuarioUseCase = crearUsuarioUseCase;
         this.obtenerUsuarioUseCase = obtenerUsuarioUseCase;
         this.listarUsuariosUseCase = listarUsuariosUseCase;
         this.editarUsuarioUseCase = editarUsuarioUseCase;
         this.eliminarUsuarioUseCase = eliminarUsuarioUseCase;
+        this.usuarioMapper = usuarioMapper;
     }
 
-    // =========================
-    // CREAR USUARIO
-    // =========================
     @PostMapping
-    public ResponseEntity<Usuario> crear(@RequestBody CrearUsuarioRequest request) {
+    public ResponseEntity<UsuarioDto> crear(@RequestBody CrearUsuarioRequest request) {
         Usuario usuario = crearUsuarioUseCase.ejecutar(
-                request.getNombres(),
+                request.getNombre(),
                 request.getTipoDocumento(),
                 request.getNumeroDocumento(),
                 request.getContrasena(),
@@ -46,60 +48,70 @@ public class UsuarioController {
                 request.getCargoId(),
                 request.getAreaId()
         );
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+        UsuarioDto dto = usuarioMapper.toDto(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
-    // =========================
-    // OBTENER USUARIO
-    // =========================
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtener(@PathVariable Long id) {
-        Optional<Usuario> usuario = obtenerUsuarioUseCase.ejecutar(id);
-        return usuario.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<UsuarioDto> obtener(@PathVariable Long id) {
+
+    Optional<Usuario> usuario = obtenerUsuarioUseCase.ejecutar(id);
+
+    if (usuario.isPresent()) {
+        UsuarioDto dto = usuarioMapper.toDto(usuario.get());
+        return ResponseEntity.ok(dto);
     }
 
-    // =========================
-    // LISTAR USUARIOS POR ÁREA
-    // =========================
+        return ResponseEntity.notFound().build();
+    }
+
     @GetMapping("/area/{areaId}")
-    public ResponseEntity<List<Usuario>> listarPorArea(@PathVariable Long areaId) {
-        List<Usuario> usuarios = listarUsuariosUseCase.listarPorArea(areaId);
-        return ResponseEntity.ok(usuarios);
+    public ResponseEntity<List<UsuarioDto>> listarPorArea(@PathVariable Long areaId) {
+
+    List<Usuario> usuarios = listarUsuariosUseCase.listarPorArea(areaId);
+
+    List<UsuarioDto> dtos = new ArrayList<>();
+
+        if (usuarios != null) {
+            for (Usuario u : usuarios) {
+            dtos.add(usuarioMapper.toDto(u));
+            }
+        }
+
+        return ResponseEntity.ok(dtos);
     }
 
-    // =========================
-    // LISTAR USUARIOS POR ROL
-    // =========================
-    @GetMapping("/area/{areaId}/rol/{rol}")
-    public ResponseEntity<List<Usuario>> listarPorAreaYRol(@PathVariable Long areaId,
-                                                           @PathVariable Long rolId) {
-        List<Usuario> usuarios = listarUsuariosUseCase.listarPorAreaYRol(areaId, rolId);
-        return ResponseEntity.ok(usuarios);
+    @GetMapping("/area/{areaId}/rol/{rolId}")
+public ResponseEntity<List<UsuarioDto>> listarPorAreaYRol(@PathVariable Long areaId,
+                                                          @PathVariable Long rolId) {
+
+    List<Usuario> usuarios = listarUsuariosUseCase.listarPorAreaYRol(areaId, rolId);
+    List<UsuarioDto> dtos = new ArrayList<>();
+
+        if (usuarios != null) {
+            for (Usuario u : usuarios) {
+            dtos.add(usuarioMapper.toDto(u));
+            }
+        }
+        return ResponseEntity.ok(dtos);
     }
 
-    // =========================
-    // EDITAR USUARIO
-    // =========================
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> editar(@PathVariable Long id,
-                                          @RequestBody EditarUsuarioRequest request) {
+    public ResponseEntity<UsuarioDto> editar(@PathVariable Long id,
+                                             @RequestBody EditarUsuarioRequest request) {
         Usuario usuario = editarUsuarioUseCase.ejecutar(
                 id,
-                request.getNombres(),
+                request.getNombre(),
                 request.getTipoDocumento(),
                 request.getContrasena(),
                 request.getRolId(),
                 request.getCargoId(),
-                request.getAreaId(),
-                request.getActivo()
+                request.getAreaId()
         );
-        return ResponseEntity.ok(usuario);
+        UsuarioDto dto = usuarioMapper.toDto(usuario);
+        return ResponseEntity.ok(dto);
     }
 
-    // =========================
-    // ELIMINAR USUARIO
-    // =========================
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         eliminarUsuarioUseCase.ejecutar(id);
@@ -108,17 +120,16 @@ public class UsuarioController {
 }
 
 class CrearUsuarioRequest {
-    private String nombres;
-    private Integer numeroDocumento;
+    private String nombre;
     private String tipoDocumento;
+    private Integer numeroDocumento;
     private Integer contrasena;
     private Long rolId;
     private Long cargoId;
     private Long areaId;
 
-    // Getters y Setters
-    public String getNombres() { return nombres; }
-    public void setNombres(String nombres) { this.nombres = nombres; }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
     public Integer getNumeroDocumento() { return numeroDocumento; }
     public void setNumeroDocumento(Integer numeroDocumento) { this.numeroDocumento = numeroDocumento; }
@@ -140,17 +151,15 @@ class CrearUsuarioRequest {
 }
 
 class EditarUsuarioRequest {
-    private String nombres;
+    private String nombre;
     private String tipoDocumento;
     private Integer contrasena;
     private Long rolId;
     private Long cargoId;
     private Long areaId;
-    private Boolean activo;
 
-    // Getters y Setters
-    public String getNombres() { return nombres; }
-    public void setNombres(String nombres) { this.nombres = nombres; }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
     public String getTipoDocumento() { return tipoDocumento; }
     public void setTipoDocumento(String tipoDocumento) { this.tipoDocumento = tipoDocumento; }
@@ -166,7 +175,4 @@ class EditarUsuarioRequest {
 
     public Long getAreaId() { return areaId; }
     public void setAreaId(Long areaId) { this.areaId = areaId; }
-
-    public Boolean getActivo() { return activo; }
-    public void setActivo(Boolean activo) { this.activo = activo; }
 }

@@ -1,7 +1,9 @@
 package com.datacenter.mallaturnos.Presentation.http.Turno;
 
-import com.datacenter.mallaturnos.application.UseCase.turno.*;
 import com.datacenter.mallaturnos.domain.model.Turno;
+import com.datacenter.mallaturnos.application.UseCase.turno.*;
+import com.datacenter.mallaturnos.Presentation.Dto.TurnoDto;
+import com.datacenter.mallaturnos.Presentation.mappers.TurnoMapper;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/turnos")
@@ -20,24 +23,24 @@ public class TurnoController {
     private final ListarTurnosUseCase listarTurnosUseCase;
     private final EditarTurnoUseCase editarTurnoUseCase;
     private final EliminarTurnoUseCase eliminarTurnoUseCase;
+    private final TurnoMapper turnoMapper;
 
     public TurnoController(CrearTurnoUseCase crearTurnoUseCase,
                            ObtenerTurnoUseCase obtenerTurnoUseCase,
                            ListarTurnosUseCase listarTurnosUseCase,
                            EditarTurnoUseCase editarTurnoUseCase,
-                           EliminarTurnoUseCase eliminarTurnoUseCase) {
+                           EliminarTurnoUseCase eliminarTurnoUseCase,
+                           TurnoMapper turnoMapper) {
         this.crearTurnoUseCase = crearTurnoUseCase;
         this.obtenerTurnoUseCase = obtenerTurnoUseCase;
         this.listarTurnosUseCase = listarTurnosUseCase;
         this.editarTurnoUseCase = editarTurnoUseCase;
         this.eliminarTurnoUseCase = eliminarTurnoUseCase;
+        this.turnoMapper = turnoMapper;
     }
 
-    // =========================
-    // CrEAR TURNO
-    // =========================
     @PostMapping
-    public ResponseEntity<Turno> crear(@RequestBody CrearTurnoRequest request) {
+    public ResponseEntity<TurnoDto> crear(@RequestBody CrearTurnoRequest request) {
         Turno turno = crearTurnoUseCase.ejecutar(
                 request.getNombre(),
                 request.getHoraInicio(),
@@ -45,34 +48,29 @@ public class TurnoController {
                 request.getHoraalmuerzo(),
                 request.getHorabreak()
         );
-        return ResponseEntity.status(HttpStatus.CREATED).body(turno);
+        TurnoDto dto = turnoMapper.toDto(turno);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
-    // =========================
-    // OBTENER TURNO
-    // =========================
     @GetMapping("/{id}")
-    public ResponseEntity<Turno> obtener(@PathVariable Long id) {
+    public ResponseEntity<TurnoDto> obtener(@PathVariable Long id) {
         Optional<Turno> turno = obtenerTurnoUseCase.ejecutar(id);
-        return turno.map(ResponseEntity::ok)
+        return turno.map(t -> ResponseEntity.ok(turnoMapper.toDto(t)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // =========================
-    // LISTAR TURNOS
-    // =========================
     @GetMapping
-    public ResponseEntity<List<Turno>> listar() {
+    public ResponseEntity<List<TurnoDto>> listar() {
         List<Turno> turnos = listarTurnosUseCase.ejecutar();
-        return ResponseEntity.ok(turnos);
+        List<TurnoDto> dtos = turnos.stream()
+                .map(turnoMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
-    // =========================
-    // EDITAR TURNO
-    // =========================
     @PutMapping("/{id}")
-    public ResponseEntity<Turno> editar(@PathVariable Long id,
-                                        @RequestBody EditarTurnoRequest request) {
+    public ResponseEntity<TurnoDto> editar(@PathVariable Long id,
+                                           @RequestBody EditarTurnoRequest request) {
         Turno turno = editarTurnoUseCase.ejecutar(
                 id,
                 request.getNombre(),
@@ -81,12 +79,10 @@ public class TurnoController {
                 request.getHoraalmuerzo(),
                 request.getHorabreak()
         );
-        return ResponseEntity.ok(turno);
+        TurnoDto dto = turnoMapper.toDto(turno);
+        return ResponseEntity.ok(dto);
     }
 
-    // =========================
-    // ELIMINAR TURNO
-    // =========================
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         eliminarTurnoUseCase.ejecutar(id);

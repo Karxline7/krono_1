@@ -15,5 +15,4 @@ public class UsuarioDto {
     private Long rolId;                                                              
     private Long cargoId;
     private Long areaId;
-    private Boolean activo;
 }

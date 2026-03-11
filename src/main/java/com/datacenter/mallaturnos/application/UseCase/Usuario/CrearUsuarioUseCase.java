@@ -45,7 +45,6 @@ public class CrearUsuarioUseCase {
         nuevoUsuario.setRolId(rolId);
         nuevoUsuario.setCargoId(cargoId);
         nuevoUsuario.setAreaId(areaId);
-        nuevoUsuario.setActivo(true);  // activo por defecto
 
         // Guardar y retornar
         return usuarioRepository.save(nuevoUsuario);

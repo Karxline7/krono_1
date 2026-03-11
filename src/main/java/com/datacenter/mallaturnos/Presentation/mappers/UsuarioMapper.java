@@ -20,10 +20,9 @@ public class UsuarioMapper {
         dto.setNombre(usuario.getNombre());
         dto.setTipoDocumento(usuario.getTipoDocumento());
         dto.setNumeroDocumento(usuario.getNumeroDocumento());
-        dto.setRolId(usuario.getRolId() != null ? usuario.getRolId() : null);
+        dto.setRolId(usuario.getRolId());
         dto.setCargoId(usuario.getCargoId());
         dto.setAreaId(usuario.getAreaId());
-        dto.setActivo(usuario.getActivo());
         
         return dto;
     }
@@ -41,9 +40,9 @@ public class UsuarioMapper {
         usuario.setNombre(dto.getNombre());
         usuario.setTipoDocumento(dto.getTipoDocumento());
         usuario.setNumeroDocumento(dto.getNumeroDocumento());
+        usuario.setRolId(dto.getRolId());
         usuario.setCargoId(dto.getCargoId());
         usuario.setAreaId(dto.getAreaId());
-        usuario.setActivo(dto.getActivo());
         
         return usuario;
     }

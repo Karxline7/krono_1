@@ -33,7 +33,7 @@ public class EditarUsuarioUseCase {
      */
     public Usuario ejecutar(Long id, String nombre, String tipodocumento,
                             Integer contrasena, Long rolId, Long cargoId, 
-                            Long areaId, Boolean activo) {
+                            Long areaId) {
         
         // Obtener usuario existente
         Optional<Usuario> usuarioExistente = usuarioRepository.findById(id);
@@ -51,7 +51,6 @@ public class EditarUsuarioUseCase {
         usuario.setRolId(rolId);
         usuario.setCargoId(cargoId);
         usuario.setAreaId(areaId);
-        usuario.setActivo(activo);
 
         // Guardar y retornar
         return usuarioRepository.save(usuario);

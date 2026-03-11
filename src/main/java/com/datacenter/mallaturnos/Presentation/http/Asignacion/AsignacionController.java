@@ -1,10 +1,12 @@
 package com.datacenter.mallaturnos.Presentation.http.Asignacion;
 
-import com.datacenter.mallaturnos.application.UseCase.asignacion.*;
 import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
 import com.datacenter.mallaturnos.domain.model.Usuario;
-
-
+import com.datacenter.mallaturnos.application.UseCase.asignacion.*;
+import com.datacenter.mallaturnos.Presentation.Dto.AsignacionTurnoDto;
+import com.datacenter.mallaturnos.Presentation.Dto.UsuarioDto;
+import com.datacenter.mallaturnos.Presentation.mappers.AsignacionTurnoMapper;
+import com.datacenter.mallaturnos.Presentation.mappers.UsuarioMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,59 +22,56 @@ public class AsignacionController {
     private final ObtenerUsuarioPorTurnoAsignadoUseCase obtenerUsuarioPorTurnoAsignadoUseCase;
     private final EditarTurnoAsignadoUseCase editarTurnoAsignadoUseCase;
     private final EliminarTurnoAsignadoUseCase eliminarTurnoAsignadoUseCase;
+    private final AsignacionTurnoMapper asignacionTurnoMapper;
+    private final UsuarioMapper usuarioMapper;
 
     public AsignacionController(AsignarTurnoUseCase asignarTurnoUseCase,
                                 ObtenerUsuarioPorTurnoAsignadoUseCase obtenerUsuarioPorTurnoAsignadoUseCase,
                                 EditarTurnoAsignadoUseCase editarTurnoAsignadoUseCase,
-                                EliminarTurnoAsignadoUseCase eliminarTurnoAsignadoUseCase) {
+                                EliminarTurnoAsignadoUseCase eliminarTurnoAsignadoUseCase,
+                                AsignacionTurnoMapper asignacionTurnoMapper,
+                                UsuarioMapper usuarioMapper) {
         this.asignarTurnoUseCase = asignarTurnoUseCase;
         this.obtenerUsuarioPorTurnoAsignadoUseCase = obtenerUsuarioPorTurnoAsignadoUseCase;
         this.editarTurnoAsignadoUseCase = editarTurnoAsignadoUseCase;
         this.eliminarTurnoAsignadoUseCase = eliminarTurnoAsignadoUseCase;
+        this.asignacionTurnoMapper = asignacionTurnoMapper;
+        this.usuarioMapper = usuarioMapper;
     }
 
-    // =========================
-    // ASIGNAR TURNO
-    // =========================
     @PostMapping
-    public ResponseEntity<AsignacionTurno> asignar(@RequestBody AsignarTurnoRequest request) {
+    public ResponseEntity<AsignacionTurnoDto> asignar(@RequestBody AsignarTurnoRequest request) {
         AsignacionTurno asignacion = asignarTurnoUseCase.ejecutar(
                 request.getFuncionarioId(),
                 request.getTurnoId(),
                 request.getFecha()
         );
-        return ResponseEntity.status(HttpStatus.CREATED).body(asignacion);
+        AsignacionTurnoDto dto = asignacionTurnoMapper.toDto(asignacion);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
-    // =========================
-    // OBTENER USUARIO POR TURNO ASIGNADO
-    // =========================
     @GetMapping("/funcionario/{funcionarioId}/fecha/{fecha}")
-    public ResponseEntity<Usuario> obtenerUsuario(@PathVariable Long funcionarioId,
-                                                   @PathVariable LocalDate fecha) {
-        Optional<Usuario> usuario = obtenerUsuarioPorTurnoAsignadoUseCase.ejecutar(funcionarioId, fecha);
-        return usuario.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<UsuarioDto> obtenerUsuario(@PathVariable Long funcionarioId,
+                                                   @PathVariable String fecha) {
+        LocalDate fechaDate = LocalDate.parse(fecha);
+        Optional<Usuario> usuario = obtenerUsuarioPorTurnoAsignadoUseCase.ejecutar(funcionarioId, fechaDate);
+        return usuario.map(u -> ResponseEntity.ok(usuarioMapper.toDto(u)))
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // =========================
-    // EDITAR TURNO ASIGNADO
-    // =========================
     @PutMapping("/{id}")
-    public ResponseEntity<AsignacionTurno> editar(@PathVariable Long id,
-                                                   @RequestBody EditarTurnoAsignadoRequest request) {
+    public ResponseEntity<AsignacionTurnoDto> editar(@PathVariable Long id,
+                                                     @RequestBody EditarTurnoAsignadoRequest request) {
         AsignacionTurno asignacion = editarTurnoAsignadoUseCase.ejecutar(
                 id,
                 request.getNuevoFuncionarioId(),
                 request.getNuevaFecha(),
                 request.getNuevoTurnoId()
         );
-        return ResponseEntity.ok(asignacion);
+        AsignacionTurnoDto dto = asignacionTurnoMapper.toDto(asignacion);
+        return ResponseEntity.ok(dto);
     }
 
-    // =========================
-    // ELIMINAR TURNO ASIGNADO
-    // =========================
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         eliminarTurnoAsignadoUseCase.ejecutar(id);
@@ -83,6 +82,7 @@ public class AsignacionController {
 class AsignarTurnoRequest {
     private Long funcionarioId;
     private Long turnoId;
+    private Long areaId;
     private LocalDate fecha;
 
     public Long getFuncionarioId() { return funcionarioId; }
@@ -91,8 +91,12 @@ class AsignarTurnoRequest {
     public Long getTurnoId() { return turnoId; }
     public void setTurnoId(Long turnoId) { this.turnoId = turnoId; }
 
+    public Long getAreaId() { return areaId; }
+    public void setAreaId(Long areaId) { this.areaId = areaId; }
+
     public LocalDate getFecha() { return fecha; }
     public void setFecha(LocalDate fecha) { this.fecha = fecha; }
+
 }
 
 class EditarTurnoAsignadoRequest {

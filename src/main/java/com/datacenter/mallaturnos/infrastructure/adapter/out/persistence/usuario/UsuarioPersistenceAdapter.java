@@ -83,14 +83,13 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
     private Usuario toDomain(UsuarioJpaEntity entity) {
         return new Usuario(
                 entity.getId(),
-                entity.getNombres(),
+                entity.getNombre(),
                 entity.getTipoDocumento(),
                 entity.getNumeroDocumento(),
                 entity.getContrasena(),
                 entity.getRol().getId(),
                 entity.getCargoId(),
-                entity.getAreaId(),
-                entity.getActivo()
+                entity.getAreaId()
         );
     }
 
@@ -109,8 +108,7 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
                 domain.getContrasena(),
                 rol,
                 domain.getCargoId(),
-                domain.getAreaId(),
-                domain.getActivo()
+                domain.getAreaId()
         );
     }
 }
