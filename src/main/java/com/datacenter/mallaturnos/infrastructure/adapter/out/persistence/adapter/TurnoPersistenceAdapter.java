@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.turno;
+package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.adapter;
 
 import com.datacenter.mallaturnos.domain.model.Turno;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.TurnoJpaEntity;

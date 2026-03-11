@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.asignacion;
+package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.adapter;
 
 import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.AsignacionTurnoJpaEntity;

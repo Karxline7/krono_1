@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.usuario;
+package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.adapter;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.RolJpaEntity;
@@ -22,9 +22,9 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
     private final UsuarioJpaRepository jpaRepository;
     private final RolJpaRepository rolRepository;
 
-    public UsuarioPersistenceAdapter(UsuarioJpaRepository jpaRepository) {
+    public UsuarioPersistenceAdapter(UsuarioJpaRepository jpaRepository, RolJpaRepository rolRepository) {
         this.jpaRepository = jpaRepository;
-        this.rolRepository = null;
+        this.rolRepository = rolRepository;
     }
 
     @Override

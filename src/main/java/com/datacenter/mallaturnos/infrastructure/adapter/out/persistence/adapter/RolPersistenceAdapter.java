@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.rol;
+package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.adapter;
 
 import com.datacenter.mallaturnos.domain.model.Rol;
 import com.datacenter.mallaturnos.infrastructure.port.out.RolRepositoryPort;

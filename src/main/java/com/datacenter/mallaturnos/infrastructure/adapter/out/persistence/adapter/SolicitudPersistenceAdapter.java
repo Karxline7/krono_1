@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.solicitud;
+package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.adapter;
 
 import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
 import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
