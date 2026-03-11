@@ -2,6 +2,7 @@ package com.datacenter.mallaturnos.application.UseCase.turno;
 
 import com.datacenter.mallaturnos.domain.model.Turno;
 import com.datacenter.mallaturnos.port.out.TurnoRepositoryPort;
+import com.datacenter.mallaturnos.port.in.turno.EliminarTurnoUseCasePort;
 
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.Optional;
  * Use Case: Eliminar un turno
  */
 @Service
-public class EliminarTurnoUseCase {
+public class EliminarTurnoUseCase implements EliminarTurnoUseCasePort {
 
     private final TurnoRepositoryPort turnoRepository;
 
@@ -24,7 +25,7 @@ public class EliminarTurnoUseCase {
      * @param id ID del turno a eliminar
      * @return true si se eliminó exitosamente
      */
-    public boolean ejecutar(Long id) {
+    public boolean eliminarTurno(Long id) {
         
         // Verificar que el turno existe
         Optional<Turno> turnoExistente = turnoRepository.findById(id);

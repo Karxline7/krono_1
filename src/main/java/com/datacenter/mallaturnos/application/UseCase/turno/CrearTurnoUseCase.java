@@ -1,6 +1,7 @@
 package com.datacenter.mallaturnos.application.UseCase.turno;
 
 import com.datacenter.mallaturnos.domain.model.Turno;
+import com.datacenter.mallaturnos.port.in.turno.CrearTurnoUseCasePort;
 import com.datacenter.mallaturnos.port.out.TurnoRepositoryPort;
 
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import java.time.LocalTime;
  * Use Case: Crear un nuevo turno
  */
 @Service
-public class CrearTurnoUseCase {
+public class CrearTurnoUseCase implements CrearTurnoUseCasePort {
 
     private final TurnoRepositoryPort turnoRepository;
 
@@ -28,7 +29,7 @@ public class CrearTurnoUseCase {
      * @param horabreak Hora de break (ej: 10:00)
      * @return Turno creado
      */
-    public Turno ejecutar(String nombre, LocalTime horaInicio, LocalTime horaFin, LocalTime horaalmuerzo, LocalTime horabreak) {
+    public Turno crearTurno(String nombre, LocalTime horaInicio, LocalTime horaFin, LocalTime horaalmuerzo, LocalTime horabreak) {
         
         // Validar que la hora de inicio sea menor que la de fin
         if (horaInicio.isAfter(horaFin) || horaInicio.equals(horaFin)) {

@@ -2,7 +2,7 @@ package com.datacenter.mallaturnos.application.UseCase.turno;
 
 import com.datacenter.mallaturnos.domain.model.Turno;
 import com.datacenter.mallaturnos.port.out.TurnoRepositoryPort;
-
+import com.datacenter.mallaturnos.port.in.turno.ListarTurnosUseCasePort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  * Los turnos son GLOBALES (no asociados a áreas)
  */
 @Service
-public class ListarTurnosUseCase {
+public class ListarTurnosUseCase implements ListarTurnosUseCasePort {
 
     private final TurnoRepositoryPort turnoRepository;
 
@@ -24,7 +24,8 @@ public class ListarTurnosUseCase {
      * Obtiene todos los turnos del sistema
      * @return Lista de todos los turnos
      */
-    public List<Turno> ejecutar() {
+    @Override
+    public List<Turno> listarTurnos() {
         return turnoRepository.findAll();
     }
 }

@@ -41,7 +41,7 @@ public class TurnoController {
 
     @PostMapping
     public ResponseEntity<TurnoDto> crear(@RequestBody CrearTurnoRequest request) {
-        Turno turno = crearTurnoUseCase.ejecutar(
+        Turno turno = crearTurnoUseCase.crearTurno(
                 request.getNombre(),
                 request.getHoraInicio(),
                 request.getHoraFin(),
@@ -54,14 +54,14 @@ public class TurnoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TurnoDto> obtener(@PathVariable Long id) {
-        Optional<Turno> turno = obtenerTurnoUseCase.ejecutar(id);
+        Optional<Turno> turno = obtenerTurnoUseCase.obtenerTurno(id);
         return turno.map(t -> ResponseEntity.ok(turnoMapper.toDto(t)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
     public ResponseEntity<List<TurnoDto>> listar() {
-        List<Turno> turnos = listarTurnosUseCase.ejecutar();
+        List<Turno> turnos = listarTurnosUseCase.listarTurnos();
         List<TurnoDto> dtos = turnos.stream()
                 .map(turnoMapper::toDto)
                 .collect(Collectors.toList());
@@ -71,7 +71,7 @@ public class TurnoController {
     @PutMapping("/{id}")
     public ResponseEntity<TurnoDto> editar(@PathVariable Long id,
                                            @RequestBody EditarTurnoRequest request) {
-        Turno turno = editarTurnoUseCase.ejecutar(
+        Turno turno = editarTurnoUseCase.editarTurno(
                 id,
                 request.getNombre(),
                 request.getHoraInicio(),
@@ -85,7 +85,7 @@ public class TurnoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        eliminarTurnoUseCase.ejecutar(id);
+        eliminarTurnoUseCase.eliminarTurno(id);
         return ResponseEntity.noContent().build();
     }
 }
