@@ -1,14 +1,14 @@
 package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
 import org.springframework.stereotype.Service;
-
+import com.datacenter.mallaturnos.port.in.Usuario.EliminarUsuarioUseCasePort;
 import com.datacenter.mallaturnos.port.out.UsuarioRepositoryPort;
 
 /**
  * Use Case: Eliminar un usuario (hard delete)
  */
 @Service
-public class EliminarUsuarioUseCase {
+public class EliminarUsuarioUseCase implements EliminarUsuarioUseCasePort {
 
     private final UsuarioRepositoryPort usuarioRepository;
 
@@ -21,7 +21,7 @@ public class EliminarUsuarioUseCase {
      * @param id ID del usuario a eliminar
      * @return true si se eliminó exitosamente
      */
-    public boolean ejecutar(Long id) {
+    public boolean eliminarUsuario(Long id) {
         
         // Verificar que el usuario existe
         if (!usuarioRepository.findById(id).isPresent()) {

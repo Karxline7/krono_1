@@ -2,6 +2,7 @@ package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.port.out.UsuarioRepositoryPort;
+import com.datacenter.mallaturnos.port.in.Usuario.ObtenerUsuarioUseCasePort;
 
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.Optional;
  * Use Case: Obtener un usuario por ID
  */
 @Service
-public class ObtenerUsuarioUseCase {
+public class ObtenerUsuarioUseCase implements ObtenerUsuarioUseCasePort {
 
     private final UsuarioRepositoryPort usuarioRepository;
 
@@ -24,7 +25,7 @@ public class ObtenerUsuarioUseCase {
      * @param id ID del usuario
      * @return Optional con el usuario si existe
      */
-    public Optional<Usuario> ejecutar(Long id) {
+    public Optional<Usuario> obtenerUsuario(Long id) {
         return usuarioRepository.findById(id);
     }
 

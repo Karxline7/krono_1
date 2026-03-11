@@ -4,6 +4,7 @@ import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.application.UseCase.Usuario.*;
 import com.datacenter.mallaturnos.Presentation.Dto.UsuarioDto;
 import com.datacenter.mallaturnos.Presentation.mappers.UsuarioMapper;
+import com.datacenter.mallaturnos.port.in.Usuario.CrearUsuarioUseCasePort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +17,14 @@ import java.util.Optional;
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
-    private final CrearUsuarioUseCase crearUsuarioUseCase;
+    private final CrearUsuarioUseCasePort crearUsuarioUseCase;
     private final ObtenerUsuarioUseCase obtenerUsuarioUseCase;
     private final ListarUsuariosUseCase listarUsuariosUseCase;
     private final EditarUsuarioUseCase editarUsuarioUseCase;
     private final EliminarUsuarioUseCase eliminarUsuarioUseCase;
     private final UsuarioMapper usuarioMapper;
 
-    public UsuarioController(CrearUsuarioUseCase crearUsuarioUseCase,
+    public UsuarioController(CrearUsuarioUseCasePort crearUsuarioUseCase,
                              ObtenerUsuarioUseCase obtenerUsuarioUseCase,
                              ListarUsuariosUseCase listarUsuariosUseCase,
                              EditarUsuarioUseCase editarUsuarioUseCase,
@@ -39,7 +40,7 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioDto> crear(@RequestBody CrearUsuarioRequest request) {
-        Usuario usuario = crearUsuarioUseCase.ejecutar(
+        Usuario usuario = crearUsuarioUseCase.crearUsuario(
                 request.getNombre(),
                 request.getTipoDocumento(),
                 request.getNumeroDocumento(),
@@ -55,7 +56,7 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDto> obtener(@PathVariable Long id) {
 
-    Optional<Usuario> usuario = obtenerUsuarioUseCase.ejecutar(id);
+    Optional<Usuario> usuario = obtenerUsuarioUseCase.obtenerUsuario(id);
 
     if (usuario.isPresent()) {
         UsuarioDto dto = usuarioMapper.toDto(usuario.get());
@@ -99,7 +100,7 @@ public ResponseEntity<List<UsuarioDto>> listarPorAreaYRol(@PathVariable Long are
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioDto> editar(@PathVariable Long id,
                                              @RequestBody EditarUsuarioRequest request) {
-        Usuario usuario = editarUsuarioUseCase.ejecutar(
+        Usuario usuario = editarUsuarioUseCase.editarUsuario(
                 id,
                 request.getNombre(),
                 request.getTipoDocumento(),
@@ -114,7 +115,7 @@ public ResponseEntity<List<UsuarioDto>> listarPorAreaYRol(@PathVariable Long are
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        eliminarUsuarioUseCase.ejecutar(id);
+        eliminarUsuarioUseCase.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
     }
 }

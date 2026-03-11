@@ -1,6 +1,7 @@
 package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
+import com.datacenter.mallaturnos.port.in.Usuario.EditarUsuarioUseCasePort;
 import com.datacenter.mallaturnos.port.out.UsuarioRepositoryPort;
 
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import java.util.Optional;
  * Use Case: Editar un usuario existente
  */
 @Service
-public class EditarUsuarioUseCase {
+public class EditarUsuarioUseCase implements EditarUsuarioUseCasePort {
 
     private final UsuarioRepositoryPort usuarioRepository;
 
@@ -31,9 +32,14 @@ public class EditarUsuarioUseCase {
      * @param activo Nuevo estado
      * @return Usuario editado
      */
-    public Usuario ejecutar(Long id, String nombre, String tipodocumento,
-                            Integer contrasena, Long rolId, Long cargoId, 
-                            Long areaId) {
+    @Override
+    public Usuario editarUsuario(Long id,
+                                  String nombre,
+                                  String tipoDocumento,
+                                  Integer contrasena,
+                                  Long rolId,
+                                  Long cargoId,
+                                Long areaId) {
         
         // Obtener usuario existente
         Optional<Usuario> usuarioExistente = usuarioRepository.findById(id);
@@ -46,7 +52,7 @@ public class EditarUsuarioUseCase {
 
         // Actualizar campos
         usuario.setNombre(nombre);
-        usuario.setTipoDocumento(tipodocumento);
+        usuario.setTipoDocumento(tipoDocumento);
         usuario.setContrasena(contrasena);
         usuario.setRolId(rolId);
         usuario.setCargoId(cargoId);

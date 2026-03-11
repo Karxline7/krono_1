@@ -2,6 +2,7 @@ package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.port.out.UsuarioRepositoryPort;
+import com.datacenter.mallaturnos.port.in.Usuario.ListarUsuariosUseCasePort;
 
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * Use Case: Listar usuarios
  */
 @Service
-public class ListarUsuariosUseCase {
+public class ListarUsuariosUseCase implements ListarUsuariosUseCasePort {
 
     private final UsuarioRepositoryPort usuarioRepository;
 

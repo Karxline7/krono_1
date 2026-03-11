@@ -1,6 +1,7 @@
 package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
+import com.datacenter.mallaturnos.port.in.Usuario.CrearUsuarioUseCasePort;
 import com.datacenter.mallaturnos.port.out.UsuarioRepositoryPort;
 
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
  * Use Case: Crear un nuevo usuario en el sistema
  */
 @Service
-public class CrearUsuarioUseCase {
+public class CrearUsuarioUseCase implements CrearUsuarioUseCasePort {
 
     private final UsuarioRepositoryPort usuarioRepository;
 
@@ -17,26 +18,19 @@ public class CrearUsuarioUseCase {
         this.usuarioRepository = usuarioRepository;
     }
 
-    /**
-     * Crea un nuevo usuario
-     * @param nombre Nombres del usuario
-     * @param numeroDocumento Número de documento (único)
-     * @param tipoDocumento Tipo de documento (CC, CE, etc)
-     * @param contrasena  Contraseña de 6 dígitos
-     * @param rolId ID del rol del usuario (ADMIN, SUPERVISOR, FUNCIONARIO)
-     * @param cargo Cargo del usuario
-     * @param areaId ID del área (puede ser null para ADMIN)
-     * @return Usuario creado
-     */
-    public Usuario ejecutar(String nombre,  String tipoDocumento, Integer numeroDocumento,
-                            Integer contrasena, Long rolId, Long cargoId, Long areaId) {
-        
-        // Validar que el número de documento no exista
+    @Override
+    public Usuario crearUsuario(String nombre,
+                                String tipoDocumento,
+                                Integer numeroDocumento,
+                                Integer contrasena,
+                                Long rolId,
+                                Long cargoId,
+                                Long areaId) {
+
         if (usuarioRepository.existsByNumeroDocumento(numeroDocumento)) {
             throw new IllegalArgumentException("El número de documento ya existe");
         }
 
-        // Crear nuevo usuario usando constructor vacío
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setNombre(nombre);
         nuevoUsuario.setTipoDocumento(tipoDocumento);
@@ -46,7 +40,6 @@ public class CrearUsuarioUseCase {
         nuevoUsuario.setCargoId(cargoId);
         nuevoUsuario.setAreaId(areaId);
 
-        // Guardar y retornar
         return usuarioRepository.save(nuevoUsuario);
     }
 }
