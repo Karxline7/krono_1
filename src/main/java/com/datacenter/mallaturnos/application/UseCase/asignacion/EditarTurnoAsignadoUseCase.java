@@ -4,6 +4,7 @@ import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
 import com.datacenter.mallaturnos.port.out.AsignacionRepositoryPort;
 import com.datacenter.mallaturnos.port.out.TurnoRepositoryPort;
 import com.datacenter.mallaturnos.port.out.UsuarioRepositoryPort;
+import com.datacenter.mallaturnos.port.in.asignacion.EditarTurnoAsignadoUseCasePort;
 
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
-public class EditarTurnoAsignadoUseCase {
+public class EditarTurnoAsignadoUseCase implements EditarTurnoAsignadoUseCasePort {
 
     private final AsignacionRepositoryPort asignacionRepository;
     private final UsuarioRepositoryPort usuarioRepository;
@@ -33,7 +34,7 @@ public class EditarTurnoAsignadoUseCase {
      * @param nuevoTurnoId Nuevo turno (puede ser null para día libre)
      * @return Asignación editada
      */
-    public AsignacionTurno ejecutar(Long id, Long nuevoFuncionarioId, LocalDate nuevaFecha,
+    public AsignacionTurno editarTurnoAsignado(Long id, Long nuevoFuncionarioId, LocalDate nuevaFecha,
                                     Long nuevoTurnoId) {
         
         // Obtener asignación existente

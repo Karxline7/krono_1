@@ -4,6 +4,7 @@ import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
 import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.port.out.AsignacionRepositoryPort;
 import com.datacenter.mallaturnos.port.out.UsuarioRepositoryPort;
+import com.datacenter.mallaturnos.port.in.asignacion.ObtenerUsuarioPorTurnoAsignadoUseCasePort;
 
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
-public class ObtenerUsuarioPorTurnoAsignadoUseCase {
+public class ObtenerUsuarioPorTurnoAsignadoUseCase implements ObtenerUsuarioPorTurnoAsignadoUseCasePort {
 
     private final AsignacionRepositoryPort asignacionRepository;
     private final UsuarioRepositoryPort usuarioRepository;
@@ -22,7 +23,7 @@ public class ObtenerUsuarioPorTurnoAsignadoUseCase {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Optional<Usuario> ejecutar(Long funcionarioId, LocalDate fecha) {
+    public Optional<Usuario> obtenerUsuarioPorTurnoAsignado(Long funcionarioId, LocalDate fecha) {
         
         Optional<AsignacionTurno> asignacion = asignacionRepository.findByFuncionarioAndFecha(funcionarioId, fecha);
         

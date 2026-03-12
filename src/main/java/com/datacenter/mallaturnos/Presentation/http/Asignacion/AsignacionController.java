@@ -41,7 +41,7 @@ public class AsignacionController {
 
     @PostMapping
     public ResponseEntity<AsignacionTurnoDto> asignar(@RequestBody AsignarTurnoRequest request) {
-        AsignacionTurno asignacion = asignarTurnoUseCase.ejecutar(
+        AsignacionTurno asignacion = asignarTurnoUseCase.asignarTurno(
                 request.getFuncionarioId(),
                 request.getTurnoId(),
                 request.getFecha()
@@ -54,7 +54,7 @@ public class AsignacionController {
     public ResponseEntity<UsuarioDto> obtenerUsuario(@PathVariable Long funcionarioId,
                                                    @PathVariable String fecha) {
         LocalDate fechaDate = LocalDate.parse(fecha);
-        Optional<Usuario> usuario = obtenerUsuarioPorTurnoAsignadoUseCase.ejecutar(funcionarioId, fechaDate);
+        Optional<Usuario> usuario = obtenerUsuarioPorTurnoAsignadoUseCase.obtenerUsuarioPorTurnoAsignado(funcionarioId, fechaDate);
         return usuario.map(u -> ResponseEntity.ok(usuarioMapper.toDto(u)))
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -62,7 +62,7 @@ public class AsignacionController {
     @PutMapping("/{id}")
     public ResponseEntity<AsignacionTurnoDto> editar(@PathVariable Long id,
                                                      @RequestBody EditarTurnoAsignadoRequest request) {
-        AsignacionTurno asignacion = editarTurnoAsignadoUseCase.ejecutar(
+        AsignacionTurno asignacion = editarTurnoAsignadoUseCase.editarTurnoAsignado(
                 id,
                 request.getNuevoFuncionarioId(),
                 request.getNuevaFecha(),
@@ -74,7 +74,7 @@ public class AsignacionController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        eliminarTurnoAsignadoUseCase.ejecutar(id);
+        eliminarTurnoAsignadoUseCase.eliminarTurnoAsignado(id);
         return ResponseEntity.noContent().build();
     }
 }

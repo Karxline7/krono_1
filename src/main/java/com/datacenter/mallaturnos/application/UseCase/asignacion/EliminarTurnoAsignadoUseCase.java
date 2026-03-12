@@ -3,9 +3,10 @@ package com.datacenter.mallaturnos.application.UseCase.asignacion;
 import org.springframework.stereotype.Service;
 
 import com.datacenter.mallaturnos.port.out.AsignacionRepositoryPort;
+import com.datacenter.mallaturnos.port.in.asignacion.EliminarTurnoAsignadoUseCasePort;
 
 @Service
-public class EliminarTurnoAsignadoUseCase {
+public class EliminarTurnoAsignadoUseCase implements EliminarTurnoAsignadoUseCasePort {
 
     private final AsignacionRepositoryPort asignacionRepository;
 
@@ -13,7 +14,7 @@ public class EliminarTurnoAsignadoUseCase {
         this.asignacionRepository = asignacionRepository;
     }
 
-    public boolean ejecutar(Long id) {
+    public boolean eliminarTurnoAsignado(Long id) {
         
         if (!asignacionRepository.findById(id).isPresent()) {
             throw new IllegalArgumentException("Asignación no encontrada");
