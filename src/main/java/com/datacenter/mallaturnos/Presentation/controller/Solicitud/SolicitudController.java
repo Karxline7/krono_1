@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.Presentation.http.Solicitud;
+package com.datacenter.mallaturnos.Presentation.controller.Solicitud;
 
 import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
 import com.datacenter.mallaturnos.domain.model.SolicitudTurno;

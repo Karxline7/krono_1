@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.Presentation.http.Turno;
+package com.datacenter.mallaturnos.Presentation.controller.Turno;
 
 import com.datacenter.mallaturnos.domain.model.Turno;
 import com.datacenter.mallaturnos.application.UseCase.turno.*;

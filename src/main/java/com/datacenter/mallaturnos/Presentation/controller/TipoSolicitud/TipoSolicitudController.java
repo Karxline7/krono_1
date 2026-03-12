@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.Presentation.http.TipoSolicitud;
+package com.datacenter.mallaturnos.Presentation.controller.TipoSolicitud;
 
 import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
 import com.datacenter.mallaturnos.application.UseCase.tiposolicitud.*;

@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.Presentation.http;
+package com.datacenter.mallaturnos.Presentation.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.Presentation.http.Asignacion;
+package com.datacenter.mallaturnos.Presentation.controller.Asignacion;
 
 import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
 import com.datacenter.mallaturnos.domain.model.Usuario;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/asignaciones")
@@ -22,6 +23,7 @@ public class AsignacionController {
     private final ObtenerUsuarioPorTurnoAsignadoUseCase obtenerUsuarioPorTurnoAsignadoUseCase;
     private final EditarTurnoAsignadoUseCase editarTurnoAsignadoUseCase;
     private final EliminarTurnoAsignadoUseCase eliminarTurnoAsignadoUseCase;
+    private final ListarAsignacionesPorFechaUseCase listarAsignacionesPorFecha;
     private final AsignacionTurnoMapper asignacionTurnoMapper;
     private final UsuarioMapper usuarioMapper;
 
@@ -29,12 +31,14 @@ public class AsignacionController {
                                 ObtenerUsuarioPorTurnoAsignadoUseCase obtenerUsuarioPorTurnoAsignadoUseCase,
                                 EditarTurnoAsignadoUseCase editarTurnoAsignadoUseCase,
                                 EliminarTurnoAsignadoUseCase eliminarTurnoAsignadoUseCase,
+                                ListarAsignacionesPorFechaUseCase listarAsignacionesPorFecha,
                                 AsignacionTurnoMapper asignacionTurnoMapper,
                                 UsuarioMapper usuarioMapper) {
         this.asignarTurnoUseCase = asignarTurnoUseCase;
         this.obtenerUsuarioPorTurnoAsignadoUseCase = obtenerUsuarioPorTurnoAsignadoUseCase;
         this.editarTurnoAsignadoUseCase = editarTurnoAsignadoUseCase;
         this.eliminarTurnoAsignadoUseCase = eliminarTurnoAsignadoUseCase;
+        this.listarAsignacionesPorFecha = listarAsignacionesPorFecha;
         this.asignacionTurnoMapper = asignacionTurnoMapper;
         this.usuarioMapper = usuarioMapper;
     }
@@ -71,6 +75,14 @@ public class AsignacionController {
         AsignacionTurnoDto dto = asignacionTurnoMapper.toDto(asignacion);
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("/fecha/{fecha}")
+    public List<AsignacionTurno> listarPorFecha(@PathVariable String fecha) {
+
+    LocalDate fechaConsulta = LocalDate.parse(fecha);
+
+    return listarAsignacionesPorFecha.listarAsignacionesPorFecha(fechaConsulta);
+}
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {

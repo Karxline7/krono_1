@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.Presentation.http.Rol;
+package com.datacenter.mallaturnos.Presentation.controller.Rol;
 
 import com.datacenter.mallaturnos.domain.model.Rol;
 import com.datacenter.mallaturnos.application.UseCase.Rol.*;

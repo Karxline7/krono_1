@@ -1,4 +1,4 @@
-package com.datacenter.mallaturnos.Presentation.http.Usuario;
+package com.datacenter.mallaturnos.Presentation.controller.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.application.UseCase.Usuario.*;

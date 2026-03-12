@@ -61,6 +61,22 @@ public class AsignacionPersistenceAdapter implements AsignacionRepositoryPort {
     }
 
     @Override
+    public List<AsignacionTurno> findByFecha(LocalDate fecha) {
+
+        return jpaRepository.findByFecha(fecha)
+                .stream()
+                .map(entity -> {
+                    AsignacionTurno asignacion = new AsignacionTurno();
+                    asignacion.setId(entity.getId());
+                    asignacion.setFuncionarioId(entity.getFuncionario().getId());
+                    asignacion.setTurnoId(entity.getTurnoId());
+                    asignacion.setFecha(entity.getFecha());
+                    return asignacion;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public AsignacionTurno save(AsignacionTurno asignacion) {
         AsignacionTurnoJpaEntity entity = toEntity(asignacion);
         AsignacionTurnoJpaEntity saved = jpaRepository.save(entity);
