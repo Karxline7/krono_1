@@ -5,7 +5,6 @@ import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -34,15 +33,15 @@ public interface AsignacionJpaRepository
 
     List<AsignacionTurnoJpaEntity> findByFecha(LocalDate fecha);
 
-    @Query("""
+        @Query("""
         SELECT a
         FROM AsignacionTurnoJpaEntity a
-        WHERE a.funcionario.area.id = :areaId
-        AND a.fecha BETWEEN :inicio AND :fin
-    """)
-    List<AsignacionTurnoJpaEntity> findByAreaAndPeriodo(
-            @Param("areaId") Long areaId,
-            @Param("inicio") LocalDate inicio,
-            @Param("fin") LocalDate fin
-    );
+        WHERE a.funcionario.areaId = :areaId
+         AND a.fecha BETWEEN :inicio AND :fin
+        """)
+        List<AsignacionTurnoJpaEntity> findByAreaAndPeriodo(
+                Long areaId,
+                LocalDate inicio,
+                LocalDate fin
+);
 }

@@ -29,7 +29,7 @@ CREATE TABLE cargos (
 -- USUARIOS DEL SISTEMA
 -- Roles: ADMINISTRADOR | SUPERVISOR | FUNCIONARIO
 -- ============================================================
-CREATE TABLE usuarios (
+CREATE TABLE usuario (
     id             BIGSERIAL    PRIMARY KEY,
     nombre        VARCHAR(100) NOT NULL,
     tipo_identificacion VARCHAR(3)  NOT NULL,

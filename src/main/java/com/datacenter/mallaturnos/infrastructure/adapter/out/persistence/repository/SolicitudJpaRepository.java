@@ -17,7 +17,5 @@ public interface SolicitudJpaRepository extends JpaRepository<SolicitudTurnoJpaE
     
     boolean existsByAsignacionTurno_IdAndEstado(Long asignacionId, EstadoSolicitud estado);
     
-    boolean existsByAsignacionTurno_IdAndFuncionario_IdAndEstado(Long asignacionId, Long funcionarioId, EstadoSolicitud estado);
-    
     boolean existsByAsignacionTurnoIdAndEstado(Long asignacionId, EstadoSolicitud estado);
 }
