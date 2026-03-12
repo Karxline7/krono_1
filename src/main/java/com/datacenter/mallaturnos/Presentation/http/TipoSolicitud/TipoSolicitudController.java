@@ -39,21 +39,21 @@ public class TipoSolicitudController {
 
     @PostMapping
     public ResponseEntity<TipoSolicitudDto> crear(@RequestBody CrearTipoSolicitudRequest request) {
-        TipoSolicitud tipoSolicitud = crearTipoSolicitudUseCase.ejecutar(request.getNombre(), request.getDescripcion());
+        TipoSolicitud tipoSolicitud = crearTipoSolicitudUseCase.crearTipoSolicitud(request.getNombre(), request.getDescripcion());
         TipoSolicitudDto dto = tipoSolicitudMapper.toDto(tipoSolicitud);
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TipoSolicitudDto> obtener(@PathVariable Long id) {
-        Optional<TipoSolicitud> tipoSolicitud = obtenerTipoSolicitudUseCase.ejecutar(id);
+        Optional<TipoSolicitud> tipoSolicitud = obtenerTipoSolicitudUseCase.obtenerTipoSolicitud(id);
         return tipoSolicitud.map(t -> ResponseEntity.ok(tipoSolicitudMapper.toDto(t)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
     public ResponseEntity<List<TipoSolicitudDto>> listar() {
-        List<TipoSolicitud> tiposSolicitud = listarTiposSolicitudUseCase.ejecutar();
+        List<TipoSolicitud> tiposSolicitud = listarTiposSolicitudUseCase.listarTiposSolicitud();
         List<TipoSolicitudDto> dtos = tiposSolicitud.stream()
                 .map(tipoSolicitudMapper::toDto)
                 .collect(Collectors.toList());
@@ -63,14 +63,14 @@ public class TipoSolicitudController {
     @PutMapping("/{id}")
     public ResponseEntity<TipoSolicitudDto> editar(@PathVariable Long id,
                                                 @RequestBody EditarTipoSolicitudRequest request) {
-        TipoSolicitud tipoSolicitud = editarTipoSolicitudUseCase.ejecutar(id, request.getNombre(), request.getDescripcion());
+        TipoSolicitud tipoSolicitud = editarTipoSolicitudUseCase.editarTipoSolicitud(id, request.getNombre(), request.getDescripcion());
         TipoSolicitudDto dto = tipoSolicitudMapper.toDto(tipoSolicitud);
         return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        eliminarTipoSolicitudUseCase.ejecutar(id);
+        eliminarTipoSolicitudUseCase.eliminarTipoSolicitud(id);
         return ResponseEntity.noContent().build();
     }
 }
