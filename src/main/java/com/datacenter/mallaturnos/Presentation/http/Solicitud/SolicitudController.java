@@ -30,7 +30,7 @@ public class SolicitudController {
 
     @PostMapping("/solicitud")
     public ResponseEntity<SolicitudTurnoDto> solicitarTurno(@RequestBody SolicitudTurnoRequest request) {
-        SolicitudTurno solicitud = solicitudTurnoUseCase.ejecutar(
+        SolicitudTurno solicitud = solicitudTurnoUseCase.crearSolicitudTurno(
                 request.getAsignacionId(),
                 request.getTipoSolicitudId(),
                 request.getMotivoSolicitud(),
@@ -43,7 +43,7 @@ public class SolicitudController {
     @PutMapping("/{id}/aprobar")
     public ResponseEntity<SolicitudTurnoDto> aprobar(@PathVariable Long id,
                                                      @RequestBody AprobarSolicitudRequest request) {
-        SolicitudTurno solicitud = aprobarSolicitudUseCase.ejecutar(id);
+        SolicitudTurno solicitud = aprobarSolicitudUseCase.aprobarSolicitud(id);
         SolicitudTurnoDto dto = solicitudTurnoMapper.toDto(solicitud);
         return ResponseEntity.ok(dto);
     }
@@ -51,9 +51,7 @@ public class SolicitudController {
     @PutMapping("/{id}/denegar")
     public ResponseEntity<SolicitudTurnoDto> denegar(@PathVariable Long id,
                                                      @RequestBody DenegarSolicitudRequest request) {
-        SolicitudTurno solicitud = denegarSolicitudUseCase.ejecutar(
-                id
-        );
+        SolicitudTurno solicitud = denegarSolicitudUseCase.denegarSolicitud(id);
         SolicitudTurnoDto dto = solicitudTurnoMapper.toDto(solicitud);
         return ResponseEntity.ok(dto);
     }

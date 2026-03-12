@@ -3,11 +3,12 @@ package com.datacenter.mallaturnos.application.UseCase.Solicitud;
 import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
 import com.datacenter.mallaturnos.port.out.SolicitudRepositoryPort;
 import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
+import com.datacenter.mallaturnos.port.in.solicitud.AprobarSolicitudUseCasePort;
 
 import org.springframework.stereotype.Service;
 
 @Service
-public class AprobarSolicitudUseCase {
+public class AprobarSolicitudUseCase implements AprobarSolicitudUseCasePort {
 
     private final SolicitudRepositoryPort solicitudRepository;
 
@@ -16,8 +17,7 @@ public class AprobarSolicitudUseCase {
         this.solicitudRepository = solicitudRepository;
     }
 
-    public SolicitudTurno ejecutar(Long solicitudId) {
-        
+    public SolicitudTurno aprobarSolicitud(Long solicitudId) {
         var solicitud = solicitudRepository.findById(solicitudId);
         
         if (!solicitud.isPresent()) {
