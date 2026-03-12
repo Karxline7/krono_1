@@ -1,6 +1,7 @@
 package com.datacenter.mallaturnos.application.UseCase.Rol;
 
 import com.datacenter.mallaturnos.domain.model.Rol;
+import com.datacenter.mallaturnos.port.in.rol.ListarRolesUseCasePort;
 import com.datacenter.mallaturnos.port.out.RolRepositoryPort;
 
 import org.springframework.stereotype.Service;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ListarRolesUseCase {
+public class ListarRolesUseCase implements ListarRolesUseCasePort{
 
     private final RolRepositoryPort rolRepository;
 
@@ -16,7 +17,7 @@ public class ListarRolesUseCase {
         this.rolRepository = rolRepository;
     }
 
-    public List<Rol> ejecutar() {
+    public List<Rol> listarRoles() {
         return rolRepository.findAll();
     }
 }

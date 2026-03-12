@@ -2,13 +2,14 @@ package com.datacenter.mallaturnos.application.UseCase.Rol;
 
 import com.datacenter.mallaturnos.domain.model.Rol;
 import com.datacenter.mallaturnos.port.out.RolRepositoryPort;
+import com.datacenter.mallaturnos.port.in.rol.EditarRolUseCasePort;
 
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class EditarRolUseCase {
+public class EditarRolUseCase implements EditarRolUseCasePort {
 
     private final RolRepositoryPort rolRepository;
 
@@ -16,7 +17,7 @@ public class EditarRolUseCase {
         this.rolRepository = rolRepository;
     }
 
-    public Rol ejecutar(Long id, String nombre, String descripcion) {
+    public Rol editarRol(Long id, String nombre, String descripcion) {
         
         Optional<Rol> rolExistente = rolRepository.findById(id);
         

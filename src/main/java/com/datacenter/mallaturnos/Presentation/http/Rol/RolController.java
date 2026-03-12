@@ -39,21 +39,21 @@ public class RolController {
 
     @PostMapping
     public ResponseEntity<RolDto> crear(@RequestBody CrearRolRequest request) {
-        Rol rol = crearRolUseCase.ejecutar(request.getNombre(), request.getDescripcion());
+        Rol rol = crearRolUseCase.crearRol(request.getNombre(), request.getDescripcion());
         RolDto dto = rolMapper.toDto(rol);
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<RolDto> obtener(@PathVariable Long id) {
-        Optional<Rol> rol = obtenerRolUseCase.ejecutar(id);
+        Optional<Rol> rol = obtenerRolUseCase.obtenerRol(id);
         return rol.map(r -> ResponseEntity.ok(rolMapper.toDto(r)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
     public ResponseEntity<List<RolDto>> listar() {
-        List<Rol> roles = listarRolesUseCase.ejecutar();
+        List<Rol> roles = listarRolesUseCase.listarRoles();
         List<RolDto> dtos = roles.stream()
                 .map(rolMapper::toDto)
                 .collect(Collectors.toList());
@@ -63,14 +63,14 @@ public class RolController {
     @PutMapping("/{id}")
     public ResponseEntity<RolDto> editar(@PathVariable Long id,
                                       @RequestBody EditarRolRequest request) {
-        Rol rol = editarRolUseCase.ejecutar(id, request.getNombre(), request.getDescripcion());
+        Rol rol = editarRolUseCase.editarRol(id, request.getNombre(), request.getDescripcion());
         RolDto dto = rolMapper.toDto(rol);
         return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        eliminarRolUseCase.ejecutar(id);
+        eliminarRolUseCase.eliminarRol(id);
         return ResponseEntity.noContent().build();
     }
 }

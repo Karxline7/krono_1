@@ -1,11 +1,12 @@
 package com.datacenter.mallaturnos.application.UseCase.Rol;
 
 import org.springframework.stereotype.Service;
+import com.datacenter.mallaturnos.port.in.rol.EliminarRolUseCasePort;
 
 import com.datacenter.mallaturnos.port.out.RolRepositoryPort;
 
 @Service
-public class EliminarRolUseCase {
+public class EliminarRolUseCase implements EliminarRolUseCasePort {
 
     private final RolRepositoryPort rolRepository;
 
@@ -13,7 +14,7 @@ public class EliminarRolUseCase {
         this.rolRepository = rolRepository;
     }
 
-    public boolean ejecutar(Long id) {
+    public boolean eliminarRol(Long id) {
         
         if (!rolRepository.findById(id).isPresent()) {
             throw new IllegalArgumentException("Rol no encontrado");
