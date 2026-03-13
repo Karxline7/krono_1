@@ -32,6 +32,10 @@ public class TurnoPersistenceAdapter implements TurnoRepositoryPort {
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
+    @Override
+    public Optional<Turno> findByNombre(String nombre) {
+        return jpaRepository.findByNombre(nombre).map(this::toDomain);
+    }
 
     @Override
     public Turno save(Turno turno) {
