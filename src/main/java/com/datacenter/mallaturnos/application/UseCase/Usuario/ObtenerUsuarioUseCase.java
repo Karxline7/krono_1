@@ -1,8 +1,9 @@
 package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
-import com.datacenter.mallaturnos.domain.model.Usuario;
-import com.datacenter.mallaturnos.port.out.UsuarioRepositoryPort;
-import com.datacenter.mallaturnos.port.in.Usuario.ObtenerUsuarioUseCasePort;
+import com.datacenter.mallaturnos.application.Dto.Usuario.UsuarioDto;
+import com.datacenter.mallaturnos.infrastructure.port.in.Usuario.ObtenerUsuarioUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.mappers.UsuarioMapper;
 
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,11 @@ import java.util.Optional;
 public class ObtenerUsuarioUseCase implements ObtenerUsuarioUseCasePort {
 
     private final UsuarioRepositoryPort usuarioRepository;
+    private final UsuarioMapper usuarioMapper;
 
-    public ObtenerUsuarioUseCase(UsuarioRepositoryPort usuarioRepository) {
+    public ObtenerUsuarioUseCase(UsuarioRepositoryPort usuarioRepository, UsuarioMapper usuarioMapper) {
         this.usuarioRepository = usuarioRepository;
+        this.usuarioMapper = usuarioMapper;
     }
 
     /**
@@ -25,8 +28,10 @@ public class ObtenerUsuarioUseCase implements ObtenerUsuarioUseCasePort {
      * @param id ID del usuario
      * @return Optional con el usuario si existe
      */
-    public Optional<Usuario> obtenerUsuario(Long id) {
-        return usuarioRepository.findById(id);
+    public Optional<UsuarioDto> obtenerUsuario(Long id) {
+
+    return usuarioRepository.findById(id)
+            .map(usuarioMapper::toDto);
     }
 
     /**
@@ -34,7 +39,9 @@ public class ObtenerUsuarioUseCase implements ObtenerUsuarioUseCasePort {
      * @param numeroDocumento Número de documento
      * @return Optional con el usuario si existe
      */
-    public Optional<Usuario> obtenerPorNumeroDocumento(Integer numeroDocumento) {
-        return usuarioRepository.findByNumeroDocumento(numeroDocumento);
+    public Optional<UsuarioDto> obtenerPorNumeroDocumento(Integer numeroDocumento) {
+
+        return usuarioRepository.findByNumeroDocumento(numeroDocumento)
+                .map(usuarioMapper::toDto);
     }
 }

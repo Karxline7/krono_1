@@ -1,8 +1,8 @@
 package com.datacenter.mallaturnos.application.UseCase.asignacion;
 
 import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
-import com.datacenter.mallaturnos.port.in.asignacion.ListarAsignacionesPorFechaUseCasePort;
-import com.datacenter.mallaturnos.port.out.AsignacionRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.in.asignacion.ListarAsignacionesPorFechaUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPort;
 
 import org.springframework.stereotype.Service;
 

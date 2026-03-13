@@ -4,7 +4,7 @@ import com.datacenter.mallaturnos.domain.model.Usuario;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.RolJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.UsuarioJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.UsuarioJpaRepository;
-import com.datacenter.mallaturnos.port.out.UsuarioRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.RolJpaRepository;
 
 import org.springframework.stereotype.Component;

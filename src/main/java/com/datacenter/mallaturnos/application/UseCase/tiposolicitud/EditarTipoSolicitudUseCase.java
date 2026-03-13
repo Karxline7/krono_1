@@ -1,8 +1,8 @@
 package com.datacenter.mallaturnos.application.UseCase.tiposolicitud;
 
 import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
-import com.datacenter.mallaturnos.port.out.TipoSolicitudRepositoryPort;
-import com.datacenter.mallaturnos.port.in.tiposolicitud.EditarTipoSolicitudUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.in.tiposolicitud.EditarTipoSolicitudUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.out.TipoSolicitudRepositoryPort;
 
 import org.springframework.stereotype.Service;
 

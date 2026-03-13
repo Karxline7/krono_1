@@ -3,7 +3,7 @@ package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.adapte
 import com.datacenter.mallaturnos.domain.model.Turno;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.TurnoJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.TurnoJpaRepository;
-import com.datacenter.mallaturnos.port.out.TurnoRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.out.TurnoRepositoryPort;
 
 import org.springframework.stereotype.Component;
 

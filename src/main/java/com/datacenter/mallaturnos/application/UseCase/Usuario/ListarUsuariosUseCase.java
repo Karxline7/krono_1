@@ -1,8 +1,9 @@
 package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
-import com.datacenter.mallaturnos.domain.model.Usuario;
-import com.datacenter.mallaturnos.port.out.UsuarioRepositoryPort;
-import com.datacenter.mallaturnos.port.in.Usuario.ListarUsuariosUseCasePort;
+import com.datacenter.mallaturnos.application.Dto.Usuario.UsuarioDto;
+import com.datacenter.mallaturnos.infrastructure.mappers.UsuarioMapper;
+import com.datacenter.mallaturnos.infrastructure.port.in.Usuario.ListarUsuariosUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
 
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,11 @@ import java.util.List;
 public class ListarUsuariosUseCase implements ListarUsuariosUseCasePort {
 
     private final UsuarioRepositoryPort usuarioRepository;
+    private final UsuarioMapper usuarioMapper;
 
-    public ListarUsuariosUseCase(UsuarioRepositoryPort usuarioRepository) {
+    public ListarUsuariosUseCase(UsuarioRepositoryPort usuarioRepository, UsuarioMapper usuarioMapper) {
         this.usuarioRepository = usuarioRepository;
+        this.usuarioMapper = usuarioMapper;
     }
 
     /**
@@ -25,16 +28,25 @@ public class ListarUsuariosUseCase implements ListarUsuariosUseCasePort {
      * @param areaId ID del área
      * @return Lista de usuarios del área
      */
-    public List<Usuario> listarPorArea(Long areaId) {
-        return usuarioRepository.findByAreaId(areaId);
+    @Override
+    public List<UsuarioDto> listarPorArea(Long areaId) {
+
+        return usuarioRepository.findByAreaId(areaId)
+                .stream()
+                .map(usuarioMapper::toDto)
+                .toList();
     }
     /**
      * Obtiene todos los usuarios de un cargo
      * @param cargoId ID del cargo
      * @return Lista de usuarios del cargo
      */
-    public List<Usuario> listarPorCargo(Long cargoId) {
-        return usuarioRepository.findByCargoId(cargoId);
+    public List<UsuarioDto> listarPorCargo(Long cargoId) {
+
+    return usuarioRepository.findByCargoId(cargoId)
+            .stream()
+            .map(usuarioMapper::toDto)
+            .toList();
     }
 
     /**
@@ -43,7 +55,11 @@ public class ListarUsuariosUseCase implements ListarUsuariosUseCasePort {
      * @param rolId ID del rol a filtrar
      * @return Lista de usuarios con ese rol en el área
      */
-    public List<Usuario> listarPorAreaYRol(Long areaId, Long rolId) {
-        return usuarioRepository.findByAreaIdAndRolId(areaId, rolId);
+    public List<UsuarioDto> listarPorAreaYRol(Long areaId, Long rolId) {
+
+    return usuarioRepository.findByAreaIdAndRolId(areaId, rolId)
+            .stream()
+            .map(usuarioMapper::toDto)
+            .toList();
     }
 }

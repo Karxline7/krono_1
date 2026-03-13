@@ -1,8 +1,10 @@
 package com.datacenter.mallaturnos.application.UseCase.Usuario;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
-import com.datacenter.mallaturnos.port.in.Usuario.EditarUsuarioUseCasePort;
-import com.datacenter.mallaturnos.port.out.UsuarioRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.in.Usuario.EditarUsuarioUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
+import com.datacenter.mallaturnos.application.Dto.Usuario.EditarUsuarioDto;
+import com.datacenter.mallaturnos.application.Dto.Usuario.UsuarioDto;
 
 import org.springframework.stereotype.Service;
 
@@ -33,14 +35,14 @@ public class EditarUsuarioUseCase implements EditarUsuarioUseCasePort {
      * @return Usuario editado
      */
     @Override
-    public Usuario editarUsuario(Long id,
-                                  String nombre,
-                                  String tipoDocumento,
-                                  Integer contrasena,
-                                  Long rolId,
-                                  Long cargoId,
-                                Long areaId) {
-        
+    public UsuarioDto editarUsuario(EditarUsuarioDto dto) {
+        Long id = dto.getId();
+        String nombre = dto.getNombre();
+        String tipoDocumento = dto.getTipoDocumento();
+        Long rolId = dto.getRolId();
+        Long cargoId = dto.getCargoId();
+        Long areaId = dto.getAreaId();
+
         // Obtener usuario existente
         Optional<Usuario> usuarioExistente = usuarioRepository.findById(id);
         
@@ -53,12 +55,22 @@ public class EditarUsuarioUseCase implements EditarUsuarioUseCasePort {
         // Actualizar campos
         usuario.setNombre(nombre);
         usuario.setTipoDocumento(tipoDocumento);
-        usuario.setContrasena(contrasena);
         usuario.setRolId(rolId);
         usuario.setCargoId(cargoId);
         usuario.setAreaId(areaId);
 
         // Guardar y retornar
-        return usuarioRepository.save(usuario);
+        Usuario usuarioEditado = usuarioRepository.save(usuario);
+
+        UsuarioDto response = new UsuarioDto();
+        response.setId(usuarioEditado.getId());
+        response.setNombre(usuarioEditado.getNombre());
+        response.setTipoDocumento(usuarioEditado.getTipoDocumento());
+        response.setNumeroDocumento(usuarioEditado.getNumeroDocumento());
+        response.setRolId(usuarioEditado.getRolId());
+        response.setCargoId(usuarioEditado.getCargoId());
+        response.setAreaId(usuarioEditado.getAreaId());
+
+        return response;
     }
 }

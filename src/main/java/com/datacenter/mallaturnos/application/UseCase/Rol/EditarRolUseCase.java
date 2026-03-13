@@ -1,34 +1,36 @@
 package com.datacenter.mallaturnos.application.UseCase.Rol;
 
+import com.datacenter.mallaturnos.application.Dto.Rol.RolDto;
 import com.datacenter.mallaturnos.domain.model.Rol;
-import com.datacenter.mallaturnos.port.out.RolRepositoryPort;
-import com.datacenter.mallaturnos.port.in.rol.EditarRolUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.in.rol.EditarRolUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.out.RolRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.mappers.RolMapper;
 
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 public class EditarRolUseCase implements EditarRolUseCasePort {
 
     private final RolRepositoryPort rolRepository;
+    private final RolMapper rolMapper;
 
-    public EditarRolUseCase(RolRepositoryPort rolRepository) {
+    public EditarRolUseCase(RolRepositoryPort rolRepository, RolMapper rolMapper) {
         this.rolRepository = rolRepository;
+        this.rolMapper = rolMapper;
     }
 
-    public Rol editarRol(Long id, String nombre, String descripcion) {
-        
-        Optional<Rol> rolExistente = rolRepository.findById(id);
-        
-        if (!rolExistente.isPresent()) {
-            throw new IllegalArgumentException("Rol no encontrado");
-        }
+    @Override
+    public RolDto editarRol(Long id, RolDto dto) {
 
-        Rol rol = rolExistente.get();
-        rol.setNombre(nombre);
-        rol.setDescripcion(descripcion);
+        Rol rol = rolRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Rol no encontrado"));
 
-        return rolRepository.save(rol);
+        rol.setNombre(dto.getNombre());
+        rol.setDescripcion(dto.getDescripcion());
+
+        Rol actualizado = rolRepository.save(rol);
+
+        return rolMapper.toDto(actualizado);
     }
 }

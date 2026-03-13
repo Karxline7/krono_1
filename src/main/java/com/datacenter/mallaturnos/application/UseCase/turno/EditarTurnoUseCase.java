@@ -1,61 +1,54 @@
 package com.datacenter.mallaturnos.application.UseCase.turno;
 
 import com.datacenter.mallaturnos.domain.model.Turno;
-import com.datacenter.mallaturnos.port.in.turno.EditarTurnoUseCasePort;
-import com.datacenter.mallaturnos.port.out.TurnoRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.in.turno.EditarTurnoUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.out.TurnoRepositoryPort;
+import com.datacenter.mallaturnos.application.Dto.Turno.TurnoDto;
+import com.datacenter.mallaturnos.infrastructure.mappers.TurnoMapper;
 
 import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
-import java.util.Optional;
-
-/**
- * Use Case: Editar un turno existente
- */
 @Service
-public class EditarTurnoUseCase implements EditarTurnoUseCasePort{
+public class EditarTurnoUseCase implements EditarTurnoUseCasePort {
 
     private final TurnoRepositoryPort turnoRepository;
+    private final TurnoMapper turnoMapper;
 
-    public EditarTurnoUseCase(TurnoRepositoryPort turnoRepository) {
+    public EditarTurnoUseCase(TurnoRepositoryPort turnoRepository, TurnoMapper turnoMapper) {
         this.turnoRepository = turnoRepository;
+        this.turnoMapper = turnoMapper;
     }
 
-    /**
-     * Edita un turno existente
-     * @param id ID del turno a editar
-     * @param nombre Nuevo nombre
-     * @param horaInicio Nueva hora de inicio
-     * @param horaFin Nueva hora de fin
-     * @param horaalmuerzo Nueva hora de almuerzo
-     * @param horabreak Nueva hora de break
-     * @return Turno editado
-     */
-    public Turno editarTurno(Long id, String nombre, LocalTime horaInicio, 
-                          LocalTime horaFin, LocalTime horaalmuerzo, LocalTime horabreak) {
-        
-        // Obtener turno existente
-        Optional<Turno> turnoExistente = turnoRepository.findById(id);
-        
-        if (!turnoExistente.isPresent()) {
-            throw new IllegalArgumentException("Turno no encontrado con ID: " + id);
-        }
+    @Override
+    public TurnoDto editarTurno(Long id, TurnoDto dto) {
 
-        // Validar que la hora de inicio sea menor que la de fin
-        if (horaInicio.isAfter(horaFin) || horaInicio.equals(horaFin)) {
+        Turno turno = turnoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Turno no encontrado con ID: " + id));
+
+        // Validar hora inicio < hora fin
+        if (dto.getHoraInicio().isAfter(dto.getHoraFin()) || dto.getHoraInicio().equals(dto.getHoraFin())) {
             throw new IllegalArgumentException("La hora de inicio debe ser menor que la hora de fin");
         }
 
-        Turno turno = turnoExistente.get();
+        // Validar almuerzo dentro del turno
+        if (dto.getHoraalmuerzo().isBefore(dto.getHoraInicio()) || dto.getHoraalmuerzo().isAfter(dto.getHoraFin())) {
+            throw new IllegalArgumentException("La hora de almuerzo debe estar dentro del turno");
+        }
+
+        // Validar break dentro del turno
+        if (dto.getHorabreak().isBefore(dto.getHoraInicio()) || dto.getHorabreak().isAfter(dto.getHoraFin())) {
+            throw new IllegalArgumentException("La hora de break debe estar dentro del turno");
+        }
 
         // Actualizar campos
-        turno.setNombre(nombre);
-        turno.setHoraInicio(horaInicio);
-        turno.setHoraFin(horaFin);
-        turno.setHoraalmuerzo(horaalmuerzo);
-        turno.setHorabreak(horabreak);
+        turno.setNombre(dto.getNombre());
+        turno.setHoraInicio(dto.getHoraInicio());
+        turno.setHoraFin(dto.getHoraFin());
+        turno.setHoraalmuerzo(dto.getHoraalmuerzo());
+        turno.setHorabreak(dto.getHorabreak());
 
-        // Guardar y retornar
-        return turnoRepository.save(turno);
+        Turno actualizado = turnoRepository.save(turno);
+
+        return turnoMapper.toDto(actualizado);
     }
 }

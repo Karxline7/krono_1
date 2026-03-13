@@ -2,8 +2,9 @@ package com.datacenter.mallaturnos.infrastructure.config;
 
 import com.datacenter.mallaturnos.domain.model.Rol;
 import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
-import com.datacenter.mallaturnos.port.out.RolRepositoryPort;
-import com.datacenter.mallaturnos.port.out.TipoSolicitudRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.out.RolRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.out.TipoSolicitudRepositoryPort;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

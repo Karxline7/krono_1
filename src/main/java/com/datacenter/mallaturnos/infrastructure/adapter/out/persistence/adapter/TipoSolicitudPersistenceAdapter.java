@@ -3,7 +3,7 @@ package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.adapte
 import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.TipoSolicitudJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.TipoSolicitudJpaRepository;
-import com.datacenter.mallaturnos.port.out.TipoSolicitudRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.out.TipoSolicitudRepositoryPort;
 
 import org.springframework.stereotype.Component;
 

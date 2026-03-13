@@ -3,7 +3,7 @@ package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.adapte
 import com.datacenter.mallaturnos.domain.model.Rol;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.RolJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.RolJpaRepository;
-import com.datacenter.mallaturnos.port.out.RolRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.out.RolRepositoryPort;
 
 import org.springframework.stereotype.Component;
 

@@ -1,9 +1,9 @@
 package com.datacenter.mallaturnos.application.UseCase.Solicitud;
 
 import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
-import com.datacenter.mallaturnos.port.out.SolicitudRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.in.solicitud.DenegarSolicitudUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.out.SolicitudRepositoryPort;
 import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
-import com.datacenter.mallaturnos.port.in.solicitud.DenegarSolicitudUseCasePort;
 
 import org.springframework.stereotype.Service;
 

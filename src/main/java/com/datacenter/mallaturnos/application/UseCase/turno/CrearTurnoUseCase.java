@@ -1,60 +1,54 @@
 package com.datacenter.mallaturnos.application.UseCase.turno;
 
 import com.datacenter.mallaturnos.domain.model.Turno;
-import com.datacenter.mallaturnos.port.in.turno.CrearTurnoUseCasePort;
-import com.datacenter.mallaturnos.port.out.TurnoRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.in.turno.CrearTurnoUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.out.TurnoRepositoryPort;
+import com.datacenter.mallaturnos.application.Dto.Turno.TurnoDto;
+import com.datacenter.mallaturnos.infrastructure.mappers.TurnoMapper;
 
 import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
-
-/**
- * Use Case: Crear un nuevo turno
- */
 @Service
 public class CrearTurnoUseCase implements CrearTurnoUseCasePort {
 
     private final TurnoRepositoryPort turnoRepository;
+    private final TurnoMapper turnoMapper;
 
-    public CrearTurnoUseCase(TurnoRepositoryPort turnoRepository) {
+    public CrearTurnoUseCase(TurnoRepositoryPort turnoRepository, TurnoMapper turnoMapper) {
         this.turnoRepository = turnoRepository;
+        this.turnoMapper = turnoMapper;
     }
 
-    /**
-     * Crea un nuevo turno
-     * @param nombre Nombre del turno (ej: Turno Mañana)
-     * @param horaInicio Hora de inicio (ej: 06:00)
-     * @param horaFin Hora de fin (ej: 14:00)
-     * @param  horaalmuerzo Hora de almuerzo (ej: 12:00)
-     * @param horabreak Hora de break (ej: 10:00)
-     * @return Turno creado
-     */
-    public Turno crearTurno(String nombre, LocalTime horaInicio, LocalTime horaFin, LocalTime horaalmuerzo, LocalTime horabreak) {
-        
-        // Validar que la hora de inicio sea menor que la de fin
-        if (horaInicio.isAfter(horaFin) || horaInicio.equals(horaFin)) {
+    @Override
+    public TurnoDto crearTurno(TurnoDto dto) {
+
+        // validar si el turno con el mismo nombre ya existe
+        if (turnoRepository.findByNombre(dto.getNombre()).isPresent()) {
+            throw new IllegalArgumentException("Ya existe un turno con el mismo nombre");
+        }
+
+        // Validar hora inicio < hora fin
+        if (dto.getHoraInicio().isAfter(dto.getHoraFin()) || dto.getHoraInicio().equals(dto.getHoraFin())) {
             throw new IllegalArgumentException("La hora de inicio debe ser antes que la hora de fin");
         }
 
-        // Validar que la hora de almuerzo esté entre inicio y fin
-        if (horaalmuerzo.isBefore(horaInicio) || horaalmuerzo.isAfter(horaFin)) {
+        // Validar almuerzo dentro del turno
+        if (dto.getHoraalmuerzo().isBefore(dto.getHoraInicio()) || dto.getHoraalmuerzo().isAfter(dto.getHoraFin())) {
             throw new IllegalArgumentException("La hora de almuerzo debe estar entre la hora de inicio y fin");
         }
 
-        // Validar que la hora de break esté entre inicio y fin
-        if (horabreak.isBefore(horaInicio) || horabreak.isAfter(horaFin)) {
+        // Validar break dentro del turno
+        if (dto.getHorabreak().isBefore(dto.getHoraInicio()) || dto.getHorabreak().isAfter(dto.getHoraFin())) {
             throw new IllegalArgumentException("La hora de break debe estar entre la hora de inicio y fin");
         }
 
-        // Crear nuevo turno
-        Turno nuevoTurno = new Turno();
-        nuevoTurno.setNombre(nombre);
-        nuevoTurno.setHoraInicio(horaInicio);
-        nuevoTurno.setHoraFin(horaFin);
-        nuevoTurno.setHoraalmuerzo(horaalmuerzo);
-        nuevoTurno.setHorabreak(horabreak);
+        // Convertir DTO → Domain
+        Turno nuevoTurno = turnoMapper.toDomain(dto);
 
-        // Guardar y retornar
-        return turnoRepository.save(nuevoTurno);
+        // Guardar
+        Turno guardado = turnoRepository.save(nuevoTurno);
+
+        // Convertir Domain → DTO
+        return turnoMapper.toDto(guardado);
     }
 }

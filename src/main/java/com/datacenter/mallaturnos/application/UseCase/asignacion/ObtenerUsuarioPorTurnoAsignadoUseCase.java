@@ -2,9 +2,9 @@ package com.datacenter.mallaturnos.application.UseCase.asignacion;
 
 import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
 import com.datacenter.mallaturnos.domain.model.Usuario;
-import com.datacenter.mallaturnos.port.out.AsignacionRepositoryPort;
-import com.datacenter.mallaturnos.port.out.UsuarioRepositoryPort;
-import com.datacenter.mallaturnos.port.in.asignacion.ObtenerUsuarioPorTurnoAsignadoUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.in.asignacion.ObtenerUsuarioPorTurnoAsignadoUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPort;
+import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
 
 import org.springframework.stereotype.Service;
 
