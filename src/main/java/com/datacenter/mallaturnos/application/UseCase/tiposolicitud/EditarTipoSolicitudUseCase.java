@@ -3,6 +3,8 @@ package com.datacenter.mallaturnos.application.UseCase.tiposolicitud;
 import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
 import com.datacenter.mallaturnos.infrastructure.port.in.tiposolicitud.EditarTipoSolicitudUseCasePort;
 import com.datacenter.mallaturnos.infrastructure.port.out.TipoSolicitudRepositoryPort;
+import com.datacenter.mallaturnos.application.Dto.TipoSolicitud.TipoSolicitudDto;
+import com.datacenter.mallaturnos.infrastructure.mappers.TipoSolicitudMapper;
 
 import org.springframework.stereotype.Service;
 
@@ -12,13 +14,15 @@ import java.util.Optional;
 public class EditarTipoSolicitudUseCase implements EditarTipoSolicitudUseCasePort {
 
     private final TipoSolicitudRepositoryPort tipoSolicitudRepository;
+    private final TipoSolicitudMapper tipoSolicitudMapper;
 
-    public EditarTipoSolicitudUseCase(TipoSolicitudRepositoryPort tipoSolicitudRepository) {
+    public EditarTipoSolicitudUseCase(TipoSolicitudRepositoryPort tipoSolicitudRepository, TipoSolicitudMapper tipoSolicitudMapper) {
         this.tipoSolicitudRepository = tipoSolicitudRepository;
+        this.tipoSolicitudMapper = tipoSolicitudMapper;
     }
 
-    public TipoSolicitud editarTipoSolicitud(Long id, String nombre, String descripcion) {
-        
+    @Override
+    public TipoSolicitudDto editarTipoSolicitud(Long id, TipoSolicitudDto tipoSolicitudDto) {
         Optional<TipoSolicitud> tipoExistente = tipoSolicitudRepository.findById(id);
         
         if (!tipoExistente.isPresent()) {
@@ -26,9 +30,9 @@ public class EditarTipoSolicitudUseCase implements EditarTipoSolicitudUseCasePor
         }
 
         TipoSolicitud tipo = tipoExistente.get();
-        tipo.setNombre(nombre);
-        tipo.setDescripcion(descripcion);
+        tipo.setNombre(tipoSolicitudDto.getNombre());
+        tipo.setDescripcion(tipoSolicitudDto.getDescripcion());
 
-        return tipoSolicitudRepository.save(tipo);
+        return tipoSolicitudMapper.toDto(tipoSolicitudRepository.save(tipo));
     }
 }

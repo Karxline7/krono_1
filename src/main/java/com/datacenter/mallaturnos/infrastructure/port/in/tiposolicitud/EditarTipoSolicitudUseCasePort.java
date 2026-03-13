@@ -1,8 +1,8 @@
 package com.datacenter.mallaturnos.infrastructure.port.in.tiposolicitud;
 
-import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
+import com.datacenter.mallaturnos.application.Dto.TipoSolicitud.TipoSolicitudDto;
 
 public interface EditarTipoSolicitudUseCasePort {
 
-    TipoSolicitud editarTipoSolicitud(Long id, String nombre, String descripcion);
+    TipoSolicitudDto editarTipoSolicitud(Long id, TipoSolicitudDto tipoSolicitudDto);
 }

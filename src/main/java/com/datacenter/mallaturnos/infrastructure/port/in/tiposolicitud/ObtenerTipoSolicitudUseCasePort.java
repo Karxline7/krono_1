@@ -1,9 +1,9 @@
 package com.datacenter.mallaturnos.infrastructure.port.in.tiposolicitud;
 
-import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
+import com.datacenter.mallaturnos.application.Dto.TipoSolicitud.TipoSolicitudDto;
 import java.util.Optional;
 
 public interface ObtenerTipoSolicitudUseCasePort {
     
-    Optional<TipoSolicitud> obtenerTipoSolicitud(Long id);
+    Optional<TipoSolicitudDto> obtenerTipoSolicitud(Long id);
 }

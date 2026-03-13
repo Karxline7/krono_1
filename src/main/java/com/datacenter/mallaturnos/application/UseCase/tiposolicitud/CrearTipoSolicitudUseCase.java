@@ -3,6 +3,8 @@ package com.datacenter.mallaturnos.application.UseCase.tiposolicitud;
 import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
 import com.datacenter.mallaturnos.infrastructure.port.in.tiposolicitud.CrearTipoSolicitudUseCasePort;
 import com.datacenter.mallaturnos.infrastructure.port.out.TipoSolicitudRepositoryPort;
+import com.datacenter.mallaturnos.application.Dto.TipoSolicitud.TipoSolicitudDto;
+import com.datacenter.mallaturnos.infrastructure.mappers.TipoSolicitudMapper;
 
 import org.springframework.stereotype.Service;
 
@@ -10,21 +12,25 @@ import org.springframework.stereotype.Service;
 public class CrearTipoSolicitudUseCase implements CrearTipoSolicitudUseCasePort {
 
     private final TipoSolicitudRepositoryPort tipoSolicitudRepository;
+    private final TipoSolicitudMapper tipoSolicitudMapper;
 
-    public CrearTipoSolicitudUseCase(TipoSolicitudRepositoryPort tipoSolicitudRepository) {
+    public CrearTipoSolicitudUseCase(TipoSolicitudRepositoryPort tipoSolicitudRepository,
+                                     TipoSolicitudMapper tipoSolicitudMapper) {
         this.tipoSolicitudRepository = tipoSolicitudRepository;
+        this.tipoSolicitudMapper = tipoSolicitudMapper;
     }
 
-    public TipoSolicitud crearTipoSolicitud(String nombre, String descripcion) {
-        
-        if (tipoSolicitudRepository.findByNombre(nombre).isPresent()) {
+    @Override
+    public TipoSolicitudDto crearTipoSolicitud(TipoSolicitudDto tipoSolicitudDto) {
+
+        if (tipoSolicitudRepository.findByNombre(tipoSolicitudDto.getNombre()).isPresent()) {
             throw new IllegalArgumentException("El tipo de solicitud ya existe");
         }
 
-        TipoSolicitud nuevoTipo = new TipoSolicitud();
-        nuevoTipo.setNombre(nombre);
-        nuevoTipo.setDescripcion(descripcion);
-        
-        return tipoSolicitudRepository.save(nuevoTipo);
+        TipoSolicitud nuevoTipo = tipoSolicitudMapper.toDomain(tipoSolicitudDto);
+
+        TipoSolicitud guardado = tipoSolicitudRepository.save(nuevoTipo);
+
+        return tipoSolicitudMapper.toDto(guardado);
     }
 }
