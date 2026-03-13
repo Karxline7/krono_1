@@ -1,11 +1,15 @@
 package com.datacenter.mallaturnos.application.UseCase.Solicitud;
 
 import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
+import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
+
 import com.datacenter.mallaturnos.infrastructure.port.in.solicitud.SolicitudTurnoUseCasePort;
 import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.port.out.SolicitudRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.port.out.TipoSolicitudRepositoryPort;
-import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
+
+import com.datacenter.mallaturnos.application.Dto.SolicitudTurno.SolicitudTurnoDto;
+import com.datacenter.mallaturnos.infrastructure.mappers.SolicitudTurnoMapper;
 
 import org.springframework.stereotype.Service;
 
@@ -15,53 +19,53 @@ public class SolicitudTurnoUseCase implements SolicitudTurnoUseCasePort {
     private final SolicitudRepositoryPort solicitudRepository;
     private final AsignacionRepositoryPort asignacionRepository;
     private final TipoSolicitudRepositoryPort tipoSolicitudRepository;
+    private final SolicitudTurnoMapper solicitudTurnoMapper;
 
     public SolicitudTurnoUseCase(SolicitudRepositoryPort solicitudRepository,
                                  AsignacionRepositoryPort asignacionRepository,
-                                 TipoSolicitudRepositoryPort tipoSolicitudRepository) {
+                                 TipoSolicitudRepositoryPort tipoSolicitudRepository,
+                                 SolicitudTurnoMapper solicitudTurnoMapper) {
 
         this.solicitudRepository = solicitudRepository;
         this.asignacionRepository = asignacionRepository;
         this.tipoSolicitudRepository = tipoSolicitudRepository;
+        this.solicitudTurnoMapper = solicitudTurnoMapper;
     }
 
     @Override
-    public SolicitudTurno crearSolicitudTurno(Long asignacionId,
-                                              Long tipoSolicitudId,
-                                              String motivoSolicitud,
-                                              EstadoSolicitud estado) {
+    public SolicitudTurnoDto crearSolicitudTurno(SolicitudTurnoDto dto) {
 
-        // Validar que la asignación exista
-        var asignacion = asignacionRepository.findById(asignacionId)
+        Long asignacionId = dto.getAsignacionTurnoId();
+        Long tipoSolicitudId = dto.getTipoSolicitudId();
+
+        // Validar asignación
+        asignacionRepository.findById(asignacionId)
                 .orElseThrow(() -> new IllegalArgumentException("Asignación no encontrada"));
 
-        // Validar que el tipo de solicitud exista
-        if (!tipoSolicitudRepository.findById(tipoSolicitudId).isPresent()) {
+        // Validar tipo de solicitud
+        if (tipoSolicitudRepository.findById(tipoSolicitudId).isEmpty()) {
             throw new IllegalArgumentException("Tipo de solicitud no encontrado");
         }
 
-        // Validar que no exista una solicitud pendiente
+        // Validar solicitudes existentes
         if (solicitudRepository.existsPendienteForAsignacion(asignacionId)) {
             throw new IllegalStateException("Ya existe una solicitud pendiente para esta asignación");
         }
 
-        // Validar que no exista una solicitud aprobada
         if (solicitudRepository.existsAprobadaForAsignacion(asignacionId)) {
             throw new IllegalStateException("Ya existe una solicitud aprobada para esta asignación");
         }
 
-        // Validar que no exista una solicitud denegada
         if (solicitudRepository.existsDenegadaForAsignacion(asignacionId)) {
             throw new IllegalStateException("Ya existe una solicitud denegada para esta asignación");
         }
 
         // Crear solicitud
-        SolicitudTurno nuevaSolicitud = new SolicitudTurno();
-        nuevaSolicitud.setAsignacionTurnoId(asignacionId);
-        nuevaSolicitud.setTipoSolicitudId(tipoSolicitudId);
-        nuevaSolicitud.setMotivoSolicitud(motivoSolicitud);
+        SolicitudTurno nuevaSolicitud = solicitudTurnoMapper.toDomain(dto);
         nuevaSolicitud.setEstado(EstadoSolicitud.PENDIENTE);
 
-        return solicitudRepository.save(nuevaSolicitud);
+        SolicitudTurno guardada = solicitudRepository.save(nuevaSolicitud);
+
+        return solicitudTurnoMapper.toDto(guardada);
     }
 }

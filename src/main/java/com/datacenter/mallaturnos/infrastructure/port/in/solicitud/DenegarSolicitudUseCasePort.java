@@ -1,8 +1,8 @@
 package com.datacenter.mallaturnos.infrastructure.port.in.solicitud;
 
-import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
+import com.datacenter.mallaturnos.application.Dto.SolicitudTurno.SolicitudTurnoDto;
 
 public interface DenegarSolicitudUseCasePort {
 
-    SolicitudTurno denegarSolicitud(Long solicitudId);
+    SolicitudTurnoDto denegarSolicitud(Long solicitudId);
 }

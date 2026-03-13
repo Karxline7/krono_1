@@ -1,9 +1,13 @@
 package com.datacenter.mallaturnos.application.UseCase.Solicitud;
 
 import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
+import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
+
 import com.datacenter.mallaturnos.infrastructure.port.in.solicitud.DenegarSolicitudUseCasePort;
 import com.datacenter.mallaturnos.infrastructure.port.out.SolicitudRepositoryPort;
-import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
+
+import com.datacenter.mallaturnos.application.Dto.SolicitudTurno.SolicitudTurnoDto;
+import com.datacenter.mallaturnos.infrastructure.mappers.SolicitudTurnoMapper;
 
 import org.springframework.stereotype.Service;
 
@@ -11,27 +15,28 @@ import org.springframework.stereotype.Service;
 public class DenegarSolicitudUseCase implements DenegarSolicitudUseCasePort {
 
     private final SolicitudRepositoryPort solicitudRepository;
+    private final SolicitudTurnoMapper solicitudTurnoMapper;
 
-    public DenegarSolicitudUseCase(SolicitudRepositoryPort solicitudRepository) {
+    public DenegarSolicitudUseCase(SolicitudRepositoryPort solicitudRepository,
+                                   SolicitudTurnoMapper solicitudTurnoMapper) {
         this.solicitudRepository = solicitudRepository;
+        this.solicitudTurnoMapper = solicitudTurnoMapper;
     }
 
-    public SolicitudTurno denegarSolicitud(Long solicitudId) {
-        
-        var solicitud = solicitudRepository.findById(solicitudId);
-        
-        if (!solicitud.isPresent()) {
-            throw new IllegalArgumentException("Solicitud no encontrada");
-        }
+    @Override
+    public SolicitudTurnoDto denegarSolicitud(Long solicitudId) {
 
-        SolicitudTurno sol = solicitud.get();
-        
-        if (!sol.getEstado().equals(EstadoSolicitud.PENDIENTE)) {
+        SolicitudTurno solicitud = solicitudRepository.findById(solicitudId)
+                .orElseThrow(() -> new IllegalArgumentException("Solicitud no encontrada"));
+
+        if (!solicitud.getEstado().equals(EstadoSolicitud.PENDIENTE)) {
             throw new IllegalArgumentException("La solicitud ya se encuentra resuelta");
         }
 
-        sol.setEstado(EstadoSolicitud.DENEGADA);
+        solicitud.setEstado(EstadoSolicitud.DENEGADA);
 
-        return solicitudRepository.save(sol);
+        SolicitudTurno actualizada = solicitudRepository.save(solicitud);
+
+        return solicitudTurnoMapper.toDto(actualizada);
     }
 }
