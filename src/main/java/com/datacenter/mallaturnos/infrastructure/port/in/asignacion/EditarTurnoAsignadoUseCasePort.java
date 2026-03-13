@@ -1,13 +1,10 @@
 package com.datacenter.mallaturnos.infrastructure.port.in.asignacion;
 
 
-import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
-import java.time.LocalDate;
+import com.datacenter.mallaturnos.application.Dto.AsignacionTurno.AsignacionTurnoDto;
+
 
 public interface EditarTurnoAsignadoUseCasePort {
 
-    AsignacionTurno editarTurnoAsignado(Long id,
-                                        Long nuevoFuncionarioId,
-                                        LocalDate nuevaFecha,
-                                        Long nuevoTurnoId);
+    AsignacionTurnoDto editarTurnoAsignado(Long id, AsignacionTurnoDto dto);
 }

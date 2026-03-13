@@ -6,10 +6,10 @@ import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPo
 import com.datacenter.mallaturnos.infrastructure.port.out.TurnoRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
 
-import org.springframework.stereotype.Service;
+import com.datacenter.mallaturnos.application.Dto.AsignacionTurno.AsignacionTurnoDto;
+import com.datacenter.mallaturnos.infrastructure.mappers.AsignacionTurnoMapper;
 
-import java.time.LocalDate;
-import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
 public class EditarTurnoAsignadoUseCase implements EditarTurnoAsignadoUseCasePort {
@@ -17,58 +17,53 @@ public class EditarTurnoAsignadoUseCase implements EditarTurnoAsignadoUseCasePor
     private final AsignacionRepositoryPort asignacionRepository;
     private final UsuarioRepositoryPort usuarioRepository;
     private final TurnoRepositoryPort turnoRepository;
+    private final AsignacionTurnoMapper asignacionTurnoMapper;
 
     public EditarTurnoAsignadoUseCase(AsignacionRepositoryPort asignacionRepository,
                                      UsuarioRepositoryPort usuarioRepository,
-                                     TurnoRepositoryPort turnoRepository) {
+                                     TurnoRepositoryPort turnoRepository,
+                                     AsignacionTurnoMapper asignacionTurnoMapper) {
+
         this.asignacionRepository = asignacionRepository;
         this.usuarioRepository = usuarioRepository;
         this.turnoRepository = turnoRepository;
+        this.asignacionTurnoMapper = asignacionTurnoMapper;
     }
 
-    /**
-     * Edita una asignación de turno
-     * @param id ID de la asignación
-     * @param nuevoFuncionarioId Nuevo funcionario
-     * @param nuevaFecha Nueva fecha
-     * @param nuevoTurnoId Nuevo turno (puede ser null para día libre)
-     * @return Asignación editada
-     */
-    public AsignacionTurno editarTurnoAsignado(Long id, Long nuevoFuncionarioId, LocalDate nuevaFecha,
-                                    Long nuevoTurnoId) {
-        
-        // Obtener asignación existente
-        Optional<AsignacionTurno> asignacionExistente = asignacionRepository.findById(id);
-        
-        if (!asignacionExistente.isPresent()) {
-            throw new IllegalArgumentException("Asignación no encontrada");
-        }
+    @Override
+    public AsignacionTurnoDto editarTurnoAsignado(Long id, AsignacionTurnoDto dto) {
 
-        // Validar que el nuevo funcionario existe
-        if (!usuarioRepository.findById(nuevoFuncionarioId).isPresent()) {
+        AsignacionTurno asignacion = asignacionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Asignación no encontrada"));
+
+        Long funcionarioId = dto.getFuncionarioId();
+        Long turnoId = dto.getTurnoId();
+
+        // Validar funcionario
+        if (usuarioRepository.findById(funcionarioId).isEmpty()) {
             throw new IllegalArgumentException("Funcionario no encontrado");
         }
 
-        // Validar que el nuevo turno existe (si no es null)
-        if (nuevoTurnoId != null && !turnoRepository.findById(nuevoTurnoId).isPresent()) {
+        // Validar turno
+        if (turnoId != null && turnoRepository.findById(turnoId).isEmpty()) {
             throw new IllegalArgumentException("Turno no encontrado");
         }
 
-        // Validar que no existe otra asignación en la misma fecha para el nuevo funcionario
-        // (a menos que sea la misma asignación que estamos editando)
-        Optional<AsignacionTurno> conflicto = asignacionRepository.findByFuncionarioAndFecha(nuevoFuncionarioId, nuevaFecha);
-        if (conflicto.isPresent() && !conflicto.get().getId().equals(id)) {
-            throw new IllegalArgumentException("El funcionario ya tiene asignación en esa fecha");
-        }
-         
-        // Actualizar asignación
-        AsignacionTurno asignacion = asignacionExistente.get();
-        asignacion.setFuncionarioId(nuevoFuncionarioId);
-        asignacion.setFecha(nuevaFecha);
-        asignacion.setTurnoId(nuevoTurnoId);
+        // Validar conflicto de fecha
+        asignacionRepository.findByFuncionarioAndFecha(funcionarioId, dto.getFecha())
+                .ifPresent(conflicto -> {
+                    if (!conflicto.getId().equals(id)) {
+                        throw new IllegalArgumentException("El funcionario ya tiene asignación en esa fecha");
+                    }
+                });
 
-        return asignacionRepository.save(asignacion);   
+        // Actualizar datos
+        asignacion.setFuncionarioId(funcionarioId);
+        asignacion.setFecha(dto.getFecha());
+        asignacion.setTurnoId(turnoId);
 
-    }   
+        AsignacionTurno actualizada = asignacionRepository.save(asignacion);
 
+        return asignacionTurnoMapper.toDto(actualizada);
+    }
 }

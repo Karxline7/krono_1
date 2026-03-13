@@ -1,10 +1,11 @@
 package com.datacenter.mallaturnos.infrastructure.port.in.asignacion;
 
-import com.datacenter.mallaturnos.domain.model.Usuario;
+import com.datacenter.mallaturnos.application.Dto.Usuario.UsuarioDto;
+
 import java.time.LocalDate;
 import java.util.Optional;
 
 public interface ObtenerUsuarioPorTurnoAsignadoUseCasePort {
 
-    Optional<Usuario> obtenerUsuarioPorTurnoAsignado(Long funcionarioId, LocalDate fecha);
+    Optional<UsuarioDto> obtenerUsuarioPorTurnoAsignado(Long funcionarioId, LocalDate fecha);
 }

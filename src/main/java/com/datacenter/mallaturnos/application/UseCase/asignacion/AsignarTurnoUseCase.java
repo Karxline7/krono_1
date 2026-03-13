@@ -6,9 +6,10 @@ import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPo
 import com.datacenter.mallaturnos.infrastructure.port.out.TurnoRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
 
-import org.springframework.stereotype.Service;
+import com.datacenter.mallaturnos.application.Dto.AsignacionTurno.AsignacionTurnoDto;
+import com.datacenter.mallaturnos.infrastructure.mappers.AsignacionTurnoMapper;
 
-import java.time.LocalDate;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AsignarTurnoUseCase implements AsignarTurnoUseCasePort {
@@ -16,35 +17,41 @@ public class AsignarTurnoUseCase implements AsignarTurnoUseCasePort {
     private final AsignacionRepositoryPort asignacionRepository;
     private final UsuarioRepositoryPort usuarioRepository;
     private final TurnoRepositoryPort turnoRepository;
+    private final AsignacionTurnoMapper asignacionTurnoMapper;
 
     public AsignarTurnoUseCase(AsignacionRepositoryPort asignacionRepository,
                               UsuarioRepositoryPort usuarioRepository,
-                              TurnoRepositoryPort turnoRepository) {
+                              TurnoRepositoryPort turnoRepository,
+                              AsignacionTurnoMapper asignacionTurnoMapper) {
+
         this.asignacionRepository = asignacionRepository;
         this.usuarioRepository = usuarioRepository;
         this.turnoRepository = turnoRepository;
+        this.asignacionTurnoMapper = asignacionTurnoMapper;
     }
 
-    public AsignacionTurno asignarTurno(Long funcionarioId, Long turnoId,
-                                       LocalDate fecha) {
+    @Override
+    public AsignacionTurnoDto asignarTurno(AsignacionTurnoDto dto) {
 
-        if (!usuarioRepository.findById(funcionarioId).isPresent()) {
+        Long funcionarioId = dto.getFuncionarioId();
+        Long turnoId = dto.getTurnoId();
+
+        if (usuarioRepository.findById(funcionarioId).isEmpty()) {
             throw new IllegalArgumentException("Funcionario no encontrado");
         }
 
-        if (turnoId != null && !turnoRepository.findById(turnoId).isPresent()) {
+        if (turnoId != null && turnoRepository.findById(turnoId).isEmpty()) {
             throw new IllegalArgumentException("Turno no encontrado");
         }
 
-        if (asignacionRepository.existsByFuncionarioAndFecha(funcionarioId, fecha)) {
+        if (asignacionRepository.existsByFuncionarioAndFecha(funcionarioId, dto.getFecha())) {
             throw new IllegalArgumentException("El funcionario ya tiene asignación en esa fecha");
         }
 
-        AsignacionTurno nuevaAsignacion = new AsignacionTurno();
-        nuevaAsignacion.setFuncionarioId(funcionarioId);
-        nuevaAsignacion.setTurnoId(turnoId);
-        nuevaAsignacion.setFecha(fecha);
+        AsignacionTurno nuevaAsignacion = asignacionTurnoMapper.toDomain(dto);
 
-        return asignacionRepository.save(nuevaAsignacion);
+        AsignacionTurno guardada = asignacionRepository.save(nuevaAsignacion);
+
+        return asignacionTurnoMapper.toDto(guardada);
     }
 }
