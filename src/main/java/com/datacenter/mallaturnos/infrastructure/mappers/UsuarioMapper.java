@@ -2,12 +2,11 @@ package com.datacenter.mallaturnos.infrastructure.mappers;
 
 import com.datacenter.mallaturnos.application.Dto.Usuario.UsuarioDto;
 import com.datacenter.mallaturnos.domain.model.Usuario;
-
 import org.springframework.stereotype.Component;
 
 @Component
 public class UsuarioMapper {
-    
+
     /**
      * Convierte Usuario (Domain) → UsuarioDto
      */
@@ -15,7 +14,7 @@ public class UsuarioMapper {
         if (usuario == null) {
             return null;
         }
-        
+
         UsuarioDto dto = new UsuarioDto();
         dto.setId(usuario.getId());
         dto.setNombre(usuario.getNombre());
@@ -24,9 +23,10 @@ public class UsuarioMapper {
         dto.setRolId(usuario.getRolId());
         dto.setCargoId(usuario.getCargoId());
         dto.setAreaId(usuario.getAreaId());
+
         return dto;
     }
-    
+
     /**
      * Convierte UsuarioDto → Usuario (Domain)
      */
@@ -34,7 +34,7 @@ public class UsuarioMapper {
         if (dto == null) {
             return null;
         }
-        
+
         Usuario usuario = new Usuario();
         usuario.setId(dto.getId());
         usuario.setNombre(dto.getNombre());
@@ -43,7 +43,7 @@ public class UsuarioMapper {
         usuario.setRolId(dto.getRolId());
         usuario.setCargoId(dto.getCargoId());
         usuario.setAreaId(dto.getAreaId());
-        
+
         return usuario;
     }
 }

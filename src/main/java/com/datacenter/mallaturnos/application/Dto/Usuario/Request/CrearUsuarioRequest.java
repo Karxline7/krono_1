@@ -1,13 +1,9 @@
-package com.datacenter.mallaturnos.application.Dto.Usuario;
+package com.datacenter.mallaturnos.application.Dto.Usuario.Request;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class CrearUsuarioDto {
+public class CrearUsuarioRequest {
 
     private String nombre;
     private String tipoDocumento;
