@@ -1,9 +1,10 @@
 package com.datacenter.mallaturnos.infrastructure.controller.TipoSolicitud;
 
-import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
 import com.datacenter.mallaturnos.infrastructure.mappers.TipoSolicitudMapper;
 import com.datacenter.mallaturnos.application.Dto.TipoSolicitud.TipoSolicitudDto;
 import com.datacenter.mallaturnos.application.UseCase.tiposolicitud.*;
+import com.datacenter.mallaturnos.application.Dto.TipoSolicitud.Request.CrearTipoSolicitudRequest;
+import com.datacenter.mallaturnos.application.Dto.TipoSolicitud.Request.EditarTipoSolicitudRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/tipos-solicitud")
@@ -22,7 +22,6 @@ public class TipoSolicitudController {
     private final ListarTipoSolicitudUseCase listarTiposSolicitudUseCase;
     private final EditarTipoSolicitudUseCase editarTipoSolicitudUseCase;
     private final EliminarTipoSolicitudUseCase eliminarTipoSolicitudUseCase;
-    private final TipoSolicitudMapper tipoSolicitudMapper;
 
     public TipoSolicitudController(CrearTipoSolicitudUseCase crearTipoSolicitudUseCase,
                                    ObtenerTipoSolicitudUseCase obtenerTipoSolicitudUseCase,
@@ -35,38 +34,55 @@ public class TipoSolicitudController {
         this.listarTiposSolicitudUseCase = listarTiposSolicitudUseCase;
         this.editarTipoSolicitudUseCase = editarTipoSolicitudUseCase;
         this.eliminarTipoSolicitudUseCase = eliminarTipoSolicitudUseCase;
-        this.tipoSolicitudMapper = tipoSolicitudMapper;
     }
 
     @PostMapping
     public ResponseEntity<TipoSolicitudDto> crear(@RequestBody CrearTipoSolicitudRequest request) {
-        TipoSolicitud tipoSolicitud = crearTipoSolicitudUseCase.crearTipoSolicitud(request.getNombre(), request.getDescripcion());
-        TipoSolicitudDto dto = tipoSolicitudMapper.toDto(tipoSolicitud);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+
+        TipoSolicitudDto dto = new TipoSolicitudDto(
+                null, // id
+                request.getNombre(),
+                request.getDescripcion()
+        );
+
+        TipoSolicitudDto response = crearTipoSolicitudUseCase.crearTipoSolicitud(dto);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TipoSolicitudDto> obtener(@PathVariable Long id) {
-        Optional<TipoSolicitud> tipoSolicitud = obtenerTipoSolicitudUseCase.obtenerTipoSolicitud(id);
-        return tipoSolicitud.map(t -> ResponseEntity.ok(tipoSolicitudMapper.toDto(t)))
+
+        Optional<TipoSolicitudDto> tipoSolicitud = obtenerTipoSolicitudUseCase.obtenerTipoSolicitud(id);
+
+        return tipoSolicitud
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
     public ResponseEntity<List<TipoSolicitudDto>> listar() {
-        List<TipoSolicitud> tiposSolicitud = listarTiposSolicitudUseCase.listarTiposSolicitud();
-        List<TipoSolicitudDto> dtos = tiposSolicitud.stream()
-                .map(tipoSolicitudMapper::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+
+        List<TipoSolicitudDto> tipos = listarTiposSolicitudUseCase.listarTiposSolicitud();
+
+        return ResponseEntity.ok(tipos);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TipoSolicitudDto> editar(@PathVariable Long id,
                                                 @RequestBody EditarTipoSolicitudRequest request) {
-        TipoSolicitud tipoSolicitud = editarTipoSolicitudUseCase.editarTipoSolicitud(id, request.getNombre(), request.getDescripcion());
-        TipoSolicitudDto dto = tipoSolicitudMapper.toDto(tipoSolicitud);
-        return ResponseEntity.ok(dto);
+
+        TipoSolicitudDto dto = new TipoSolicitudDto(
+                id,
+                request.getNombre(),
+                request.getDescripcion()
+        );
+
+        TipoSolicitudDto actualizado = editarTipoSolicitudUseCase.editarTipoSolicitud(id, dto);
+
+        return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
@@ -76,25 +92,3 @@ public class TipoSolicitudController {
     }
 }
 
-class CrearTipoSolicitudRequest {
-    private String nombre;
-    private String descripcion;
-
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-}
-
-class EditarTipoSolicitudRequest {
-    private String nombre;
-    private String descripcion;
-
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-
-}
