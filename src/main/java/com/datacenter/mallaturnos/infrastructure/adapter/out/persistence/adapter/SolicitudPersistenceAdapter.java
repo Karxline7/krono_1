@@ -12,6 +12,7 @@ import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.reposit
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.List;
 
 /**
  * Adaptador de salida: Implementa el puerto SolicitudRepositoryPort
@@ -50,6 +51,13 @@ public class SolicitudPersistenceAdapter implements SolicitudRepositoryPort {
     public boolean existsAprobadaForAsignacion(Long asignacionId) {
         return jpaRepository.existsByAsignacionTurno_IdAndEstado(
                 asignacionId, EstadoSolicitud.APROBADA);
+    }
+
+    @Override
+    public List<SolicitudTurno> obtener() {
+        return jpaRepository.findAll().stream()
+                .map(this::toDomain)
+                .toList();
     }
 
     @Override

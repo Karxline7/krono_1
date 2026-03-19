@@ -9,6 +9,7 @@ import com.datacenter.mallaturnos.application.Dto.SolicitudTurno.Request.Denegar
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/solicitudes")
@@ -17,14 +18,17 @@ public class SolicitudController {
     private final SolicitudTurnoUseCase solicitudTurnoUseCase;
     private final AprobarSolicitudUseCase aprobarSolicitudUseCase;
     private final DenegarSolicitudUseCase denegarSolicitudUseCase;
+    private final ListarSolicitudesUseCase listarSolicitudesUseCase;
 
     public SolicitudController(SolicitudTurnoUseCase solicitudTurnoUseCase,
                                AprobarSolicitudUseCase aprobarSolicitudUseCase,
                                DenegarSolicitudUseCase denegarSolicitudUseCase,
+                               ListarSolicitudesUseCase listarSolicitudesUseCase,
                                SolicitudTurnoMapper solicitudTurnoMapper) {
         this.solicitudTurnoUseCase = solicitudTurnoUseCase;
         this.aprobarSolicitudUseCase = aprobarSolicitudUseCase;
         this.denegarSolicitudUseCase = denegarSolicitudUseCase;
+        this.listarSolicitudesUseCase = listarSolicitudesUseCase;
     }
 
     @PostMapping("/solicitud")
@@ -35,6 +39,10 @@ public class SolicitudController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(solicitud);
+    }
+    @GetMapping
+    public ResponseEntity<List<SolicitudTurnoDto>> listarSolicitudes() {
+        return ResponseEntity.ok(listarSolicitudesUseCase.listarSolicitudes());
     }
 
     @PutMapping("/{id}/aprobar")
