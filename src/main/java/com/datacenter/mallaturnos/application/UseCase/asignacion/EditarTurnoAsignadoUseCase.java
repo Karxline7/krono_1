@@ -7,6 +7,7 @@ import com.datacenter.mallaturnos.infrastructure.port.out.TurnoRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
 
 import com.datacenter.mallaturnos.application.Dto.AsignacionTurno.AsignacionTurnoDto;
+import com.datacenter.mallaturnos.application.Dto.AsignacionTurno.Request.EditarTurnoAsignadoRequest;
 import com.datacenter.mallaturnos.infrastructure.mappers.AsignacionTurnoMapper;
 
 import org.springframework.stereotype.Service;
@@ -31,13 +32,13 @@ public class EditarTurnoAsignadoUseCase implements EditarTurnoAsignadoUseCasePor
     }
 
     @Override
-    public AsignacionTurnoDto editarTurnoAsignado(Long id, AsignacionTurnoDto dto) {
+    public AsignacionTurnoDto editarTurnoAsignado(Long id, EditarTurnoAsignadoRequest dto) {
 
         AsignacionTurno asignacion = asignacionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Asignación no encontrada"));
 
-        Long funcionarioId = dto.getFuncionarioId();
-        Long turnoId = dto.getTurnoId();
+        Long funcionarioId = dto.getNuevoFuncionarioId();
+        Long turnoId = dto.getNuevoTurnoId();
 
         // Validar funcionario
         if (usuarioRepository.findById(funcionarioId).isEmpty()) {
@@ -50,7 +51,7 @@ public class EditarTurnoAsignadoUseCase implements EditarTurnoAsignadoUseCasePor
         }
 
         // Validar conflicto de fecha
-        asignacionRepository.findByFuncionarioAndFecha(funcionarioId, dto.getFecha())
+        asignacionRepository.findByFuncionarioAndFecha(funcionarioId, dto.getNuevaFecha())
                 .ifPresent(conflicto -> {
                     if (!conflicto.getId().equals(id)) {
                         throw new IllegalArgumentException("El funcionario ya tiene asignación en esa fecha");
@@ -59,7 +60,7 @@ public class EditarTurnoAsignadoUseCase implements EditarTurnoAsignadoUseCasePor
 
         // Actualizar datos
         asignacion.setFuncionarioId(funcionarioId);
-        asignacion.setFecha(dto.getFecha());
+        asignacion.setFecha(dto.getNuevaFecha());
         asignacion.setTurnoId(turnoId);
 
         AsignacionTurno actualizada = asignacionRepository.save(asignacion);

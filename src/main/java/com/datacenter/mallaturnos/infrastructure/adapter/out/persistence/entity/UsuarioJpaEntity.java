@@ -29,14 +29,14 @@ public class UsuarioJpaEntity {
     @Column(name = "numero_documento", nullable = false, unique = true)
     private Integer numeroDocumento;
 
-    @Column(name = "contraseña", nullable = false)
+    @Column(name = "contrasena", nullable = false)
     private Integer contrasena;
 
     @ManyToOne
-    @JoinColumn(name = "rol_id", nullable = false)
+    @JoinColumn(name = "rol_id")
     private RolJpaEntity rol;
 
-    @Column(name = "cargo_id", nullable = false)
+    @Column(name = "cargo_id")
     private Long cargoId;
 
     @Column(name = "area_id")

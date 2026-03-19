@@ -68,21 +68,12 @@ public class AsignacionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AsignacionTurnoDto> editar(@PathVariable Long id,
-                                                     @RequestBody EditarTurnoAsignadoRequest request) {
+        public ResponseEntity<?> editar(
+                @PathVariable Long id,
+                @RequestBody EditarTurnoAsignadoRequest dto) {
 
-        AsignacionTurnoDto dto = new AsignacionTurnoDto(
-                id,
-                request.getNuevoFuncionarioId(),
-                request.getNuevoTurnoId(),
-                request.getNuevaFecha()
-        );
-
-        AsignacionTurnoDto asignacionActualizada =
-                editarTurnoAsignadoUseCase.editarTurnoAsignado(id, dto);
-
-        return ResponseEntity.ok(asignacionActualizada);
-    }
+        return ResponseEntity.ok(editarTurnoAsignadoUseCase.editarTurnoAsignado(id, dto));
+        }
 
     @GetMapping("/fecha/{fecha}")
     public ResponseEntity<List<AsignacionTurnoDto>> listarPorFecha(@PathVariable String fecha) {
