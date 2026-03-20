@@ -2,6 +2,8 @@ package com.datacenter.mallaturnos.infrastructure.mappers;
 
 import com.datacenter.mallaturnos.application.Dto.Usuario.UsuarioDto;
 import com.datacenter.mallaturnos.domain.model.Usuario;
+import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.UsuarioJpaEntity;
+
 import org.springframework.stereotype.Component;
 
 @Component

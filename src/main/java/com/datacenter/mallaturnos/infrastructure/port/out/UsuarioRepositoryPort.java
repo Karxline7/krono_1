@@ -1,6 +1,7 @@
 package com.datacenter.mallaturnos.infrastructure.port.out;
 
 import com.datacenter.mallaturnos.domain.model.Usuario;
+import com.datacenter.mallaturnos.application.Dto.Usuario.UsuarioDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ public interface UsuarioRepositoryPort {
     List<Usuario> findByAreaIdAndRolId(Long areaId, Long rolId);
     List<Usuario> findByAreaId(Long areaId);
     List<Usuario> findByCargoId(Long cargoId);
+    List<UsuarioDto> findAllWithCargo();
     void delete(Long id);
     Usuario save(Usuario usuario);
 }

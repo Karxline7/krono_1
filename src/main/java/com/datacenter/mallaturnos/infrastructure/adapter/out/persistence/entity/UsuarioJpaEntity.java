@@ -36,8 +36,9 @@ public class UsuarioJpaEntity {
     @JoinColumn(name = "rol_id")
     private RolJpaEntity rol;
 
-    @Column(name = "cargo_id")
-    private Long cargoId;
+    @ManyToOne
+    @JoinColumn(name = "cargo_id")
+    private CargoJpaEntity cargo;
 
     @Column(name = "area_id")
     private Long areaId;

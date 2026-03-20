@@ -28,11 +28,7 @@ public class ListarUsuariosUseCase implements ListarUsuariosUseCasePort {
      */
     @Override
     public List<UsuarioDto> listar() {
-
-        return usuarioRepository.findAll()
-                .stream()
-                .map(usuarioMapper::toDto)
-                .toList();
+        return usuarioRepository.findAllWithCargo();
     }
     /**
      * Obtiene todos los usuarios de un área

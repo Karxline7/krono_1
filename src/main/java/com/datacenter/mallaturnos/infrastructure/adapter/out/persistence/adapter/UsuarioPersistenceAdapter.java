@@ -1,6 +1,8 @@
 package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.adapter;
 
+import com.datacenter.mallaturnos.application.Dto.Usuario.UsuarioDto;
 import com.datacenter.mallaturnos.domain.model.Usuario;
+import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.CargoJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.RolJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.UsuarioJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.UsuarioJpaRepository;
@@ -47,6 +49,36 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
         return jpaRepository.findAll()
                 .stream()
                 .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<UsuarioDto> findAllWithCargo() {
+
+        return jpaRepository.findAll()
+                .stream()
+                .map(entity -> {
+
+                    UsuarioDto dto = new UsuarioDto();
+
+                    dto.setId(entity.getId());
+                    dto.setNombre(entity.getNombre());
+                    dto.setTipoDocumento(entity.getTipoDocumento());
+                    dto.setNumeroDocumento(entity.getNumeroDocumento());
+
+                    if (entity.getRol() != null) {
+                        dto.setRolId(entity.getRol().getId());
+                    }
+
+                    if (entity.getCargo() != null) {
+                        dto.setCargoId(entity.getCargo().getId());
+                        dto.setCargoNombre(entity.getCargo().getNombre()); // 🔥 AQUÍ
+                    }
+
+                    dto.setAreaId(entity.getAreaId());
+
+                    return dto;
+
+                })
                 .collect(Collectors.toList());
     }
 
@@ -96,7 +128,7 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
                 entity.getNumeroDocumento(),
                 entity.getContrasena(),
                 entity.getRol().getId(),
-                entity.getCargoId(),
+                entity.getCargo().getId(),
                 entity.getAreaId()
         );
     }
@@ -108,6 +140,10 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
 
         RolJpaEntity rol = rolRepository.findById(domain.getRolId())
             .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+
+        CargoJpaEntity cargo = new CargoJpaEntity();
+        cargo.setId(domain.getCargoId());
+
         return new UsuarioJpaEntity(
                 domain.getId(),
                 domain.getNombre(),
@@ -115,7 +151,7 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
                 domain.getNumeroDocumento(),
                 domain.getContrasena(),
                 rol,
-                domain.getCargoId(),
+                cargo,
                 domain.getAreaId()
         );
     }

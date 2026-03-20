@@ -14,5 +14,6 @@ public class UsuarioDto {
     private Long numeroDocumento;
     private Long rolId;                                                              
     private Long cargoId;
+    private String cargoNombre;
     private Long areaId;
 }

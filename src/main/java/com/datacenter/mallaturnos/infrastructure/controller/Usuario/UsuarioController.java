@@ -63,11 +63,8 @@ public class UsuarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
     @GetMapping
-    public ResponseEntity<List<UsuarioDto>> listar() {
-
-        List<UsuarioDto> usuarios = listarUsuariosUseCase.listar();
-
-        return ResponseEntity.ok(usuarios);
+    public List<UsuarioDto> listarUsuarios() {
+        return listarUsuariosUseCase.listar();
     }
     
     @GetMapping("/area/{areaId}")
