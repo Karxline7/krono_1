@@ -13,9 +13,9 @@ import java.util.Optional;
 @Repository
 public interface UsuarioJpaRepository extends JpaRepository<UsuarioJpaEntity, Long> {
     
-    Optional<UsuarioJpaEntity> findByNumeroDocumento(Integer numeroDocumento);
+    Optional<UsuarioJpaEntity> findByNumeroDocumento(Long numeroDocumento);
     
-    boolean existsByNumeroDocumento(Integer numeroDocumento);
+    boolean existsByNumeroDocumento(Long numeroDocumento);
     
     List<UsuarioJpaEntity> findByAreaIdAndRolId(Long areaId, Long rolId);
     

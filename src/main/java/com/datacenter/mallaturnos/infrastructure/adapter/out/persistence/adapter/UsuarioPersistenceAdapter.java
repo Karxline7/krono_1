@@ -33,12 +33,12 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
     }
 
     @Override
-    public Optional<Usuario> findByNumeroDocumento(Integer numeroDocumento) {
+    public Optional<Usuario> findByNumeroDocumento(Long numeroDocumento) {
         return jpaRepository.findByNumeroDocumento(numeroDocumento).map(this::toDomain);
     }
 
     @Override
-    public boolean existsByNumeroDocumento(Integer numeroDocumento) {
+    public boolean existsByNumeroDocumento(Long numeroDocumento) {
         return jpaRepository.existsByNumeroDocumento(numeroDocumento);
     }
 

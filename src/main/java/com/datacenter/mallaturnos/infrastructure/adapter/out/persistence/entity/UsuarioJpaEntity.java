@@ -27,7 +27,7 @@ public class UsuarioJpaEntity {
     private String tipoDocumento;
 
     @Column(name = "numero_documento", nullable = false, unique = true)
-    private Integer numeroDocumento;
+    private Long numeroDocumento;
 
     @Column(name = "contrasena", nullable = false)
     private Integer contrasena;

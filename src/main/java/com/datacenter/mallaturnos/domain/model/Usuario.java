@@ -13,7 +13,7 @@ public class Usuario {
     private Long id;
     private String nombre;
     private String tipoDocumento;
-    private Integer numeroDocumento;
+    private Long numeroDocumento;
     private Integer contrasena;
     private Long rolId;
     private Long cargoId;

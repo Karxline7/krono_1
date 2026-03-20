@@ -39,7 +39,7 @@ public class ObtenerUsuarioUseCase implements ObtenerUsuarioUseCasePort {
      * @param numeroDocumento Número de documento
      * @return Optional con el usuario si existe
      */
-    public Optional<UsuarioDto> obtenerPorNumeroDocumento(Integer numeroDocumento) {
+    public Optional<UsuarioDto> obtenerPorNumeroDocumento(Long numeroDocumento) {
 
         return usuarioRepository.findByNumeroDocumento(numeroDocumento)
                 .map(usuarioMapper::toDto);

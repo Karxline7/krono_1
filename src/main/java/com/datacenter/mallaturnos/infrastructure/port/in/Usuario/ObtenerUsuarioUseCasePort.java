@@ -7,5 +7,5 @@ public interface ObtenerUsuarioUseCasePort {
 
     Optional<UsuarioDto> obtenerUsuario(Long id);
 
-    Optional<UsuarioDto> obtenerPorNumeroDocumento(Integer numeroDocumento);
+    Optional<UsuarioDto> obtenerPorNumeroDocumento(Long numeroDocumento);
 }
