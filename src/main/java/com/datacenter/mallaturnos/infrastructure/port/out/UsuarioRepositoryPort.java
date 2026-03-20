@@ -14,7 +14,6 @@ public interface UsuarioRepositoryPort {
     Optional<Usuario> findById(Long id);
     Optional<Usuario> findByNumeroDocumento(Long numeroDocumento);
     boolean existsByNumeroDocumento(Long numeroDocumento);
-    List<Usuario> findAll();
     List<Usuario> findByAreaIdAndRolId(Long areaId, Long rolId);
     List<Usuario> findByAreaId(Long areaId);
     List<Usuario> findByCargoId(Long cargoId);

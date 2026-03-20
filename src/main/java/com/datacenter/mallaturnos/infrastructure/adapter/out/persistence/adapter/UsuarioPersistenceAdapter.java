@@ -8,6 +8,7 @@ import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.UsuarioJpaRepository;
 import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.RolJpaRepository;
+import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.CargoJpaRepository;
 
 import org.springframework.stereotype.Component;
 import java.util.Optional;
@@ -23,10 +24,12 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
 
     private final UsuarioJpaRepository jpaRepository;
     private final RolJpaRepository rolRepository;
+    private final CargoJpaRepository cargoRepository;
 
-    public UsuarioPersistenceAdapter(UsuarioJpaRepository jpaRepository, RolJpaRepository rolRepository) {
+    public UsuarioPersistenceAdapter(UsuarioJpaRepository jpaRepository, RolJpaRepository rolRepository, CargoJpaRepository cargoRepository) {
         this.jpaRepository = jpaRepository;
         this.rolRepository = rolRepository;
+        this.cargoRepository = cargoRepository;
     }
 
     @Override
@@ -45,16 +48,9 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
     }
 
     @Override
-    public List<Usuario> findAll() {
-        return jpaRepository.findAll()
-                .stream()
-                .map(this::toDomain)
-                .collect(Collectors.toList());
-    }
-    @Override
     public List<UsuarioDto> findAllWithCargo() {
 
-        return jpaRepository.findAll()
+        return jpaRepository.findAllWithCargo()
                 .stream()
                 .map(entity -> {
 
@@ -141,8 +137,8 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
         RolJpaEntity rol = rolRepository.findById(domain.getRolId())
             .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 
-        CargoJpaEntity cargo = new CargoJpaEntity();
-        cargo.setId(domain.getCargoId());
+        CargoJpaEntity cargo = cargoRepository.findById(domain.getCargoId())
+    .orElseThrow(() -> new RuntimeException("Cargo no encontrado"));
 
         return new UsuarioJpaEntity(
                 domain.getId(),

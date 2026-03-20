@@ -2,6 +2,7 @@ package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.reposi
 
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.UsuarioJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,6 +13,9 @@ import java.util.Optional;
  */
 @Repository
 public interface UsuarioJpaRepository extends JpaRepository<UsuarioJpaEntity, Long> {
+
+    @Query("SELECT u FROM UsuarioJpaEntity u JOIN FETCH u.cargo")
+    List<UsuarioJpaEntity> findAllWithCargo();
     
     Optional<UsuarioJpaEntity> findByNumeroDocumento(Long numeroDocumento);
     

@@ -2,12 +2,19 @@ package com.datacenter.mallaturnos.infrastructure.mappers;
 
 import com.datacenter.mallaturnos.application.Dto.Usuario.UsuarioDto;
 import com.datacenter.mallaturnos.domain.model.Usuario;
+import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.CargoJpaRepository;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.UsuarioJpaEntity;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class UsuarioMapper {
+
+    private final CargoJpaRepository cargoRepository;
+
+    public UsuarioMapper(CargoJpaRepository cargoRepository) {
+        this.cargoRepository = cargoRepository;
+    }
 
     /**
      * Convierte Usuario (Domain) → UsuarioDto
@@ -24,6 +31,10 @@ public class UsuarioMapper {
         dto.setNumeroDocumento(usuario.getNumeroDocumento());
         dto.setRolId(usuario.getRolId());
         dto.setCargoId(usuario.getCargoId());
+        if (usuario.getCargoId() != null) {
+            String cargoNombre = cargoRepository.findNombreById(usuario.getCargoId());
+            dto.setCargoNombre(cargoNombre);
+        }
         dto.setAreaId(usuario.getAreaId());
 
         return dto;

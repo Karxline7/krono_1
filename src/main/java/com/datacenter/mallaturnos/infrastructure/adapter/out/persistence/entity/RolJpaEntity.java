@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
  * constructores de forma automática.
  */
 @Entity
-@Table(name = "Rol")
+@Table(name = "rol")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
