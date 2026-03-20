@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface ListarUsuariosUseCasePort {
 
+    List<UsuarioDto> listar();
+
     List<UsuarioDto> listarPorArea(Long areaId);
 
     List<UsuarioDto> listarPorCargo(Long cargoId);

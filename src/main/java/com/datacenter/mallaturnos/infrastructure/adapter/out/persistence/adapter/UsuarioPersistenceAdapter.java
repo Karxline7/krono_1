@@ -43,6 +43,14 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
     }
 
     @Override
+    public List<Usuario> findAll() {
+        return jpaRepository.findAll()
+                .stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Usuario> findByAreaIdAndRolId(Long areaId, Long rolId) {
         return jpaRepository.findByAreaIdAndRolId(areaId, rolId)
                 .stream()

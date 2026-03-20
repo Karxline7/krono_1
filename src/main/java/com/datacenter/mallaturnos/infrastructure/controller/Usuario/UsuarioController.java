@@ -62,7 +62,14 @@ public class UsuarioController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    @GetMapping
+    public ResponseEntity<List<UsuarioDto>> listar() {
 
+        List<UsuarioDto> usuarios = listarUsuariosUseCase.listar();
+
+        return ResponseEntity.ok(usuarios);
+    }
+    
     @GetMapping("/area/{areaId}")
     public ResponseEntity<List<UsuarioDto>> listarPorArea(@PathVariable Long areaId) {
 

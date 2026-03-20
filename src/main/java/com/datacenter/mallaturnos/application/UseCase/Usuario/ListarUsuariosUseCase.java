@@ -22,7 +22,18 @@ public class ListarUsuariosUseCase implements ListarUsuariosUseCasePort {
         this.usuarioRepository = usuarioRepository;
         this.usuarioMapper = usuarioMapper;
     }
+    /**
+     * Obtiene todos los usuarios
+     * @return Lista de usuarios de la base de datos
+     */
+    @Override
+    public List<UsuarioDto> listar() {
 
+        return usuarioRepository.findAll()
+                .stream()
+                .map(usuarioMapper::toDto)
+                .toList();
+    }
     /**
      * Obtiene todos los usuarios de un área
      * @param areaId ID del área
