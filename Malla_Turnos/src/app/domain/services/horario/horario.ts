@@ -8,7 +8,7 @@ import { get } from 'node:http';
 })
 export class Horario {
 
-  private apiUrl = '/api/asignaciones'; // Cambia esto a tu URL real
+  private apiUrl = 'http://localhost:8081/api/asignaciones'; // Cambia esto a tu URL real
   constructor(private http: HttpClient) {}
 
   listarHorarios(): Observable<any[]> {
