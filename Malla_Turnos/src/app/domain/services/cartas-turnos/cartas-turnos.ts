@@ -17,7 +17,7 @@ export interface Turno {
   providedIn: 'root'
 })
 export class TurnoService {
-  private apiUrl = '/api/turnos'; // Ajusta tu puerto
+  private apiUrl = 'http://localhost:8081/api/turnos'; // Ajusta tu puerto
 
   constructor(private http: HttpClient) {}
 

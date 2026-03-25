@@ -12,7 +12,7 @@ import { NavbarUser } from '../../shared/navbar-user/navbar-user';
 })
 export class HorarioUser implements OnInit {
   // Ajusta la URL a la ruta de tu API para consultar los turnos de un usuario en específico
-  private apiUrl = '/api/turnos/mis-turnos';
+  private apiUrl = 'http://localhost:8081/api/turnos/mis-turnos';
 
   nombreUsuario = 'Usuario Actual'; // Este valor luego vendrá del inicio de sesión (Login)
   cargoUsuario = 'Funcionario';

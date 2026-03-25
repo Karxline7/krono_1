@@ -13,7 +13,7 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './solicitudes-user.scss',
 })
 export class SolicitudesUser {
-  private apiUrl = '/api/solicitudes';
+  private apiUrl = 'http://localhost:8081/api/solicitudes';
 
   nuevaSolicitud = {
     tipo: '',
@@ -29,14 +29,14 @@ export class SolicitudesUser {
     }
 
     const payload = {
-      titulo: this.nuevaSolicitud.tipo === '1' ? 'Cambio de turno' : 'Eliminacion de turno',
-      mensaje: this.nuevaSolicitud.descripcion,
-      nombre: 'Usuario Solicitante',
-      cargo: 'Funcionario',
-      estado: 'Pendiente'
+      asignacionTurnoId: 1, // OJO: Debes enviar el id del turno seleccionado desde el front
+      tipoSolicitudId: Number(this.nuevaSolicitud.tipo), // '1' o '2' convertido a número
+      motivoSolicitud: this.nuevaSolicitud.descripcion,
+      estado: 'PENDIENTE'
     };
 
-    this.http.post(this.apiUrl, payload).subscribe({
+    // El backend espera la ruta POST: /api/solicitudes/solicitud
+    this.http.post(`${this.apiUrl}/solicitud`, payload).subscribe({
       next: () => {
         alert('Solicitud enviada correctamente');
         this.nuevaSolicitud = { tipo: '', descripcion: '' };
