@@ -118,59 +118,51 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-t>
-          <tr [pSelectableRow]="t">
+          <tr (click)="seleccionarFila(t)" [pSelectableRow]="t" [class.fila-seleccionada]="turnoActual.id === t.id" [class.fila-descanso]="t.esDescanso" style="cursor: pointer;">
             <td>{{ t.funcionario }}</td>
             <td>{{ t.semana }}</td>
-            
-            <td (click)="seleccionarCelda(t.lunes, t.funcionarioId, t.fechas.lunes)" 
-                [class.fila-seleccionada]="t.lunes && turnoIdSeleccionado === t.lunes.id" 
-                style="cursor: pointer; position: relative;">
-               <div class="dia-mes">{{ getDiaMes(t.fechas.lunes) }}</div>
-               <p-tag *ngIf="t.lunes" [value]="t.lunes.turnoNombre" [severity]="t.lunes.esDescanso ? 'secondary' : 'info'"></p-tag>
+            <td>
+              <ng-container *ngIf="t.diaSemana === 'Lunes'">
+                  <div class="dia-mes">{{ t.diaMes }}</div>
+                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
+              </ng-container>
             </td>
-
-            <td (click)="seleccionarCelda(t.martes, t.funcionarioId, t.fechas.martes)" 
-                [class.fila-seleccionada]="t.martes && turnoIdSeleccionado === t.martes.id" 
-                style="cursor: pointer; position: relative;">
-               <div class="dia-mes">{{ getDiaMes(t.fechas.martes) }}</div>
-               <p-tag *ngIf="t.martes" [value]="t.martes.turnoNombre" [severity]="t.martes.esDescanso ? 'secondary' : 'info'"></p-tag>
+            <td>
+              <ng-container *ngIf="t.diaSemana === 'Martes'">
+                  <div class="dia-mes">{{ t.diaMes }}</div>
+                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
+              </ng-container>
             </td>
-
-            <td (click)="seleccionarCelda(t.miercoles, t.funcionarioId, t.fechas.miercoles)" 
-                [class.fila-seleccionada]="t.miercoles && turnoIdSeleccionado === t.miercoles.id" 
-                style="cursor: pointer; position: relative;">
-               <div class="dia-mes">{{ getDiaMes(t.fechas.miercoles) }}</div>
-               <p-tag *ngIf="t.miercoles" [value]="t.miercoles.turnoNombre" [severity]="t.miercoles.esDescanso ? 'secondary' : 'info'"></p-tag>
+            <td>
+              <ng-container *ngIf="t.diaSemana === 'Miércoles'">
+                  <div class="dia-mes">{{ t.diaMes }}</div>
+                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
+              </ng-container>
             </td>
-
-            <td (click)="seleccionarCelda(t.jueves, t.funcionarioId, t.fechas.jueves)" 
-                [class.fila-seleccionada]="t.jueves && turnoIdSeleccionado === t.jueves.id" 
-                style="cursor: pointer; position: relative;">
-               <div class="dia-mes">{{ getDiaMes(t.fechas.jueves) }}</div>
-               <p-tag *ngIf="t.jueves" [value]="t.jueves.turnoNombre" [severity]="t.jueves.esDescanso ? 'secondary' : 'info'"></p-tag>
+            <td>
+              <ng-container *ngIf="t.diaSemana === 'Jueves'">
+                  <div class="dia-mes">{{ t.diaMes }}</div>
+                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
+              </ng-container>
             </td>
-
-            <td (click)="seleccionarCelda(t.viernes, t.funcionarioId, t.fechas.viernes)" 
-                [class.fila-seleccionada]="t.viernes && turnoIdSeleccionado === t.viernes.id" 
-                style="cursor: pointer; position: relative;">
-               <div class="dia-mes">{{ getDiaMes(t.fechas.viernes) }}</div>
-               <p-tag *ngIf="t.viernes" [value]="t.viernes.turnoNombre" [severity]="t.viernes.esDescanso ? 'secondary' : 'info'"></p-tag>
+            <td>
+              <ng-container *ngIf="t.diaSemana === 'Viernes'">
+                  <div class="dia-mes">{{ t.diaMes }}</div>
+                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
+              </ng-container>
             </td>
-
-            <td (click)="seleccionarCelda(t.sabado, t.funcionarioId, t.fechas.sabado)" 
-                [class.fila-seleccionada]="t.sabado && turnoIdSeleccionado === t.sabado.id" 
-                style="cursor: pointer; position: relative;">
-               <div class="dia-mes">{{ getDiaMes(t.fechas.sabado) }}</div>
-               <p-tag *ngIf="t.sabado" [value]="t.sabado.turnoNombre" [severity]="t.sabado.esDescanso ? 'secondary' : 'info'"></p-tag>
+            <td>
+              <ng-container *ngIf="t.diaSemana === 'Sábado'">
+                  <div class="dia-mes">{{ t.diaMes }}</div>
+                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
+              </ng-container>
             </td>
-
-            <td (click)="seleccionarCelda(t.domingo, t.funcionarioId, t.fechas.domingo)" 
-                [class.fila-seleccionada]="t.domingo && turnoIdSeleccionado === t.domingo.id" 
-                style="cursor: pointer; position: relative;">
-               <div class="dia-mes">{{ getDiaMes(t.fechas.domingo) }}</div>
-               <p-tag *ngIf="t.domingo" [value]="t.domingo.turnoNombre" [severity]="t.domingo.esDescanso ? 'secondary' : 'info'"></p-tag>
+            <td>
+              <ng-container *ngIf="t.diaSemana === 'Domingo'">
+                  <div class="dia-mes">{{ t.diaMes }}</div>
+                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
+              </ng-container>
             </td>
-
             <td>{{ t.break }}</td>
             <td>{{ t.almuerzo }}</td>
             <td>{{ t.compensatorios }}</td>
