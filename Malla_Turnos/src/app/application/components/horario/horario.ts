@@ -193,6 +193,14 @@ export class Horario implements OnInit {
        const w = map.get(a.funcionarioId);
        if (!w) return;
 
+       let fechaStr = a.fecha;
+       if (Array.isArray(a.fecha)) {
+           const y = a.fecha[0];
+           const m = String(a.fecha[1]).padStart(2, '0');
+           const d = String(a.fecha[2]).padStart(2, '0');
+           fechaStr = `${y}-${m}-${d}`;
+       }
+
        const t = this.turnosDisponibles.find(x => x.id === a.turnoId);
        const tNombre = t ? t.nombre : 'Descanso';
        const esDescanso = t ? t.nombre === 'Descanso' : true;
@@ -200,19 +208,19 @@ export class Horario implements OnInit {
        if (t && t.horabreak) w.break = t.horabreak;
        if (t && t.horaalmuerzo) w.almuerzo = t.horaalmuerzo;
 
-       const dMes = a.fecha.split('-')[2];
+       const dMes = fechaStr ? fechaStr.split('-')[2] : '';
        const diaObj: AsignacionDia = {
           id: a.id, turnoId: a.turnoId, turnoNombre: tNombre, diaMes: dMes, 
           esDescanso: esDescanso, break: t ? t.horabreak || '—' : '—', almuerzo: t ? t.horaalmuerzo || '—' : '—'
        };
 
-       if (a.fecha === fechasSemana[0]) w.lunes = diaObj;
-       else if (a.fecha === fechasSemana[1]) w.martes = diaObj;
-       else if (a.fecha === fechasSemana[2]) w.miercoles = diaObj;
-       else if (a.fecha === fechasSemana[3]) w.jueves = diaObj;
-       else if (a.fecha === fechasSemana[4]) w.viernes = diaObj;
-       else if (a.fecha === fechasSemana[5]) w.sabado = diaObj;
-       else if (a.fecha === fechasSemana[6]) w.domingo = diaObj;
+       if (fechaStr === fechasSemana[0]) w.lunes = diaObj;
+       else if (fechaStr === fechasSemana[1]) w.martes = diaObj;
+       else if (fechaStr === fechasSemana[2]) w.miercoles = diaObj;
+       else if (fechaStr === fechasSemana[3]) w.jueves = diaObj;
+       else if (fechaStr === fechasSemana[4]) w.viernes = diaObj;
+       else if (fechaStr === fechasSemana[5]) w.sabado = diaObj;
+       else if (fechaStr === fechasSemana[6]) w.domingo = diaObj;
     });
 
     this.listaTurnosSemanales = Array.from(map.values());
