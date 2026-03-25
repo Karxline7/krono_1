@@ -38,8 +38,7 @@ export interface Turno {
   styleUrl: './horario.scss',
 })
 export class Horario implements OnInit {
-
-  private apiUrl = '/api/asignaciones';
+  private apiUrl = 'http://localhost:8081/api/asignaciones';
 
   semanas      = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
   funcionarios: string[] = [];
@@ -82,10 +81,10 @@ export class Horario implements OnInit {
 
   cargarDatosMaestros() {
     forkJoin({
-      turnos: this.http.get<any[]>('/api/turnos').pipe(catchError(() => of([]))),
+      turnos: this.http.get<any[]>('http://localhost:8081/api/turnos').pipe(catchError(() => of([]))),
       // Obtenemos usuarios de las areas principales asumiendo ID 1 y 2
-      users1: this.http.get<any[]>('/api/usuarios/area/1').pipe(catchError(() => of([]))),
-      users2: this.http.get<any[]>('/api/usuarios/area/2').pipe(catchError(() => of([])))
+      users1: this.http.get<any[]>('http://localhost:8081/api/usuarios/area/1').pipe(catchError(() => of([]))),
+      users2: this.http.get<any[]>('http://localhost:8081/api/usuarios/area/2').pipe(catchError(() => of([])))
     }).subscribe(res => {
       this.turnosDisponibles = res.turnos;
       const allUsers = [...res.users1, ...res.users2];
