@@ -38,6 +38,14 @@ export class Solicitudes implements OnInit {
   ngOnInit(): void {
     this.cargarDatos();
   }
+  refresh() {
+    // Evita el ciclo infinito o referenciar a variables de servicio no inyectadas.
+    if (this.tiposSolicitud.length > 0) {
+      this.cargarSolicitudes();
+    } else {
+      this.cargarDatos();
+    }
+  }
 
   cargarDatos() {
     // Primero cargamos los tipos de solicitud para poder mapear sus nombres

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -73,7 +73,7 @@ export class Horario implements OnInit {
   verToast            = false;
   mensajeToast        = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.cargarDatosMaestros();
@@ -91,8 +91,14 @@ export class Horario implements OnInit {
       this.usuariosDisponibles = Array.from(new Map(allUsers.map(item => [item.id, item])).values());
       this.funcionarios = this.usuariosDisponibles.map(x => x.nombre);
 
+      this.cdr.detectChanges();
       this.cargarTurnos();
     });
+  }
+
+  refresh() {
+    // Solo delegamos a cargarTurnos para mantener la lógica de mapeo con usuarios y turnos intacta
+    this.cargarTurnos();
   }
 
   cargarTurnos() {
@@ -133,10 +139,12 @@ export class Horario implements OnInit {
              turnoId: asignacion.turnoId
            };
         });
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error al cargar asignaciones', error);
         this.listaTurnos = [];
+        this.cdr.detectChanges();
       }
     });
   }

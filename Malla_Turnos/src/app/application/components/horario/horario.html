@@ -46,7 +46,7 @@
         <select [(ngModel)]="turnoActual.turnoId" name="turnoId" class="p-inputtext" required
                 (ngModelChange)="onTurnoChange()">
           <option [ngValue]="null">Seleccionar turno</option>
-          <option *ngFor="let t of turnosDisponibles" [value]="t.id">{{ t.nombre }}</option>
+          <option *ngFor="let t of turnosDisponibles" [ngValue]="t.id">{{ t.nombre }}</option>
         </select>
 
         <!-- Funcionario -->

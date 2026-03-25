@@ -38,13 +38,23 @@ export class CartasTurnos implements OnInit {
 
   constructor(private turnoService: TurnoService) {}
 
+  refresh() {
+    this.cargarTurnos();
+  }
+
   ngOnInit() {
     this.cargarTurnos();
   }
 
   cargarTurnos() {
-    this.turnoService.listar().subscribe((data: any[]) => {
-      this.turnos = data.map(t => ({...t, cantidadPersonas: Math.floor(Math.random() * 10) + 1}));
+    this.turnoService.listar().subscribe({
+      next: (data: any[]) => {
+        this.turnos = data.map(t => ({
+          ...t, 
+          cantidadPersonas: t.cantidadPersonas || Math.floor(Math.random() * 10) + 1
+        }));
+      },
+      error: (err) => console.error('Error al cargar los turnos:', err)
     });
   }
 

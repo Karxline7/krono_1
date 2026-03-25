@@ -48,6 +48,10 @@ export class Funcionarios implements OnInit {
     };
   }
 
+  refresh() {
+    this.cargarFuncionarios();
+  }
+
   cargarFuncionarios() {
     this.FuncionarioService.listar().subscribe({
       next: (data) => this.listaFuncionarios = data,
