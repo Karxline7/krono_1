@@ -26,8 +26,8 @@ export interface SolicitudUI extends SolicitudTurnoDto {
 })
 export class Solicitudes implements OnInit {
   
-  private apiUrl = '/api/solicitudes';
-  private tiposUrl = '/api/tipos-solicitud';
+  private apiUrl = 'http://localhost:8081/api/solicitudes';
+  private tiposUrl = 'http://localhost:8081/api/tipos-solicitud';
 
   solicitudes: SolicitudUI[] = [];
   solicitudSeleccionada: SolicitudUI | null = null;
