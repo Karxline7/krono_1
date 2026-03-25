@@ -8,8 +8,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
-import { forkJoin, of } from '../../../../../node_modules/rxjs/dist/types';
-import { catchError } from '../../../../../node_modules/rxjs/dist/types/operators';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 export interface Turno {
   id: number;
