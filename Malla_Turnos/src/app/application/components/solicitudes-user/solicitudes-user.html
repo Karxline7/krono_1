@@ -1,0 +1,31 @@
+<app-navbar-user></app-navbar-user>
+<div class="contenedor-centrado">
+    <section class="request-card">
+        <h1 class="main-title">Solicitudes</h1>
+        
+        <div class="form-container">
+            <div class="logo-placeholder">
+                <span class="data">data</span><span class="center">center</span>
+                <div class="colombia">Colombia</div>
+            </div>
+
+            <form (ngSubmit)="enviarSolicitud()">
+                <div class="input-group">
+                    <div class="custom-select-wrapper">
+                        <select class="custom-select p-inputtext w-full" [(ngModel)]="nuevaSolicitud.tipo" name="tipo" required>
+                            <option value="" disabled selected hidden>Tipo de Solicitud</option>
+                            <option value="1">Cambio de turno</option>
+                            <option value="2">Eliminacion de turno</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <textarea class="description-area p-inputtext w-full" [(ngModel)]="nuevaSolicitud.descripcion" name="descripcion" placeholder="Descripcion" required autoResize="true"></textarea>
+                </div>
+
+                <p-button type="submit" label="Enviar" styleClass="btn-submit w-full"></p-button>
+            </form>
+        </div>
+    </section>
+</div>

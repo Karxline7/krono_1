@@ -1,0 +1,55 @@
+<section class="login-page">
+  <div class="login-card">
+    <div class="login-image">
+      <img src="assets/Foto.png" alt="Data Center Team">
+    </div>
+ 
+    <div class="login-form-container">
+      <div class="form-box">
+        <header class="form-header">
+          <img src="assets/Logo_Data_Center.png" alt="Data Center Colombia" class="logo">
+          <h2 class="form-title">Inicio sesión</h2>
+        </header>
+ 
+        <form (ngSubmit)="iniciarSesion()">
+          <div class="input-wrapper">
+            <select class="custom-input" [(ngModel)]="tipo_documento" name="tipoDoc">
+              <option value="" disabled selected hidden>Tipo de documento</option>
+              <option value="cc">Cédula de Ciudadanía</option>
+              <option value="ce">Cédula de Extranjería</option>
+              <option value="ti">Tarjeta de Identidad</option>
+              <option value="ps">Pasaporte</option>
+              <option value="pep">Permiso Especial de Permanencia</option>
+            </select>
+          </div>
+ 
+          <div class="input-wrapper">
+            <input type="text" placeholder="Documento" class="custom-input"
+                   [(ngModel)]="usuario" name="documento">
+          </div>
+ 
+          <div class="input-wrapper">
+            <input type="password" placeholder="Contraseña" class="custom-input"
+                   [(ngModel)]="contrasena" name="password">
+          </div>
+ 
+          <div class="legal-options">
+            <label class="checkbox-item">
+              <input type="checkbox" name="recuerdame"> <span>Recuérdame</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" [(ngModel)]="aceptaPoliticas" name="politicas">
+              <span>Acepto las políticas de tratamiento de datos personales</span>
+            </label>
+          </div>
+ 
+          <div *ngIf="mensaje" class="message" [ngClass]="tipoMensaje">
+            {{ mensaje }}
+          </div>
+ 
+          <button type="submit" class="btn-login">Ingresar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

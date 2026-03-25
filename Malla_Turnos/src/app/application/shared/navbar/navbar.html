@@ -1,0 +1,101 @@
+
+<nav class="navbar">
+ 
+  <div class="nav-left">
+ 
+    <div class="logo">
+      <img src="assets/Logo_Data_Center.png" alt="Logo">
+    </div>
+ 
+    <ul class="nav-links">
+ 
+      <li>
+        <a routerLink="/cartas-turnos" routerLinkActive="active">
+          Inicio
+        </a>
+      </li>
+ 
+      <li>
+        <a routerLink="/funcionarios" routerLinkActive="active">
+          Funcionario
+          <img src="assets/Funcionario.png" class="nav-icon">
+        </a>
+      </li>
+ 
+      <li>
+        <a routerLink="/horario" routerLinkActive="active">
+          Turnos
+          <img src="assets/Turnos.png" class="nav-icon">
+        </a>
+      </li>
+ 
+      <li>
+        <a routerLink="/solicitudes" routerLinkActive="active">
+          Solicitudes
+          <img src="assets/Solicitudes.png" class="nav-icon">
+        </a>
+      </li>
+ 
+      <li>
+        <a routerLink="/reportes" routerLinkActive="active">
+          Reportes
+          <img src="assets/Reportes.png" class="nav-icon">
+        </a>
+      </li>
+ 
+    </ul>
+ 
+  </div>
+ 
+ 
+    <div class="nav-right">
+ 
+    <div class="user-info-text">
+      <span class="user-name">{{ userName }}</span>
+      <span class="user-role">{{ userRole }}</span>
+    </div>
+ 
+    <!-- FOTO -->
+    <div class="user-photo-container" (click)="toggleMenu()">
+      <img src="assets/github.svg" class="user-photo">
+    </div>
+ 
+    <!-- MENU -->
+    <div class="dropdown-menu" [class.open]="menuAbierto">
+ 
+      <div class="dropdown-wrapper">
+ 
+        <div class="user-info">
+          <img src="assets/github.svg ">
+          <div>
+            <h3>{{ userName }}</h3>
+            <span class="user-role">{{ userRole }}</span>
+          </div>
+        </div>
+ 
+        <hr>
+ 
+        <div class="menu-options">
+ 
+          <!-- Config -->
+          <div class="menu-item">
+            <img src="assets/Logo_Data_Center.png">
+            <span>Configuración</span>
+            <span class="arrow">›</span>
+          </div>
+ 
+          <!-- Logout -->
+          <div class="menu-item logout" routerLink="/">
+            <img src="assets/door.png">
+            <span>Cerrar sesión</span>
+          </div>
+ 
+        </div>
+ 
+      </div>
+ 
+    </div>
+ 
+  </div>
+ 
+</nav>

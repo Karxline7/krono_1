@@ -1,0 +1,116 @@
+<app-navbar></app-navbar>
+
+<div class="hero-container">
+  <h2 class="Titulo_Contenedor">Gestión de Turnos</h2>
+
+  <div class="cards-wrapper">
+    <div *ngFor="let stat of statsDinamicas" class="hero-card">
+      <span class="text-uppercase" style="font-size: 0.8rem; color: #555;">{{ stat.nombre }}</span>
+      <div class="hero-info">
+        <span class="h4 m-0">{{ stat.cantidad }}</span>
+      </div>
+      <small class="text-muted mt-1" style="font-size: 10px;">Personas totales</small>
+    </div>
+  </div>
+
+  <hr class="my-5" style="opacity: 0.1;">
+
+  <div class="form-card mb-5">
+    <h5 class="mb-4 text-start" style="color: #666;">
+      {{ accionActual === 'editar' ? '📝 Editar Turno' : 'Agregar Nuevo Turno' }}
+    </h5>
+    
+    <form #turnoForm="ngForm">
+      <div class="inputs-grid">
+        <ng-container *ngTemplateOutlet="formFields; context: { 
+          modelo: accionActual === 'editar' ? turnoSeleccionado : nuevoTurno 
+        }"></ng-container>
+
+        <div class="input-container">
+          <button *ngIf="accionActual !== 'editar'" class="btn-guardar-turno" (click)="onGuardar()">
+            Guardar Turno
+          </button>
+          <button *ngIf="accionActual === 'editar'" class="btn-guardar-turno" style="background: #3b9dfa;" (click)="onActualizar()">
+            Actualizar
+          </button>
+        </div>
+        
+      </div>
+    </form>
+  </div>
+
+  <div class="table-responsive" style="border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+    <table class="turnos-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Tipo</th>
+          <th>Horar inicio</th>
+          <th>Hora fin</th>
+          <th>Almuerzo</th>
+          <th>Break</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let turno of turnos">
+          <td class="fw-bold">{{ turno.nombre }}</td>
+          <td><span class="badge">{{ turno.tipo }}</span></td>
+          <td>
+            <span class="fw-bold">{{ turno.horaInicio }}</span>
+          </td>
+          <td>
+            <span class="fw-bold">{{ turno.horaFin }}</span>
+          </td>
+          <td>
+            <span class="fw-bold">{{ turno.horaalmuerzo }}</span>
+          </td>
+          <td>
+            <span class="fw-bold">{{ turno.horabreak }}</span>
+          </td>
+          <td><span class="fw-bold">{{ turno.cantidadPersonas }}</span></td>
+          <td>
+            <button class="btn btn-sm btn-outline-warning border-0 me-1" (click)="seleccionarTurno(turno, 'editar')">
+              <i class="bi bi-pencil"></i> Editar
+            </button>
+            <button class="btn btn-sm btn-outline-danger border-0" (click)="seleccionarTurno(turno, 'eliminar')">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #formFields let-modelo="modelo">
+  <div class="input-container">
+    <small>Nombre del Turno</small>
+    <input type="text" name="nombre" [(ngModel)]="modelo.nombre" placeholder="Ej: Mañana A">
+  </div>
+
+  <div class="input-container">
+    <small>Tipo</small>
+    <input type="text" name="tipo" [(ngModel)]="modelo.tipo" placeholder="Ej: Operativo">
+  </div>
+
+  <div class="input-container">
+    <small>Inicio</small>
+    <input type="time" name="horaInicio" [(ngModel)]="modelo.horaInicio">
+  </div>
+
+  <div class="input-container">
+    <small>Fin</small>
+    <input type="time" name="horaFin" [(ngModel)]="modelo.horaFin">
+  </div>
+
+  <div class="input-container">
+    <small>Almuerzo</small>
+    <input type="time" name="horaalmuerzo" [(ngModel)]="modelo.horaalmuerzo">
+  </div>
+
+  <div class="input-container">
+    <small>Break</small>
+    <input type="time" name="horabreak" [(ngModel)]="modelo.horabreak">
+  </div>
+</ng-template> 

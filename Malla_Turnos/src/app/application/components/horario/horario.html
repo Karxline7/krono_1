@@ -1,0 +1,211 @@
+<app-navbar></app-navbar>
+
+<section class="main-container">
+  <header class="top-header">
+    <h1>Turnos</h1>
+  </header>
+
+  <main class="main-content">
+
+    <!-- ═══════════════════════════════════════════
+         FILTROS SUPERIORES
+    ═══════════════════════════════════════════ -->
+    <div class="filtros-container">
+      <div class="selector-group">
+        <select [(ngModel)]="filtroSemana" class="p-inputtext">
+          <option value="">Seleccionar semana</option>
+          <option *ngFor="let s of semanas" [value]="s">{{ s }}</option>
+        </select>
+
+        <select [(ngModel)]="filtroTurno" class="p-inputtext">
+          <option value="">Seleccionar turno</option>
+          <option *ngFor="let t of turnosDisponibles" [value]="t.nombre">{{ t.nombre }}</option>
+        </select>
+
+        <select [(ngModel)]="filtroFuncionario" class="p-inputtext">
+          <option value="">Seleccionar funcionario</option>
+          <option *ngFor="let f of funcionarios" [value]="f">{{ f }}</option>
+        </select>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         FORMULARIO
+    ═══════════════════════════════════════════ -->
+    <div class="form-container" [class.abierto]="mostrarFormulario">
+      <form (ngSubmit)="guardar()" class="form-horizontal">
+
+        <!-- Semana -->
+        <select [(ngModel)]="turnoActual.semana" name="semana" class="p-inputtext" required>
+          <option value="">Seleccionar semana</option>
+          <option *ngFor="let s of semanas" [value]="s">{{ s }}</option>
+        </select>
+
+        <!-- Turno (Descanso deshabilita horas) -->
+        <select [(ngModel)]="turnoActual.turnoId" name="turnoId" class="p-inputtext" required
+                (ngModelChange)="onTurnoChange()">
+          <option [ngValue]="null">Seleccionar turno</option>
+          <option *ngFor="let t of turnosDisponibles" [value]="t.id">{{ t.nombre }}</option>
+        </select>
+
+        <!-- Funcionario -->
+        <select [(ngModel)]="turnoActual.funcionarioId" name="funcionarioId" class="p-inputtext" required>
+          <option [ngValue]="null">Seleccionar funcionario</option>
+          <option *ngFor="let u of usuariosDisponibles" [value]="u.id">{{ u.nombre }}</option>
+        </select>
+
+        <!-- Fecha (día exacto) -->
+        <input
+          type="date"
+          pInputText
+          [(ngModel)]="turnoActual.dia"
+          name="dia"
+          required
+        >
+
+        <!-- Hora inicio — deshabilitada si es Descanso, auto-llenada -->
+        <input
+          type="time"
+          pInputText
+          [(ngModel)]="turnoActual.horaInicio"
+          name="horaInicio"
+          disabled
+          readonly
+          class="input-disabled"
+        >
+
+        <!-- Hora fin — deshabilitada si es Descanso, auto-llenada -->
+        <input
+          type="time"
+          pInputText
+          [(ngModel)]="turnoActual.horaFin"
+          name="horaFin"
+          disabled
+          readonly
+          class="input-disabled"
+        >
+
+        <p-button
+          type="submit"
+          [styleClass]="esEdicion ? 'btn-actualizar' : 'btn-guardar-verde'"
+          [label]="esEdicion ? 'Actualizar' : 'Guardar'"
+        ></p-button>
+
+      </form>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         TABLA
+    ═══════════════════════════════════════════ -->
+    <div class="contenedor-tabla">
+      <p-table [value]="turnosFiltrados" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}" selectionMode="single" dataKey="id">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Funcionarios</th>
+            <th>Semana</th>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miércoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+            <th>Sábado</th>
+            <th>Domingo</th>
+            <th>Break</th>
+            <th>Almuerzo</th>
+            <th>Compensatorios</th>
+            <th>Vacaciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-t>
+          <tr [pSelectableRow]="t">
+            <td>{{ t.funcionario }}</td>
+            <td>{{ t.semana }}</td>
+            
+            <td (click)="seleccionarCelda(t.lunes, t.funcionarioId, t.fechas.lunes)" 
+                [class.fila-seleccionada]="t.lunes && turnoIdSeleccionado === t.lunes.id" 
+                style="cursor: pointer; position: relative;">
+               <div class="dia-mes">{{ getDiaMes(t.fechas.lunes) }}</div>
+               <p-tag *ngIf="t.lunes" [value]="t.lunes.turnoNombre" [severity]="t.lunes.esDescanso ? 'secondary' : 'info'"></p-tag>
+            </td>
+
+            <td (click)="seleccionarCelda(t.martes, t.funcionarioId, t.fechas.martes)" 
+                [class.fila-seleccionada]="t.martes && turnoIdSeleccionado === t.martes.id" 
+                style="cursor: pointer; position: relative;">
+               <div class="dia-mes">{{ getDiaMes(t.fechas.martes) }}</div>
+               <p-tag *ngIf="t.martes" [value]="t.martes.turnoNombre" [severity]="t.martes.esDescanso ? 'secondary' : 'info'"></p-tag>
+            </td>
+
+            <td (click)="seleccionarCelda(t.miercoles, t.funcionarioId, t.fechas.miercoles)" 
+                [class.fila-seleccionada]="t.miercoles && turnoIdSeleccionado === t.miercoles.id" 
+                style="cursor: pointer; position: relative;">
+               <div class="dia-mes">{{ getDiaMes(t.fechas.miercoles) }}</div>
+               <p-tag *ngIf="t.miercoles" [value]="t.miercoles.turnoNombre" [severity]="t.miercoles.esDescanso ? 'secondary' : 'info'"></p-tag>
+            </td>
+
+            <td (click)="seleccionarCelda(t.jueves, t.funcionarioId, t.fechas.jueves)" 
+                [class.fila-seleccionada]="t.jueves && turnoIdSeleccionado === t.jueves.id" 
+                style="cursor: pointer; position: relative;">
+               <div class="dia-mes">{{ getDiaMes(t.fechas.jueves) }}</div>
+               <p-tag *ngIf="t.jueves" [value]="t.jueves.turnoNombre" [severity]="t.jueves.esDescanso ? 'secondary' : 'info'"></p-tag>
+            </td>
+
+            <td (click)="seleccionarCelda(t.viernes, t.funcionarioId, t.fechas.viernes)" 
+                [class.fila-seleccionada]="t.viernes && turnoIdSeleccionado === t.viernes.id" 
+                style="cursor: pointer; position: relative;">
+               <div class="dia-mes">{{ getDiaMes(t.fechas.viernes) }}</div>
+               <p-tag *ngIf="t.viernes" [value]="t.viernes.turnoNombre" [severity]="t.viernes.esDescanso ? 'secondary' : 'info'"></p-tag>
+            </td>
+
+            <td (click)="seleccionarCelda(t.sabado, t.funcionarioId, t.fechas.sabado)" 
+                [class.fila-seleccionada]="t.sabado && turnoIdSeleccionado === t.sabado.id" 
+                style="cursor: pointer; position: relative;">
+               <div class="dia-mes">{{ getDiaMes(t.fechas.sabado) }}</div>
+               <p-tag *ngIf="t.sabado" [value]="t.sabado.turnoNombre" [severity]="t.sabado.esDescanso ? 'secondary' : 'info'"></p-tag>
+            </td>
+
+            <td (click)="seleccionarCelda(t.domingo, t.funcionarioId, t.fechas.domingo)" 
+                [class.fila-seleccionada]="t.domingo && turnoIdSeleccionado === t.domingo.id" 
+                style="cursor: pointer; position: relative;">
+               <div class="dia-mes">{{ getDiaMes(t.fechas.domingo) }}</div>
+               <p-tag *ngIf="t.domingo" [value]="t.domingo.turnoNombre" [severity]="t.domingo.esDescanso ? 'secondary' : 'info'"></p-tag>
+            </td>
+
+            <td>{{ t.break }}</td>
+            <td>{{ t.almuerzo }}</td>
+            <td>{{ t.compensatorios }}</td>
+            <td>{{ t.vacaciones }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="13" class="text-center p-4">Sin registros para la fecha consultada</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <!-- Botones -->
+      <div class="acciones-container mt-3" style="display: flex; gap: 10px; margin-top: 15px;">
+        <p-button label="Agregar" icon="pi pi-plus" styleClass="btn-guardar-verde" (onClick)="toggleFormulario()"></p-button>
+        <p-button label="Editar" icon="pi pi-pencil" styleClass="btn-actualizar" (onClick)="abrirEditar()"></p-button>
+        <p-button label="Eliminar" icon="pi pi-trash" styleClass="btn-eliminar" (onClick)="abrirModalEliminar()"></p-button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Modal confirmación -->
+  <p-dialog [(visible)]="mostrarConfirmacion" [modal]="true" header="Confirmar Eliminación" [closable]="false" [style]="{width: '450px'}">
+    <div class="flex align-items-center justify-content-center">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem; color: var(--red-500)"></i>
+      <p>¿Eliminar el turno de <b>{{ turnoActual.funcionario }}</b> del <b>{{ turnoActual.dia }}</b>?</p>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button icon="pi pi-times" label="No" styleClass="btn-cancelar" (onClick)="cancelarEliminacion()"></p-button>
+      <p-button icon="pi pi-check" label="Sí, eliminar" styleClass="btn-eliminar" (onClick)="eliminar()"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <div *ngIf="verToast" class="toast-success">{{ mensajeToast }}</div>
+
+</section>

@@ -1,0 +1,50 @@
+.hero-container { max-width: 1100px; margin: 20px auto; text-align: center; }
+.Titulo_Contenedor { color: #3b9dfa; font-size: 2.2rem; font-weight: bold; }
+
+.cards-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap; /* Importante para que las cartas bajen si son muchas */
+    margin-bottom: 30px;
+}
+
+.hero-card {
+    background-color: #9ac5fe;
+    min-width: 180px;
+    border-radius: 25px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.hero-info { background: white; padding: 5px 15px; border-radius: 10px; font-weight: bold; margin-top: 10px; }
+
+/* FORMULARIO */
+.form-card { background: white; border-radius: 20px; padding: 25px; border: 1px solid #eee; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+.inputs-grid { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; align-items: flex-end; }
+.input-container { display: flex; flex-direction: column; align-items: flex-start; position: relative; }
+.input-container small { font-weight: bold; color: #666; margin-bottom: 4px; font-size: 11px; }
+
+input[type="text"], input[type="time"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    min-width: 140px;
+}
+
+/* Selector de tiempo que abre al clickear todo el campo */
+input[type="time"]::-webkit-calendar-picker-indicator {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    width: auto; height: auto; color: transparent; background: transparent; cursor: pointer;
+}
+
+.btn-circle { width: 50px; height: 50px; border-radius: 50%; border: none; background: #3b9dfa; color: white; font-size: 24px; cursor: pointer; }
+.btn-guardar-turno { background: #52b788; color: white; border: none; padding: 11px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+
+.turnos-table { width: 100%; border-collapse: collapse; background: white; border-radius: 15px; overflow: hidden; margin-top: 20px; }
+.turnos-table th { background: #f8f9fa; padding: 15px; border-bottom: 2px solid #eee; }
+.turnos-table td { padding: 12px; border-bottom: 1px solid #f1f1f1; text-align: center; }
+.badge { background: #e3f2fd; color: #1976d2; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; }

@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+@use './app/styles/variables' as *;
+@use './app/styles/mixins' as *;
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: $bg-main;
+  color: $dark-text;
+}
+
+* {
+  box-sizing: border-box;
+}

@@ -1,0 +1,209 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.main-content {
+  padding: 40px;
+  background-color: $bg-main;
+  min-height: 100vh;
+
+  .header-tabla {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+
+    .titulo-pagina {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0;
+    }
+  }
+}
+
+/* --- BOTONES --- */
+button {
+  @include button-base;
+
+  &.btn-azul-nuevo {
+    background: $blue-primary;
+    color: white;
+    border-radius: $radius-md;
+    padding: 10px 25px;
+    font-weight: 600;
+
+    span {
+      font-size: 0.8em;
+      margin-left: 8px;
+    }
+
+    &:hover {
+      background: color-mix(in srgb, $blue-primary, black 5%);
+    }
+  }
+
+  &.btn-guardar-verde { background: $green-success; color: white; border-radius: 10px; }
+  &.btn-actualizar    { background: $blue-active; color: #0d47a1; border-radius: 10px; }
+  &.btn-rojo          { background: $red-danger; color: white; }
+  &.btn-gris          { background: #e0e0e0; color: #333; }
+  
+  &.btn-accion {
+    background: transparent;
+    padding: 5px;
+    border-radius: 5px;
+    
+    img {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background: #f0f0f0;
+    }
+  }
+}
+
+/* --- TABLA --- */
+.tabla-wrapper {
+  @include card-style;
+  padding: 0;
+  border: 1px solid $border-color;
+  overflow: hidden;
+
+  .tabla-funcionarios {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead th {
+      background: #fff;
+      padding: 20px;
+      color: #333;
+      border-bottom: 1px solid $border-color;
+      text-align: left;
+    }
+
+    tbody tr {
+      background: #fff;
+      color: #444;
+
+      td {
+        padding: 20px;
+        border-bottom: 1px solid #f0f0f0;
+
+        &.bold { font-weight: 600; }
+        &.acciones {
+          display: flex;
+          gap: 10px;
+        }
+      }
+
+      &:hover {
+        background: #f9f9f9;
+      }
+    }
+  }
+}
+
+/* --- PAGINACIÓN --- */
+.paginacion-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+
+  .btn-pag, .btn-pag-nav {
+    min-width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid $border-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: 600;
+
+    &.active {
+      background: $blue-active;
+      color: #0d47a1;
+      border-color: $blue-active;
+    }
+
+    &:hover:not(.active) {
+      background: #f0f0f0;
+    }
+  }
+}
+
+/* --- FORMULARIO --- */
+.form-container {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.4s ease-in-out;
+  opacity: 0;
+
+  &.abierto {
+    max-height: 300px;
+    opacity: 1;
+    margin-bottom: 30px;
+  }
+
+  .form-horizontal {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+
+    input, select {
+      @include input-base;
+      flex: 1;
+      min-width: 150px;
+      border-radius: 10px;
+    }
+  }
+}
+
+/* --- MODAL --- */
+.custom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  .modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 450px;
+    box-shadow: $shadow-soft;
+  }
+
+  .alerta-icon {
+    width: 60px;
+    height: 60px;
+    border: 2px solid #ffeded;
+    color: $red-danger;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin: 0 auto 20px;
+    font-weight: bold;
+  }
+
+  .modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 18px;
+  }
+}

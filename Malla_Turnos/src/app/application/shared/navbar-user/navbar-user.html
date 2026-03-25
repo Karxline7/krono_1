@@ -1,0 +1,89 @@
+<nav class="navbar">
+ 
+  <div class="nav-left">
+ 
+    <div class="logo">
+      <img src="assets/Logo_Data_Center.png" alt="Logo">
+    </div>
+ 
+    <ul class="nav-links">
+ 
+      <li>
+        <a routerLink="/horario-user" routerLinkActive="active">
+          Turnos
+          <img src="assets/Turnos.png" class="nav-icon">
+        </a>
+      </li>
+ 
+      <li>
+        <a routerLink="/solicitudes-user" routerLinkActive="active">
+          Solicitudes
+          <img src="assets/Solicitudes.png" class="nav-icon">
+        </a>
+      </li>
+ 
+      <li>
+        <a routerLink="/reportes-user" routerLinkActive="active">
+          Reportes
+          <img src="assets/Reportes.png" class="nav-icon">
+        </a>
+      </li>
+ 
+    </ul>
+ 
+  </div>
+ 
+ 
+  <!-- LADO DERECHO -->
+  <div class="nav-right">
+ 
+    <div class="user-info-text">
+      <span class="user-name">{{ userName }}</span>
+      <span class="user-role">{{ userRole }}</span>
+    </div>
+ 
+    <!-- FOTO -->
+    <div class="user-photo-container" (click)="toggleMenu()">
+      <img src="assets/github.svg" class="user-photo">
+    </div>
+ 
+ 
+    <!-- MENU DESPLEGABLE -->
+    <div class="dropdown-menu" [class.open]="menuAbierto">
+ 
+      <div class="dropdown-wrapper">
+ 
+        <div class="user-info">
+          <img src="assets/github.svg">
+          <h2>{{ userName }}</h2>
+        </div>
+ 
+        <hr>
+ 
+        <div class="menu-options">
+ 
+          <div>
+            <img src="assets/tuerca.png">
+            <p>Configuración</p>
+            <span>›</span>
+          </div>
+ 
+          <div>
+            <a routerLink="/" routerLinkActive="active">
+            <img src="assets/door.png">
+            <p>Cerrar sesión</p> 
+            </a>
+            <span>›</span>
+            
+          </div>
+ 
+        </div>
+ 
+      </div>
+ 
+    </div>
+ 
+  </div>
+ 
+</nav>
+ 
