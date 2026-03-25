@@ -124,15 +124,31 @@ export class Horario implements OnInit, OnDestroy {
            let dSemana = '';
            let dMes = '';
            if (asignacion.fecha) {
-             const partes = asignacion.fecha.split('-');
-             const fObj = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
-             const diasLista = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-             dSemana = diasLista[fObj.getDay()];
-             dMes = partes[2];
+             let year: number, month: number, day: number;
+             
+             if (Array.isArray(asignacion.fecha)) {
+               year = asignacion.fecha[0];
+               month = asignacion.fecha[1];
+               day = asignacion.fecha[2];
+             } else {
+               const fechaStr = String(asignacion.fecha);
+               const sep = fechaStr.includes('/') ? '/' : '-';
+               const partes = fechaStr.split(sep);
+               year = parseInt(partes[0]);
+               month = parseInt(partes[1]);
+               day = parseInt(partes[2]);
+             }
+             
+             if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+               const fObj = new Date(year, month - 1, day);
+               const diasLista = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+               dSemana = diasLista[fObj.getDay()];
+               dMes = day.toString();
+             }
            }
 
            return {
-             id: asignacion.id,
+             id: asignacion.id || Math.floor(Math.random() * 1000000),
              semana: 'Semana Actual',
              turno: t ? t.nombre : 'Descanso',
              funcionario: u ? u.nombre : 'Usuario ' + asignacion.funcionarioId,
@@ -142,8 +158,8 @@ export class Horario implements OnInit, OnDestroy {
              horaInicio: t ? t.horaInicio : '',
              horaFin: t ? t.horaFin : '',
              esDescanso: t ? t.nombre === 'Descanso' : true,
-             break: t && t.horabreak ? t.horabreak : '—',
-             almuerzo: t && t.horaalmuerzo ? t.horaalmuerzo : '—',
+             break: t && t.horabreak ? t.horabreak : '',
+             almuerzo: t && t.horaalmuerzo ? t.horaalmuerzo : '',
              compensatorios: '0',
              vacaciones: '0',
              funcionarioId: asignacion.funcionarioId,
