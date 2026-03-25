@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -37,8 +37,10 @@ export interface Turno {
   templateUrl: './horario.html',
   styleUrl: './horario.scss',
 })
-export class Horario implements OnInit {
+export class Horario implements OnInit, OnDestroy {
   private apiUrl = 'http://localhost:8081/api/asignaciones';
+
+  syncInterval: any;
 
   semanas      = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
   funcionarios: string[] = [];
@@ -77,6 +79,15 @@ export class Horario implements OnInit {
 
   ngOnInit(): void {
     this.cargarDatosMaestros();
+    this.syncInterval = setInterval(() => {
+      this.refresh();
+    }, 5000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.syncInterval) {
+      clearInterval(this.syncInterval);
+    }
   }
 
   cargarDatosMaestros() {

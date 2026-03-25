@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -24,10 +24,12 @@ export interface SolicitudUI extends SolicitudTurnoDto {
   templateUrl: './solicitudes.html',
   styleUrl: './solicitudes.scss',
 })
-export class Solicitudes implements OnInit {
+export class Solicitudes implements OnInit, OnDestroy {
   
   private apiUrl = 'http://localhost:8081/api/solicitudes';
   private tiposUrl = 'http://localhost:8081/api/tipos-solicitud';
+
+  syncInterval: any;
 
   solicitudes: SolicitudUI[] = [];
   solicitudSeleccionada: SolicitudUI | null = null;
@@ -37,6 +39,15 @@ export class Solicitudes implements OnInit {
 
   ngOnInit(): void {
     this.cargarDatos();
+    this.syncInterval = setInterval(() => {
+      this.refresh();
+    }, 5000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.syncInterval) {
+      clearInterval(this.syncInterval);
+    }
   }
   refresh() {
     // Evita el ciclo infinito o referenciar a variables de servicio no inyectadas.

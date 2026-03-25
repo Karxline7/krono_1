@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Para *ngIf y *ngFor
 import { FormsModule } from '@angular/forms';   // Para [(ngModel)]
 import { TurnoService, Turno } from '../../../domain/services/cartas-turnos/cartas-turnos';
@@ -21,10 +21,11 @@ import { DialogModule } from 'primeng/dialog';
   templateUrl: './cartas-turnos.html',
   styleUrls: ['./cartas-turnos.scss']
 })
-export class CartasTurnos implements OnInit {
+export class CartasTurnos implements OnInit, OnDestroy {
   turnos: Turno[] = [];
   accionActual: 'agregar' | 'editar' | null = null;
   turnoSeleccionado: Turno | null = null;
+  syncInterval: any;
   
   nuevoTurno: Turno = {
     nombre: '',
@@ -44,6 +45,15 @@ export class CartasTurnos implements OnInit {
 
   ngOnInit() {
     this.cargarTurnos();
+    this.syncInterval = setInterval(() => {
+      this.refresh();
+    }, 5000);
+  }
+
+  ngOnDestroy() {
+    if (this.syncInterval) {
+      clearInterval(this.syncInterval);
+    }
   }
 
   cargarTurnos() {

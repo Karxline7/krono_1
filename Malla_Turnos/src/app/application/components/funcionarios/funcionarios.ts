@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../shared/navbar/navbar';
@@ -22,9 +22,11 @@ import { TooltipModule } from 'primeng/tooltip';
   templateUrl: './funcionarios.html',
   styleUrl: './funcionarios.scss',
 })
-export class Funcionarios implements OnInit {
+export class Funcionarios implements OnInit, OnDestroy {
   listaFuncionarios: Funcionario[] = [];
   funcionarioActual: Funcionario = this.getInitFuncionario();
+  
+  syncInterval: any;
   
   mostrarFormulario = false;
   esEdicion = false;
@@ -39,6 +41,15 @@ export class Funcionarios implements OnInit {
 
   ngOnInit(): void {
     this.cargarFuncionarios();
+    this.syncInterval = setInterval(() => {
+      this.refresh();
+    }, 5000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.syncInterval) {
+      clearInterval(this.syncInterval);
+    }
   }
 
   getInitFuncionario(): Funcionario {
