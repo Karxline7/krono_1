@@ -143,6 +143,8 @@
               <ng-container *ngIf="t.diaSemana === 'Jueves'">
                   <div class="dia-mes">{{ t.diaMes }}</div>
                   <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
+                  <p-tag [value]="t.break" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
+                  <p-tag [value]="t.almuerzo" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
               </ng-container>
             </td>
             <td>
@@ -163,10 +165,6 @@
                   <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
               </ng-container>
             </td>
-            <td>{{ t.break }}</td>
-            <td>{{ t.almuerzo }}</td>
-            <td>{{ t.compensatorios }}</td>
-            <td>{{ t.vacaciones }}</td>
           </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">

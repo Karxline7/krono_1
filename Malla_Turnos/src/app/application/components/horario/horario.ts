@@ -118,8 +118,11 @@ export class Horario implements OnInit, OnDestroy {
     this.http.get<any[]>(`${this.apiUrl}/fecha/${this.fechaFiltro}`).subscribe({
       next: (data) => {
         this.listaTurnos = data.map(asignacion => {
-           const u = this.usuariosDisponibles.find(x => x.id === asignacion.funcionarioId);
-           const t = this.turnosDisponibles.find(x => x.id === asignacion.turnoId);
+           const fId = asignacion.funcionarioId ?? asignacion.funcionario?.id ?? asignacion.usuario?.id;
+           const tId = asignacion.turnoId ?? asignacion.turno?.id;
+
+           const u = this.usuariosDisponibles.find(x => x.id == fId);
+           const t = this.turnosDisponibles.find(x => x.id == tId);
 
            let dSemana = '';
            let dMes = '';
@@ -151,7 +154,7 @@ export class Horario implements OnInit, OnDestroy {
              id: asignacion.id || Math.floor(Math.random() * 1000000),
              semana: 'Semana Actual',
              turno: t ? t.nombre : 'Descanso',
-             funcionario: u ? u.nombre : 'Usuario ' + asignacion.funcionarioId,
+             funcionario: u ? u.nombre : 'Usuario ' + fId,
              dia: asignacion.fecha,
              diaSemana: dSemana,
              diaMes: dMes,
@@ -162,8 +165,8 @@ export class Horario implements OnInit, OnDestroy {
              almuerzo: t && t.horaalmuerzo ? t.horaalmuerzo : '',
              compensatorios: '0',
              vacaciones: '0',
-             funcionarioId: asignacion.funcionarioId,
-             turnoId: asignacion.turnoId
+             funcionarioId: fId,
+             turnoId: tId
            };
         });
         this.cdr.detectChanges();
