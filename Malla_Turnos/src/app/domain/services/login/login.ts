@@ -8,7 +8,7 @@ import { Observable } from '../../../../../node_modules/rxjs/dist/types';
 })
 export class Login {
 
-  private apiUrl = '/api/login';
+  private apiUrl = 'http://localhost:8081/api/login';
   constructor(private http: HttpClient) {}
 
   login(username: string, password: string): Observable<any> {
