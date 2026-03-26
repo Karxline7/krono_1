@@ -77,14 +77,22 @@
     </div>
 </main>
 
-<p-dialog [(visible)]="mostrarModalEliminar" [modal]="true" header="¿Está seguro?" [closable]="false" [style]="{width: '450px'}">
-    <div class="flex align-items-center justify-content-center">
-        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem; color: #ef4444"></i>
-        <p class="m-0">¿Realmente desea eliminar este funcionario? Esta acción <strong>no se puede deshacer</strong>.</p>
+<p-dialog [(visible)]="mostrarModalEliminar" [modal]="true" header="Confirmar acción" 
+    [closable]="true" [style]="{width: '450px'}" styleClass="dialogo-premium">
+    <div class="modal-body">
+        <div class="alerta-circulo">
+            <i class="pi pi-exclamation-triangle"></i>
+        </div>
+        <h2 class="titulo-alerta text-center">¿Estás seguro?</h2>
+        <p class="texto-confirmacion text-center m-0">
+            ¿Realmente deseas eliminar este funcionario? Esta acción <strong>no se puede deshacer</strong>.
+        </p>
     </div>
     <ng-template pTemplate="footer">
-        <button pButton label="No, cancelar" icon="pi pi-times" class="p-button-text p-button-secondary" (click)="cerrarModal()"></button>
-        <button pButton label="Sí, eliminar" icon="pi pi-check" class="p-button-danger" (click)="eliminarConfirmado()"></button>
+        <div class="botones-container">
+            <button pButton label="No, cancelar" icon="pi pi-times" class="p-button-text p-button-secondary" (click)="cerrarModal()"></button>
+            <button pButton label="Sí, eliminar" icon="pi pi-trash" class="p-button-danger p-button-raised" (click)="eliminarConfirmado()"></button>
+        </div>
     </ng-template>
 </p-dialog>
 
