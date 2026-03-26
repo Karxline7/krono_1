@@ -84,6 +84,7 @@ export class Horario implements OnInit {
   // --- PROPIEDADES ---
   apiUrl = 'http://localhost:8081/api/asignaciones'; // Cambia esto por tu URL real
   semanas = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
+  diasSemana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'] as const;
   funcionarios: string[] = [];
 
   listaTurnosSemanales: TurnoSemanal[] = [];
