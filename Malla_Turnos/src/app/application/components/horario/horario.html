@@ -9,8 +9,6 @@
 
     <div class="filtros-container">
       <div class="selector-group">
-        <input type="date" [(ngModel)]="fechaFiltro" (change)="cargarTurnos()" class="p-inputtext" style="min-width: 200px;">
-        
         <select [(ngModel)]="filtroSemana" class="p-inputtext">
           <option value="">Todas las semanas</option>
           <option *ngFor="let s of semanas" [value]="s">{{ s }}</option>

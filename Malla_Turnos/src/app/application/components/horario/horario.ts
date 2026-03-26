@@ -80,7 +80,7 @@ export interface TurnoSemanal {
 export class Horario implements OnInit {
   
   // --- PROPIEDADES ---
-  apiUrl = 'http://localhost:8080/api/asignaciones'; // Cambia esto por tu URL real
+  apiUrl = 'http://localhost:8081/api/asignaciones'; // Cambia esto por tu URL real
   semanas = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
   funcionarios: string[] = [];
 
