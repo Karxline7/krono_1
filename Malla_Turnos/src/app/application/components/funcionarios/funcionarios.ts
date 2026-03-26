@@ -39,16 +39,19 @@ export class Funcionarios implements OnInit, OnDestroy {
 
   constructor(private FuncionarioService: FuncionarioService) {}
 
+  private intervalId: any;
+
   ngOnInit(): void {
     this.cargarFuncionarios();
-    this.syncInterval = setInterval(() => {
+
+    this.intervalId = setInterval(() => {
       this.refresh();
-    }, 5000);
+    }, 3000);
   }
 
   ngOnDestroy(): void {
-    if (this.syncInterval) {
-      clearInterval(this.syncInterval);
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
     }
   }
 
@@ -60,7 +63,9 @@ export class Funcionarios implements OnInit, OnDestroy {
   }
 
   refresh() {
-    this.cargarFuncionarios();
+    if (!this.mostrarFormulario && !this.mostrarModalEliminar) {
+      this.cargarFuncionarios();
+    }
   }
 
   cargarFuncionarios() {

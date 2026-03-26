@@ -10,6 +10,8 @@ import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { FuncionarioService } from '../../../domain/services/Funcionarios/funcionarios';
+import { TurnoService } from '../../../domain/services/cartas-turnos/cartas-turnos';
 
 // --- INTERFACES ---
 export interface Turno {
@@ -65,12 +67,12 @@ export interface TurnoSemanal {
   selector: 'app-horario',
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
-    TableModule, 
-    ButtonModule, 
-    InputTextModule, 
-    DialogModule, 
+    CommonModule,
+    FormsModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    DialogModule,
     TagModule, 
     Navbar
   ],
@@ -104,18 +106,52 @@ export class Horario implements OnInit {
 
   turnoActual: Turno = this.inicializarTurno();
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private funcionarioService: FuncionarioService,
+    private turnoService: TurnoService
+  ) {}
+
+  private intervalId: any;
 
   ngOnInit() {
-    // Aquí deberías cargar primero tus catálogos (usuarios y turnos)
-    // Para este ejemplo, llamamos a cargarTurnos directamente
+    this.cargarCatalogos();
+
+    this.intervalId = setInterval(() => {
     this.cargarTurnos();
+  }, 300000);
+  }
+
+  ngOnDestroy() {
+  if (this.intervalId) {
+    clearInterval(this.intervalId);
+  }
+}
+
+  cargarCatalogos() {
+    forkJoin({
+      usuarios: this.funcionarioService.listar().pipe(catchError(() => of([]))),
+      turnos: this.turnoService.listar().pipe(catchError(() => of([])))
+    }).subscribe({
+      next: ({ usuarios, turnos }) => {
+        this.usuariosDisponibles = usuarios;
+        this.funcionarios = usuarios.map(u => u.nombre);
+        this.turnosDisponibles = turnos;
+        
+        // Una vez cargados los catálogos, se cargan los turnos de la semana
+        this.cargarTurnos();
+      },
+      error: (error) => {
+        console.error('Error al cargar catálogos', error);
+        this.lanzarToast('Error al cargar catálogos');
+      }
+    });
   }
 
   // --- LÓGICA DE FECHAS ---
   getUpcomingFriday(): string {
     const d = new Date();
-    const day = d.getDay(); 
+    const day = d.getDay();
     let diff = 5 - day;
     if (diff < 0) diff += 7;
     d.setDate(d.getDate() + diff);
@@ -148,9 +184,9 @@ export class Horario implements OnInit {
 
     const fechasSemana: string[] = [];
     for(let i=0; i<7; i++) {
-       const d = new Date(monday.getTime());
-       d.setDate(monday.getDate() + i);
-       fechasSemana.push(d.toISOString().split('T')[0]);
+      const d = new Date(monday.getTime());
+      d.setDate(monday.getDate() + i);
+      fechasSemana.push(d.toISOString().split('T')[0]);
     }
 
     const requests = fechasSemana.map(f => 
@@ -248,7 +284,7 @@ export class Horario implements OnInit {
           dia: fechaDia,
           diaSemana: diasLista[fObj.getDay()],
           diaMes: diaObj.diaMes,
-          horaInicio: '', 
+          horaInicio: '',
           horaFin: '',
           esDescanso: diaObj.esDescanso,
           break: diaObj.break,
@@ -286,20 +322,35 @@ export class Horario implements OnInit {
   }
 
   guardar() {
+    // Construir el payload que espera el backend (sin datos extras de la UI)
+    const payload = {
+      funcionarioId: this.turnoActual.funcionarioId,
+      turnoId: this.turnoActual.turnoId,
+      fecha: this.turnoActual.dia
+    };
+
     if (this.esEdicion) {
-      this.http.put(`${this.apiUrl}/${this.turnoActual.id}`, this.turnoActual).subscribe({
+      this.http.put(`${this.apiUrl}/${this.turnoActual.id}`, payload).subscribe({
         next: () => {
           this.lanzarToast('Actualizado con éxito');
           this.cargarTurnos();
           this.resetForm();
+        },
+        error: (err) => {
+          console.error(err);
+          this.lanzarToast('Error al actualizar');
         }
       });
     } else {
-      this.http.post(this.apiUrl, this.turnoActual).subscribe({
+      this.http.post(this.apiUrl, payload).subscribe({
         next: () => {
           this.lanzarToast('Guardado con éxito');
           this.cargarTurnos();
           this.resetForm();
+        },
+        error: (err) => {
+          console.error(err);
+          this.lanzarToast('Error al guardar');
         }
       });
     }
@@ -360,4 +411,6 @@ export class Horario implements OnInit {
     this.verToast = true;
     setTimeout(() => (this.verToast = false), 3000);
   }
+
+
 }

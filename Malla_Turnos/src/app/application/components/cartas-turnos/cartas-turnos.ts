@@ -27,6 +27,8 @@ export class CartasTurnos implements OnInit, OnDestroy {
   turnoSeleccionado: Turno | null = null;
   syncInterval: any;
   
+  cargando: boolean = false;
+
   nuevoTurno: Turno = {
     nombre: '',
     horaInicio: '',
@@ -39,32 +41,43 @@ export class CartasTurnos implements OnInit, OnDestroy {
 
   constructor(private turnoService: TurnoService) {}
 
-  refresh() {
-    this.cargarTurnos();
-  }
-
   ngOnInit() {
     this.cargarTurnos();
+    // Lo configuramos a 5 segundos como tenías, o 10 para mayor estabilidad
     this.syncInterval = setInterval(() => {
       this.refresh();
     }, 5000);
   }
 
   ngOnDestroy() {
+    // Limpieza vital para evitar que el proceso siga corriendo en segundo plano
     if (this.syncInterval) {
       clearInterval(this.syncInterval);
     }
   }
 
+  refresh() {
+    // Solo refresca si el usuario NO tiene un formulario abierto (agregar o editar)
+    if (!this.accionActual) {
+      this.cargarTurnos();
+    }
+  }
+
   cargarTurnos() {
+    this.cargando = true; // Iniciamos estado de carga
     this.turnoService.listar().subscribe({
       next: (data: any[]) => {
         this.turnos = data.map(t => ({
           ...t, 
+          // Mantenemos tu lógica de personas (ojo: el random cambiará cada 5s si el back no trae el dato)
           cantidadPersonas: t.cantidadPersonas || Math.floor(Math.random() * 10) + 1
         }));
+        this.cargando = false;
       },
-      error: (err) => console.error('Error al cargar los turnos:', err)
+      error: (err) => {
+        console.error('Error al cargar los turnos:', err);
+        this.cargando = false;
+      }
     });
   }
 
@@ -92,8 +105,8 @@ export class CartasTurnos implements OnInit, OnDestroy {
     this.accionActual = null;
     this.turnoSeleccionado = null;
     this.nuevoTurno = {
-      nombre: '', horaInicio: '', horaFin: '', 
-      horaalmuerzo: '', horabreak: '', tipo: '', cantidadPersonas: 0 
+      nombre: '', horaInicio: '', horaFin: '',
+      horaalmuerzo: '', horabreak: '', tipo: '', cantidadPersonas: 0
     };
   }
 
