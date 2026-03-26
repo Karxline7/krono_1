@@ -75,7 +75,103 @@
             <td class="font-bold">{{ t.funcionario }}</td>
             <td><small>{{ t.semana }}</small></td>
             
-            <ng-container *ngFor="let dia of ['lunes','martes','miercoles','jueves','viernes','sabado','domingo']">
+            <ng-container *ngFor="let dia of ['lunes']">
+              <td (click)="seleccionarCelda(t[dia], t.funcionarioId, t.fechas[dia])"
+                  [class.fila-seleccionada]="t[dia] && turnoIdSeleccionado === t[dia].id"
+                  class="celda-turno">
+                
+                <div class="dia-mes">{{ getDiaMes(t.fechas[dia]) }}</div>
+                
+                <div *ngIf="t[dia]" class="tag-container">
+                  <p-tag [value]="t[dia].turnoNombre"[severity]="t[dia].esDescanso ? 'secondary' : 'info'"></p-tag>
+                </div>
+                
+                <div *ngIf="!t[dia]" class="add-icon">
+                  <i class="pi pi-plus"></i>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container *ngFor="let dia of ['martes']">
+              <td (click)="seleccionarCelda(t[dia], t.funcionarioId, t.fechas[dia])"
+                  [class.fila-seleccionada]="t[dia] && turnoIdSeleccionado === t[dia].id"
+                  class="celda-turno">
+                
+                <div class="dia-mes">{{ getDiaMes(t.fechas[dia]) }}</div>
+                
+                <div *ngIf="t[dia]" class="tag-container">
+                  <p-tag [value]="t[dia].turnoNombre"[severity]="t[dia].esDescanso ? 'secondary' : 'info'"></p-tag>
+                </div>
+                
+                <div *ngIf="!t[dia]" class="add-icon">
+                  <i class="pi pi-plus"></i>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container *ngFor="let dia of ['miercoles']">
+              <td (click)="seleccionarCelda(t[dia], t.funcionarioId, t.fechas[dia])"
+                  [class.fila-seleccionada]="t[dia] && turnoIdSeleccionado === t[dia].id"
+                  class="celda-turno">
+                
+                <div class="dia-mes">{{ getDiaMes(t.fechas[dia]) }}</div>
+                
+                <div *ngIf="t[dia]" class="tag-container">
+                  <p-tag [value]="t[dia].turnoNombre"[severity]="t[dia].esDescanso ? 'secondary' : 'info'"></p-tag>
+                </div>
+                
+                <div *ngIf="!t[dia]" class="add-icon">
+                  <i class="pi pi-plus"></i>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container *ngFor="let dia of ['jueves']">
+              <td (click)="seleccionarCelda(t[dia], t.funcionarioId, t.fechas[dia])"
+                  [class.fila-seleccionada]="t[dia] && turnoIdSeleccionado === t[dia].id"
+                  class="celda-turno">
+                
+                <div class="dia-mes">{{ getDiaMes(t.fechas[dia]) }}</div>
+                
+                <div *ngIf="t[dia]" class="tag-container">
+                  <p-tag [value]="t[dia].turnoNombre"[severity]="t[dia].esDescanso ? 'secondary' : 'info'"></p-tag>
+                </div>
+                
+                <div *ngIf="!t[dia]" class="add-icon">
+                  <i class="pi pi-plus"></i>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container *ngFor="let dia of ['viernes']">
+              <td (click)="seleccionarCelda(t[dia], t.funcionarioId, t.fechas[dia])"
+                  [class.fila-seleccionada]="t[dia] && turnoIdSeleccionado === t[dia].id"
+                  class="celda-turno">
+                
+                <div class="dia-mes">{{ getDiaMes(t.fechas[dia]) }}</div>
+                
+                <div *ngIf="t[dia]" class="tag-container">
+                  <p-tag [value]="t[dia].turnoNombre"[severity]="t[dia].esDescanso ? 'secondary' : 'info'"></p-tag>
+                </div>
+                
+                <div *ngIf="!t[dia]" class="add-icon">
+                  <i class="pi pi-plus"></i>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container *ngFor="let dia of ['sabado']">
+              <td (click)="seleccionarCelda(t[dia], t.funcionarioId, t.fechas[dia])"
+                  [class.fila-seleccionada]="t[dia] && turnoIdSeleccionado === t[dia].id"
+                  class="celda-turno">
+                
+                <div class="dia-mes">{{ getDiaMes(t.fechas[dia]) }}</div>
+                
+                <div *ngIf="t[dia]" class="tag-container">
+                  <p-tag [value]="t[dia].turnoNombre"[severity]="t[dia].esDescanso ? 'secondary' : 'info'"></p-tag>
+                </div>
+                
+                <div *ngIf="!t[dia]" class="add-icon">
+                  <i class="pi pi-plus"></i>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container *ngFor="let dia of ['domingo']">
               <td (click)="seleccionarCelda(t[dia], t.funcionarioId, t.fechas[dia])"
                   [class.fila-seleccionada]="t[dia] && turnoIdSeleccionado === t[dia].id"
                   class="celda-turno">
