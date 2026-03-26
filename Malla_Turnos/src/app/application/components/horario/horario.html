@@ -2,107 +2,65 @@
 
 <section class="main-container">
   <header class="top-header">
-    <h1>Turnos</h1>
+    <h1>Gestión de Turnos</h1>
   </header>
 
   <main class="main-content">
 
-    <!-- ═══════════════════════════════════════════
-         FILTROS SUPERIORES
-    ═══════════════════════════════════════════ -->
     <div class="filtros-container">
       <div class="selector-group">
+        <input type="date" [(ngModel)]="fechaFiltro" (change)="cargarTurnos()" class="p-inputtext" style="min-width: 200px;">
+        
         <select [(ngModel)]="filtroSemana" class="p-inputtext">
-          <option value="">Seleccionar semana</option>
+          <option value="">Todas las semanas</option>
           <option *ngFor="let s of semanas" [value]="s">{{ s }}</option>
         </select>
 
         <select [(ngModel)]="filtroTurno" class="p-inputtext">
-          <option value="">Seleccionar turno</option>
+          <option value="">Todos los turnos</option>
           <option *ngFor="let t of turnosDisponibles" [value]="t.nombre">{{ t.nombre }}</option>
         </select>
 
         <select [(ngModel)]="filtroFuncionario" class="p-inputtext">
-          <option value="">Seleccionar funcionario</option>
+          <option value="">Todos los funcionarios</option>
           <option *ngFor="let f of funcionarios" [value]="f">{{ f }}</option>
         </select>
-
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════
-         FORMULARIO
-    ═══════════════════════════════════════════ -->
     <div class="form-container" [class.abierto]="mostrarFormulario">
       <form (ngSubmit)="guardar()" class="form-horizontal">
-
-        <!-- Semana -->
-        <select [(ngModel)]="turnoActual.semana" name="semana" class="p-inputtext" required>
-          <option value="">Seleccionar semana</option>
-          <option *ngFor="let s of semanas" [value]="s">{{ s }}</option>
-        </select>
-
-        <!-- Turno (Descanso deshabilita horas) -->
-        <select [(ngModel)]="turnoActual.turnoId" name="turnoId" class="p-inputtext" required
-                (ngModelChange)="onTurnoChange()">
-          <option [ngValue]="null">Seleccionar turno</option>
-          <option *ngFor="let t of turnosDisponibles" [ngValue]="t.id">{{ t.nombre }}</option>
-        </select>
-
-        <!-- Funcionario -->
+        
         <select [(ngModel)]="turnoActual.funcionarioId" name="funcionarioId" class="p-inputtext" required>
-          <option [ngValue]="null">Seleccionar funcionario</option>
+          <option [ngValue]="null">Funcionario</option>
           <option *ngFor="let u of usuariosDisponibles" [value]="u.id">{{ u.nombre }}</option>
         </select>
 
-        <!-- Fecha (día exacto) -->
-        <input
-          type="date"
-          pInputText
-          [(ngModel)]="turnoActual.dia"
-          name="dia"
-          required
-        >
+        <select [(ngModel)]="turnoActual.turnoId" name="turnoId" class="p-inputtext" required (ngModelChange)="onTurnoChange()">
+          <option [ngValue]="null">Turno</option>
+          <option *ngFor="let t of turnosDisponibles" [value]="t.id">{{ t.nombre }}</option>
+        </select>
 
-        <!-- Hora inicio — deshabilitada si es Descanso, auto-llenada -->
-        <input
-          type="time"
-          pInputText
-          [(ngModel)]="turnoActual.horaInicio"
-          name="horaInicio"
-          disabled
-          readonly
-          class="input-disabled"
-        >
+        <input type="date" [(ngModel)]="turnoActual.dia" name="dia" class="p-inputtext" required>
+        
+        <input type="time" [(ngModel)]="turnoActual.horaInicio" name="horaInicio" placeholder="Inicio" class="p-inputtext" readonly>
+        
+        <input type="time" [(ngModel)]="turnoActual.horaFin" name="horaFin" placeholder="Fin" class="p-inputtext" readonly>
 
-        <!-- Hora fin — deshabilitada si es Descanso, auto-llenada -->
-        <input
-          type="time"
-          pInputText
-          [(ngModel)]="turnoActual.horaFin"
-          name="horaFin"
-          disabled
-          readonly
-          class="input-disabled"
-        >
-
-        <p-button
-          type="submit"
-          [styleClass]="esEdicion ? 'btn-actualizar' : 'btn-guardar-verde'"
-          [label]="esEdicion ? 'Actualizar' : 'Guardar'"
-        ></p-button>
-
+        <button type="submit" [class]="esEdicion ? 'btn-actualizar' : 'btn-guardar-verde'">
+          <i [class]="esEdicion ? 'pi pi-refresh' : 'pi pi-save'"></i>
+          {{ esEdicion ? 'Actualizar' : 'Guardar' }}
+        </button>
+        
+        <button type="button" class="btn-cancelar" (click)="resetForm()">Cancelar</button>
       </form>
     </div>
 
-    <!-- ═══════════════════════════════════════════
-         TABLA
-    ═══════════════════════════════════════════ -->
     <div class="contenedor-tabla">
-      <p-table [value]="turnosFiltrados" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}" selectionMode="single" dataKey="id">
+      <p-table [value]="turnosFiltrados" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '60rem'}">
         <ng-template pTemplate="header">
           <tr>
-            <th>Funcionarios</th>
+            <th>Funcionario</th>
             <th>Semana</th>
             <th>Lunes</th>
             <th>Martes</th>
@@ -111,91 +69,70 @@
             <th>Viernes</th>
             <th>Sábado</th>
             <th>Domingo</th>
-            <th>Break</th>
-            <th>Almuerzo</th>
-            <th>Compensatorios</th>
-            <th>Vacaciones</th>
           </tr>
         </ng-template>
+
         <ng-template pTemplate="body" let-t>
-          <tr (click)="seleccionarFila(t)" [pSelectableRow]="t" [class.fila-seleccionada]="turnoActual.id === t.id" [class.fila-descanso]="t.esDescanso" style="cursor: pointer;">
-            <td>{{ t.funcionario }}</td>
-            <td>{{ t.semana }}</td>
-            <td>
-              <ng-container *ngIf="t.diaSemana === 'Lunes'">
-                  <div class="dia-mes">{{ t.diaMes }}</div>
-                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
-              </ng-container>
-            </td>
-            <td>
-              <ng-container *ngIf="t.diaSemana === 'Martes'">
-                  <div class="dia-mes">{{ t.diaMes }}</div>
-                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
-              </ng-container>
-            </td>
-            <td>
-              <ng-container *ngIf="t.diaSemana === 'Miércoles'">
-                  <div class="dia-mes">{{ t.diaMes }}</div>
-                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
-              </ng-container>
-            </td>
-            <td>
-              <ng-container *ngIf="t.diaSemana === 'Jueves'">
-                  <div class="dia-mes">{{ t.diaMes }}</div>
-                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
-                  <p-tag [value]="t.break" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
-                  <p-tag [value]="t.almuerzo" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
-              </ng-container>
-            </td>
-            <td>
-              <ng-container *ngIf="t.diaSemana === 'Viernes'">
-                  <div class="dia-mes">{{ t.diaMes }}</div>
-                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
-              </ng-container>
-            </td>
-            <td>
-              <ng-container *ngIf="t.diaSemana === 'Sábado'">
-                  <div class="dia-mes">{{ t.diaMes }}</div>
-                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
-              </ng-container>
-            </td>
-            <td>
-              <ng-container *ngIf="t.diaSemana === 'Domingo'">
-                  <div class="dia-mes">{{ t.diaMes }}</div>
-                  <p-tag [value]="t.turno" [severity]="t.esDescanso ? 'secondary' : 'info'"></p-tag>
-              </ng-container>
-            </td>
+          <tr>
+            <td class="font-bold">{{ t.funcionario }}</td>
+            <td><small>{{ t.semana }}</small></td>
+            
+            <ng-container *ngFor="let dia of ['lunes','martes','miercoles','jueves','viernes','sabado','domingo']">
+              <td (click)="seleccionarCelda(t[dia], t.funcionarioId, t.fechas[dia])"
+                  [class.fila-seleccionada]="t[dia] && turnoIdSeleccionado === t[dia].id"
+                  class="celda-turno">
+                
+                <div class="dia-mes">{{ getDiaMes(t.fechas[dia]) }}</div>
+                
+                <div *ngIf="t[dia]" class="tag-container">
+                  <p-tag [value]="t[dia].turnoNombre"[severity]="t[dia].esDescanso ? 'secondary' : 'info'"></p-tag>
+                </div>
+                
+                <div *ngIf="!t[dia]" class="add-icon">
+                  <i class="pi pi-plus"></i>
+                </div>
+              </td>
+            </ng-container>
           </tr>
         </ng-template>
+
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="13" class="text-center p-4">Sin registros para la fecha consultada</td>
+            <td colspan="9" class="text-center p-4">No se encontraron turnos para esta selección.</td>
           </tr>
         </ng-template>
       </p-table>
 
-      <!-- Botones -->
-      <div class="acciones-container mt-3" style="display: flex; gap: 10px; margin-top: 15px;">
-        <p-button label="Agregar" icon="pi pi-plus" styleClass="btn-guardar-verde" (onClick)="toggleFormulario()"></p-button>
-        <p-button label="Editar" icon="pi pi-pencil" styleClass="btn-actualizar" (onClick)="abrirEditar()"></p-button>
-        <p-button label="Eliminar" icon="pi pi-trash" styleClass="btn-eliminar" (onClick)="abrirModalEliminar()"></p-button>
+      <div class="acciones-container">
+        <button class="btn-guardar-verde" (click)="toggleFormulario()">
+          <i class="pi pi-plus"></i> Agregar Turno
+        </button>
+        <button class="btn-actualizar" (click)="abrirEditar()" [disabled]="!turnoIdSeleccionado">
+          <i class="pi pi-pencil"></i> Editar
+        </button>
+        <button class="btn-eliminar" (click)="abrirModalEliminar()" [disabled]="!turnoIdSeleccionado">
+          <i class="pi pi-trash"></i> Eliminar
+        </button>
       </div>
     </div>
-
   </main>
 
-  <!-- Modal confirmación -->
-  <p-dialog [(visible)]="mostrarConfirmacion" [modal]="true" header="Confirmar Eliminación" [closable]="false" [style]="{width: '450px'}">
-    <div class="flex align-items-center justify-content-center">
-      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem; color: var(--red-500)"></i>
-      <p>¿Eliminar el turno de <b>{{ turnoActual.funcionario }}</b> del <b>{{ turnoActual.dia }}</b>?</p>
+  <p-dialog [(visible)]="mostrarConfirmacion" [modal]="true" header="Confirmar Acción" [closable]="false" [style]="{width: '400px'}">
+    <div class="text-center">
+      <i class="pi pi-exclamation-triangle text-red-500 mb-3" style="font-size: 2.5rem"></i>
+      <p>¿Estás seguro de eliminar el turno de <strong>{{ turnoActual.funcionario }}</strong>?</p>
+      <p><small>{{ turnoActual.dia | date:'fullDate' }}</small></p>
     </div>
     <ng-template pTemplate="footer">
-      <p-button icon="pi pi-times" label="No" styleClass="btn-cancelar" (onClick)="cancelarEliminacion()"></p-button>
-      <p-button icon="pi pi-check" label="Sí, eliminar" styleClass="btn-eliminar" (onClick)="eliminar()"></p-button>
+      <div class="modal-actions">
+        <button class="btn-cancelar" (click)="cancelarEliminacion()">No, volver</button>
+        <button class="btn-eliminar" (click)="eliminar()">Sí, eliminar</button>
+      </div>
     </ng-template>
   </p-dialog>
 
-  <div *ngIf="verToast" class="toast-success">{{ mensajeToast }}</div>
+  <div *ngIf="verToast" class="toast-success">
+    <i class="pi pi-check-circle"></i> {{ mensajeToast }}
+  </div>
 
 </section>

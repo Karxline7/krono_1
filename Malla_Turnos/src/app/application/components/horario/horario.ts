@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -11,6 +11,7 @@ import { TagModule } from 'primeng/tag';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+// --- INTERFACES ---
 export interface Turno {
   id: number;
   semana: string;
@@ -30,170 +31,252 @@ export interface Turno {
   turnoId?: number | null;
 }
 
+export interface AsignacionDia {
+  id: number;
+  turnoId: number;
+  turnoNombre: string;
+  diaMes: string;
+  esDescanso: boolean;
+  break: string;
+  almuerzo: string;
+}
+
+export interface TurnoSemanal {
+  funcionarioId: number;
+  funcionario: string;
+  semana: string;
+  lunes: AsignacionDia | null;
+  martes: AsignacionDia | null;
+  miercoles: AsignacionDia | null;
+  jueves: AsignacionDia | null;
+  viernes: AsignacionDia | null;
+  sabado: AsignacionDia | null;
+  domingo: AsignacionDia | null;
+  fechas: {
+    lunes: string; martes: string; miercoles: string; jueves: string; viernes: string; sabado: string; domingo: string;
+  };
+  break: string;
+  almuerzo: string;
+  compensatorios: string;
+  vacaciones: string;
+}
+
 @Component({
   selector: 'app-horario',
   standalone: true,
-  imports: [CommonModule, FormsModule, Navbar, TableModule, ButtonModule, InputTextModule, DialogModule, TagModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    TableModule, 
+    ButtonModule, 
+    InputTextModule, 
+    DialogModule, 
+    TagModule, 
+    Navbar
+  ],
   templateUrl: './horario.html',
-  styleUrl: './horario.scss',
+  styleUrls: ['./horario.scss']
 })
-export class Horario implements OnInit, OnDestroy {
-  private apiUrl = 'http://localhost:8081/api/asignaciones';
-
-  syncInterval: any;
-
-  semanas      = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
+export class HorarioComponent implements OnInit {
+  
+  // --- PROPIEDADES ---
+  apiUrl = 'http://localhost:8080/api/asignaciones'; // Cambia esto por tu URL real
+  semanas = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
   funcionarios: string[] = [];
 
-  listaTurnos: Turno[] = [];
+  listaTurnosSemanales: TurnoSemanal[] = [];
   turnosDisponibles: any[] = [];
   usuariosDisponibles: any[] = [];
 
   // Filtros superiores
-  fechaFiltro       = new Date().toISOString().split('T')[0];
-  filtroSemana      = '';
-  filtroTurno       = '';
+  fechaFiltro = this.getUpcomingFriday();
+  filtroSemana = '';
+  filtroTurno = '';
   filtroFuncionario = '';
 
-  get turnosFiltrados(): Turno[] {
-    return this.listaTurnos.filter(t => {
-      const okSemana      = !this.filtroSemana      || t.semana      === this.filtroSemana;
-      const okTurno       = !this.filtroTurno       || t.turno       === this.filtroTurno;
+  // Control de UI
+  mostrarFormulario = false;
+  esEdicion = false;
+  turnoIdSeleccionado: number | null = null;
+  verToast = false;
+  mensajeToast = '';
+  mostrarConfirmacion = false;
+
+  turnoActual: Turno = this.inicializarTurno();
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    // Aquí deberías cargar primero tus catálogos (usuarios y turnos)
+    // Para este ejemplo, llamamos a cargarTurnos directamente
+    this.cargarTurnos();
+  }
+
+  // --- LÓGICA DE FECHAS ---
+  getUpcomingFriday(): string {
+    const d = new Date();
+    const day = d.getDay(); 
+    let diff = 5 - day;
+    if (diff < 0) diff += 7;
+    d.setDate(d.getDate() + diff);
+    return d.toISOString().split('T')[0];
+  }
+
+  get turnosFiltrados(): TurnoSemanal[] {
+    return this.listaTurnosSemanales.filter(t => {
+      const okSemana = !this.filtroSemana || t.semana === this.filtroSemana;
       const okFuncionario = !this.filtroFuncionario || t.funcionario === this.filtroFuncionario;
+      const okTurno = !this.filtroTurno || [
+        t.lunes?.turnoNombre, t.martes?.turnoNombre, t.miercoles?.turnoNombre,
+        t.jueves?.turnoNombre, t.viernes?.turnoNombre, t.sabado?.turnoNombre, t.domingo?.turnoNombre
+      ].includes(this.filtroTurno);
+      
       return okSemana && okTurno && okFuncionario;
     });
   }
 
-  // Formulario
-  turnoActual: Turno = this.inicializarTurno();
-  mostrarFormulario  = false;
-  esEdicion          = false;
-  turnoIdSeleccionado: number | null = null;
-
-  // Modal / Toast
-  mostrarConfirmacion = false;
-  verToast            = false;
-  mensajeToast        = '';
-
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
-
-  ngOnInit(): void {
-    this.cargarDatosMaestros();
-    this.syncInterval = setInterval(() => {
-      this.refresh();
-    }, 5000);
-  }
-
-  ngOnDestroy(): void {
-    if (this.syncInterval) {
-      clearInterval(this.syncInterval);
-    }
-  }
-
-  cargarDatosMaestros() {
-    forkJoin({
-      turnos: this.http.get<any[]>('http://localhost:8081/api/turnos').pipe(catchError(() => of([]))),
-      // Obtenemos usuarios de las areas principales asumiendo ID 1 y 2
-      users1: this.http.get<any[]>('http://localhost:8081/api/usuarios/area/1').pipe(catchError(() => of([]))),
-      users2: this.http.get<any[]>('http://localhost:8081/api/usuarios/area/2').pipe(catchError(() => of([])))
-    }).subscribe(res => {
-      this.turnosDisponibles = res.turnos;
-      const allUsers = [...res.users1, ...res.users2];
-      this.usuariosDisponibles = Array.from(new Map(allUsers.map(item => [item.id, item])).values());
-      this.funcionarios = this.usuariosDisponibles.map(x => x.nombre);
-
-      this.cdr.detectChanges();
-      this.cargarTurnos();
-    });
-  }
-
-  refresh() {
-    // Solo delegamos a cargarTurnos para mantener la lógica de mapeo con usuarios y turnos intacta
-    this.cargarTurnos();
-  }
-
+  // --- OPERACIONES API ---
   cargarTurnos() {
     if (!this.fechaFiltro) return;
 
-    this.http.get<any[]>(`${this.apiUrl}/fecha/${this.fechaFiltro}`).subscribe({
-      next: (data) => {
-        this.listaTurnos = data.map(asignacion => {
-           const fId = asignacion.funcionarioId ?? asignacion.funcionario?.id ?? asignacion.usuario?.id;
-           const tId = asignacion.turnoId ?? asignacion.turno?.id;
+    const baseDate = new Date(this.fechaFiltro + 'T00:00:00'); 
+    const dayOfWeek = baseDate.getDay();
+    const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    
+    const monday = new Date(baseDate.getTime());
+    monday.setDate(baseDate.getDate() + diffToMonday);
 
-           const u = this.usuariosDisponibles.find(x => x.id == fId);
-           const t = this.turnosDisponibles.find(x => x.id == tId);
+    const fechasSemana: string[] = [];
+    for(let i=0; i<7; i++) {
+       const d = new Date(monday.getTime());
+       d.setDate(monday.getDate() + i);
+       fechasSemana.push(d.toISOString().split('T')[0]);
+    }
 
-           let dSemana = '';
-           let dMes = '';
-           if (asignacion.fecha) {
-             let year: number, month: number, day: number;
-             
-             if (Array.isArray(asignacion.fecha)) {
-               year = asignacion.fecha[0];
-               month = asignacion.fecha[1];
-               day = asignacion.fecha[2];
-             } else {
-               const fechaStr = String(asignacion.fecha);
-               const sep = fechaStr.includes('/') ? '/' : '-';
-               const partes = fechaStr.split(sep);
-               year = parseInt(partes[0]);
-               month = parseInt(partes[1]);
-               day = parseInt(partes[2]);
-             }
-             
-             if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
-               const fObj = new Date(year, month - 1, day);
-               const diasLista = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-               dSemana = diasLista[fObj.getDay()];
-               dMes = day.toString();
-             }
-           }
+    const requests = fechasSemana.map(f => 
+      this.http.get<any[]>(`${this.apiUrl}/fecha/${f}`).pipe(catchError(() => of([])))
+    );
 
-           return {
-             id: asignacion.id || Math.floor(Math.random() * 1000000),
-             semana: 'Semana Actual',
-             turno: t ? t.nombre : 'Descanso',
-             funcionario: u ? u.nombre : 'Usuario ' + fId,
-             dia: asignacion.fecha,
-             diaSemana: dSemana,
-             diaMes: dMes,
-             horaInicio: t ? t.horaInicio : '',
-             horaFin: t ? t.horaFin : '',
-             esDescanso: t ? t.nombre === 'Descanso' : true,
-             break: t && t.horabreak ? t.horabreak : '',
-             almuerzo: t && t.horaalmuerzo ? t.horaalmuerzo : '',
-             compensatorios: '0',
-             vacaciones: '0',
-             funcionarioId: fId,
-             turnoId: tId
-           };
-        });
-        this.cdr.detectChanges();
+    forkJoin(requests).subscribe({
+      next: (results) => {
+        const flatAssignments = results.flat();
+        this.procesarTurnosSemanales(flatAssignments, fechasSemana);
       },
       error: (error) => {
         console.error('Error al cargar asignaciones', error);
-        this.listaTurnos = [];
-        this.cdr.detectChanges();
+        this.listaTurnosSemanales = [];
       }
     });
   }
 
+  procesarTurnosSemanales(asignacionesFlat: any[], fechasSemana: string[]) {
+    const map = new Map<number, TurnoSemanal>();
+
+    this.usuariosDisponibles.forEach(u => {
+      map.set(u.id, {
+        funcionarioId: u.id,
+        funcionario: u.nombre,
+        semana: 'Semana Actual',
+        lunes: null, martes: null, miercoles: null, jueves: null, viernes: null, sabado: null, domingo: null,
+        fechas: {
+          lunes: fechasSemana[0], martes: fechasSemana[1], miercoles: fechasSemana[2], 
+          jueves: fechasSemana[3], viernes: fechasSemana[4], sabado: fechasSemana[5], domingo: fechasSemana[6]
+        },
+        break: '—', almuerzo: '—', compensatorios: '0', vacaciones: '0'
+      });
+    });
+
+    asignacionesFlat.forEach(a => {
+       const w = map.get(a.funcionarioId);
+       if (!w) return;
+
+       const t = this.turnosDisponibles.find(x => x.id === a.turnoId);
+       const tNombre = t ? t.nombre : 'Descanso';
+       const esDescanso = t ? t.nombre === 'Descanso' : true;
+       
+       if (t && t.horabreak) w.break = t.horabreak;
+       if (t && t.horaalmuerzo) w.almuerzo = t.horaalmuerzo;
+
+       const dMes = a.fecha.split('-')[2];
+       const diaObj: AsignacionDia = {
+          id: a.id, turnoId: a.turnoId, turnoNombre: tNombre, diaMes: dMes, 
+          esDescanso: esDescanso, break: t ? t.horabreak || '—' : '—', almuerzo: t ? t.horaalmuerzo || '—' : '—'
+       };
+
+       if (a.fecha === fechasSemana[0]) w.lunes = diaObj;
+       else if (a.fecha === fechasSemana[1]) w.martes = diaObj;
+       else if (a.fecha === fechasSemana[2]) w.miercoles = diaObj;
+       else if (a.fecha === fechasSemana[3]) w.jueves = diaObj;
+       else if (a.fecha === fechasSemana[4]) w.viernes = diaObj;
+       else if (a.fecha === fechasSemana[5]) w.sabado = diaObj;
+       else if (a.fecha === fechasSemana[6]) w.domingo = diaObj;
+    });
+
+    this.listaTurnosSemanales = Array.from(map.values());
+  }
+
+  // --- MÉTODOS DE ACCIÓN ---
   onTurnoChange() {
     if (this.turnoActual.turnoId != null) {
        const t = this.turnosDisponibles.find(x => x.id === Number(this.turnoActual.turnoId));
        if (t) {
-         this.turnoActual.turno = t.nombre;
-         if (t.nombre === 'Descanso') {
-           this.turnoActual.esDescanso = true;
-           this.turnoActual.horaInicio = '';
-           this.turnoActual.horaFin    = '';
-         } else {
-           this.turnoActual.esDescanso = false;
-           this.turnoActual.horaInicio = t.horaInicio || '';
-           this.turnoActual.horaFin    = t.horaFin || '';
-         }
+         this.turnoActual.horaInicio = t.horainicio || '';
+         this.turnoActual.horaFin = t.horafin || '';
+         this.turnoActual.break = t.horabreak || '';
+         this.turnoActual.almuerzo = t.horaalmuerzo || '';
+         this.turnoActual.esDescanso = (t.nombre === 'Descanso');
        }
+    }
+  }
+
+  seleccionarCelda(diaObj: AsignacionDia | null, funcionarioId: number | null, fechaDia: string) {
+    if (!funcionarioId) return;
+
+    if (diaObj) {
+      if (this.turnoIdSeleccionado === diaObj.id) {
+        this.resetForm();
+      } else {
+        this.turnoIdSeleccionado = diaObj.id;
+        const fObj = new Date(fechaDia + 'T00:00:00');
+        const diasLista = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+        this.turnoActual = {
+          id: diaObj.id,
+          semana: 'Semana Actual',
+          turno: diaObj.turnoNombre,
+          funcionario: this.usuariosDisponibles.find(u => u.id === funcionarioId)?.nombre || '',
+          dia: fechaDia,
+          diaSemana: diasLista[fObj.getDay()],
+          diaMes: diaObj.diaMes,
+          horaInicio: '', 
+          horaFin: '',
+          esDescanso: diaObj.esDescanso,
+          break: diaObj.break,
+          almuerzo: diaObj.almuerzo,
+          compensatorios: '0',
+          vacaciones: '0',
+          funcionarioId: funcionarioId,
+          turnoId: diaObj.turnoId
+        };
+        this.onTurnoChange();
+        this.esEdicion = true; // Listo para editar si se desea
+        this.mostrarFormulario = false;
+      }
+    } else {
+      this.resetForm();
+      this.turnoActual.funcionarioId = funcionarioId;
+      this.turnoActual.dia = fechaDia;
+      this.esEdicion = false;
+      this.mostrarFormulario = true;
+    }
+  }
+
+  abrirEditar() {
+    if (this.turnoIdSeleccionado) {
+      this.esEdicion = true;
+      this.mostrarFormulario = true;
+    } else {
+      this.lanzarToast('Selecciona un turno en la tabla para editar');
     }
   }
 
@@ -202,66 +285,23 @@ export class Horario implements OnInit, OnDestroy {
     if (!this.mostrarFormulario) this.resetForm();
   }
 
-  abrirEditar() {
-    if (this.turnoIdSeleccionado !== null) {
-      this.esEdicion         = true;
-      this.mostrarFormulario = true;
-    } else {
-      this.lanzarToast('Selecciona un registro para editar');
-    }
-  }
-
   guardar() {
-    if (!this.turnoActual.funcionarioId || !this.turnoActual.dia || !this.turnoActual.turnoId) {
-      this.lanzarToast('Completa los campos obligatorios (Funcionario, Fecha, Turno)');
-      return;
-    }
-
-    const payload = {
-      funcionarioId: this.turnoActual.funcionarioId,
-      turnoId: this.turnoActual.turnoId,
-      fecha: this.turnoActual.dia,
-      areaId: 1
-    };
-
-    if (this.esEdicion && this.turnoActual.id !== 0) {
-      this.http.put(`${this.apiUrl}/${this.turnoActual.id}`, payload).subscribe({
+    if (this.esEdicion) {
+      this.http.put(`${this.apiUrl}/${this.turnoActual.id}`, this.turnoActual).subscribe({
         next: () => {
-          this.lanzarToast('¡Registro actualizado!');
+          this.lanzarToast('Actualizado con éxito');
           this.cargarTurnos();
-          this.toggleFormulario();
-        },
-        error: (error) => {
-          console.error('Error al actualizar', error);
-          this.lanzarToast('Error al actualizar');
+          this.resetForm();
         }
       });
     } else {
-      this.http.post(this.apiUrl, payload).subscribe({
+      this.http.post(this.apiUrl, this.turnoActual).subscribe({
         next: () => {
-          this.lanzarToast('¡Registro guardado!');
+          this.lanzarToast('Guardado con éxito');
           this.cargarTurnos();
-          this.toggleFormulario();
-        },
-        error: (error) => {
-          console.error('Error al guardar', error);
-          this.lanzarToast('Error al guardar');
+          this.resetForm();
         }
       });
-    }
-  }
-
-  seleccionarFila(turno: Turno) {
-    if (this.turnoIdSeleccionado === turno.id) {
-      this.resetForm();
-    } else {
-      this.turnoIdSeleccionado = turno.id;
-      this.turnoActual        = { ...turno };
-      if (!this.turnoActual.dia) {
-        this.turnoActual.dia = this.fechaFiltro;
-      }
-      this.esEdicion          = false;
-      this.mostrarFormulario  = false;
     }
   }
 
@@ -282,8 +322,8 @@ export class Horario implements OnInit, OnDestroy {
           this.cargarTurnos();
           this.resetForm();
         },
-        error: (error) => {
-          console.error('Error al eliminar', error);
+        error: (err) => {
+          console.error(err);
           this.lanzarToast('Error al eliminar');
           this.mostrarConfirmacion = false;
         }
@@ -295,37 +335,29 @@ export class Horario implements OnInit, OnDestroy {
     this.mostrarConfirmacion = false;
   }
 
+  getDiaMes(fechaStr: string): string {
+    return fechaStr ? fechaStr.split('-')[2] : '';
+  }
+
   private inicializarTurno(): Turno {
-    let dSemana = '';
-    let dMes = '';
-    if (this.fechaFiltro) {
-       const partes = this.fechaFiltro.split('-');
-       if (partes.length === 3) {
-         const fObj = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
-         const diasLista = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-         dSemana = diasLista[fObj.getDay()];
-         dMes = partes[2];
-       }
-    }
-  
     return {
       id: 0, semana: '', turno: '', funcionario: '',
-      dia: this.fechaFiltro, diaSemana: dSemana, diaMes: dMes, horaInicio: '', horaFin: '',
+      dia: this.fechaFiltro, diaSemana: '', diaMes: '', horaInicio: '', horaFin: '',
       esDescanso: false, break: '', almuerzo: '', compensatorios: '0', vacaciones: '0',
       funcionarioId: null, turnoId: null
     };
   }
 
   resetForm() {
-    this.turnoActual         = this.inicializarTurno();
-    this.esEdicion           = false;
+    this.turnoActual = this.inicializarTurno();
+    this.esEdicion = false;
     this.turnoIdSeleccionado = null;
-    this.mostrarFormulario   = false;
+    this.mostrarFormulario = false;
   }
 
   lanzarToast(msg: string) {
     this.mensajeToast = msg;
-    this.verToast     = true;
+    this.verToast = true;
     setTimeout(() => (this.verToast = false), 3000);
   }
 }

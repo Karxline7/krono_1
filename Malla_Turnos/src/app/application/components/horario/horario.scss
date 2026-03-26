@@ -1,182 +1,62 @@
 @use 'styles/variables' as *;
 @use 'styles/mixins' as *;
-/* --- ESTRUCTURA PRINCIPAL --- */
-.main-container {
-  font-family: 'Segoe UI', sans-serif;
-  padding: 20px;
-  background-color: $bg-main;
-  min-height: 100vh;
 
-  .top-header h1 {
+// Heredamos toda tu estructura anterior...
+
+.celda-turno {
+  position: relative;
+  cursor: pointer;
+  min-height: 70px;
+  transition: all 0.2s ease;
+  vertical-align: top !important;
+
+  &:hover {
+    background-color: $lime-hover;
+    
+    .add-icon { opacity: 1; }
+  }
+
+  .dia-mes {
+    font-size: 0.75rem;
+    color: #999;
+    position: absolute;
+    top: 4px;
+    right: 6px;
+  }
+
+  .tag-container {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .add-icon {
+    opacity: 0;
+    color: $lime-primary;
+    margin-top: 15px;
     text-align: center;
-    color: $dark-text;
+    transition: opacity 0.2s;
   }
 }
 
-/* --- FILTROS Y SELECTORES --- */
-.filtros-container {
-  @include card-style;
-  margin-bottom: 20px;
+// Estilo para celdas seleccionadas (basado en tu variable $lime-light)
+.fila-seleccionada {
+  background-color: #f1f8e9 !important; // Un verde muy claro si $lime-light no está definido
+  border: 1px solid $lime-primary !important;
+  box-shadow: inset 0 0 0 1px $lime-primary;
+}
 
-  .selector-group {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-
-    select {
-      @include input-base;
-      min-width: 155px;
-    }
+// Ajuste para el p-table de PrimeNG para que use tus fuentes
+:host ::ng-deep {
+  .p-datatable .p-datatable-thead > tr > th {
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 600;
   }
 }
 
-/* --- FORMULARIO DINÁMICO --- */
-.form-container {
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.4s ease;
-  background: #fff;
-  border-radius: 10px;
-
-  &.abierto {
-    max-height: 500px;
-    padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid $lime-primary;
-  }
-
-  .form-horizontal {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-
-    select, input {
-      @include input-base;
-      min-width: 150px;
-    }
-  }
-}
-
-/* --- TABLA --- */
-.contenedor-tabla {
-  @include card-style;
-  padding: 0;
-  overflow: hidden;
-
-  .tabla-funcionarios {
-    width: 100%;
-    border-collapse: collapse;
-
-    thead th {
-      background: white;
-      padding: 12px;
-      border-bottom: 2px solid #eee;
-      text-align: center;
-      color: $dark-text;
-      font-size: 0.9em;
-    }
-
-    tbody tr {
-      transition: background 0.15s;
-      cursor: pointer;
-
-      td {
-        padding: 12px;
-        border-bottom: 1px solid #eee;
-        text-align: center;
-        font-size: 0.9em;
-      }
-
-      &:hover {
-        background: $lime-hover;
-      }
-
-      &.fila-seleccionada {
-        background-color: $lime-light !important;
-      }
-
-      &.fila-descanso td {
-        color: $gray-text;
-        font-style: italic;
-        
-        &:first-child {
-          color: $dark-text;
-          font-style: normal;
-        }
-      }
-    }
-  }
-}
-
-/* --- BOTONES Y ACCIONES --- */
-.acciones-container {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  padding: 20px;
-}
-
-button {
-  @include button-base;
-
-  &.btn-guardar-verde { background: $lime-primary; color: #1a1a1a; }
-  &.btn-actualizar    { background: #f4ff81; color: #1a1a1a; }
-  &.btn-eliminar      { background: #ff5252; color: white;   }
-  &.btn-cancelar      { background: #e0e0e0; color: #333;    }
-}
-
-/* --- MODAL --- */
-.custom-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-
-  &.abierto {
-    display: flex;
-  }
-
-  .modal-content {
-    background: white;
-    padding: 30px 36px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: $shadow-soft;
-    max-width: 400px;
-  }
-  
-  .modal-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    margin-top: 18px;
-  }
-}
-
-/* --- TOAST --- */
-.toast-success {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #333;
-  color: #fff;
-  padding: 14px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  z-index: 2000;
-  animation: slideIn 0.3s ease;
-}
-
-@keyframes slideIn {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+// Deshabilitar botones
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(1);
 }
