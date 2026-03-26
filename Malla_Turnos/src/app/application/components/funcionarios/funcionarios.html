@@ -26,6 +26,8 @@
 
                 <input type="number" pInputText [(ngModel)]="funcionarioActual.numeroDocumento" name="numeroDocumento" placeholder="Número de documento" [disabled]="esEdicion" required>
                 
+                <input type="number" pInputText [(ngModel)]="funcionarioActual.rolId" name="rolId" placeholder="ID de Rol" [disabled]="esEdicion" required>
+                
                 <input type="number" pInputText [(ngModel)]="funcionarioActual.cargoId" name="cargoId" placeholder="ID de Cargo" required>
 
                 <input type="password" pInputText [(ngModel)]="funcionarioActual.contrasena" name="contrasena" placeholder="Contraseña" *ngIf="!esEdicion" required>
