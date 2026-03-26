@@ -42,9 +42,9 @@ button:not(.p-button) {
     }
   }
 
-  &.btn-guardar-verde { background: $green-success; color: white; border-radius: 10px; }
+  &.btn-guardar-verde { background: $green-success; color: rgb(255, 0, 0); border-radius: 10px; }
   &.btn-actualizar    { background: $blue-active; color: #0d47a1; border-radius: 10px; }
-  &.btn-rojo          { background: $red-danger; color: white; }
+  &.btn-rojo          { background: $red-danger; color: rgb(219, 17, 17); }
   &.btn-gris          { background: #e0e0e0; color: #333; }
   
   &.btn-accion {
@@ -303,4 +303,4 @@ button:not(.p-button) {
 }
 
 .text-center { text-align: center; }
-.m-0 { margin: 0; }
+.m-0 { margin: 0; }
