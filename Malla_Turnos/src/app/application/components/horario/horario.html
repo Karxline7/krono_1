@@ -31,12 +31,12 @@
         
         <select [(ngModel)]="turnoActual.funcionarioId" name="funcionarioId" class="p-inputtext" required>
           <option [ngValue]="null">Funcionario</option>
-          <option *ngFor="let u of usuariosDisponibles" [value]="u.id">{{ u.nombre }}</option>
+          <option *ngFor="let u of usuariosDisponibles" [ngValue]="u.id">{{ u.nombre }}</option>
         </select>
 
         <select [(ngModel)]="turnoActual.turnoId" name="turnoId" class="p-inputtext" required (ngModelChange)="onTurnoChange()">
           <option [ngValue]="null">Turno</option>
-          <option *ngFor="let t of turnosDisponibles" [value]="t.id">{{ t.nombre }}</option>
+          <option *ngFor="let t of turnosDisponibles" [ngValue]="t.id">{{ t.nombre }}</option>
         </select>
 
         <input type="date" [(ngModel)]="turnoActual.dia" name="dia" class="p-inputtext" required>
