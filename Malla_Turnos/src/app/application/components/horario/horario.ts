@@ -77,7 +77,7 @@ export interface TurnoSemanal {
   templateUrl: './horario.html',
   styleUrls: ['./horario.scss']
 })
-export class HorarioComponent implements OnInit {
+export class Horario implements OnInit {
   
   // --- PROPIEDADES ---
   apiUrl = 'http://localhost:8080/api/asignaciones'; // Cambia esto por tu URL real
