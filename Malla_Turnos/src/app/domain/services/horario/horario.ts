@@ -1,35 +1,40 @@
 import { Injectable } from '@angular/core';
-import { Observable } from '../../../../../node_modules/rxjs/dist/types';
 import { HttpClient } from '@angular/common/http';
-import { get } from 'node:http';
+import { Observable } from 'rxjs';
+
+export interface Asignacion {
+  id?: number;
+  funcionarioId: number;
+  turnoId: number;
+  fecha: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class Horario {
+export class AsignacionService {
 
-  private apiUrl = 'http://localhost:8081/api/asignaciones'; // Cambia esto a tu URL real
+  private apiUrl = 'http://localhost:8081/api/asignaciones';
+  
   constructor(private http: HttpClient) {}
 
-  listarHorarios(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
-  
+  listar(): Observable<Asignacion[]> {
+    return this.http.get<Asignacion[]>(this.apiUrl);
   }
 
-  crearHorario(horario: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, horario);
+  listarPorFecha(fecha: string): Observable<Asignacion[]> {
+    return this.http.get<Asignacion[]>(`${this.apiUrl}/fecha/${fecha}`);
   }
 
-  editarHorario(id: number, horario: any): Observable<any> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.put<any>(url, horario);
+  crear(data: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, data);
   }
 
-  eliminarHorario(id: number): Observable<any> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.delete<any>(url);
+  editar(id: number, data: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, data);
   }
 
-    
-  
+  eliminar(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
 }

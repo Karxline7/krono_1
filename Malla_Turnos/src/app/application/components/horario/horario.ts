@@ -12,6 +12,7 @@ import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { FuncionarioService } from '../../../domain/services/Funcionarios/funcionarios';
 import { TurnoService } from '../../../domain/services/cartas-turnos/cartas-turnos';
+import { AsignacionService } from '../../../domain/services/horario/horario';
 
 // --- INTERFACES ---
 export interface Turno {
@@ -110,7 +111,8 @@ export class Horario implements OnInit {
   constructor(
     private http: HttpClient,
     private funcionarioService: FuncionarioService,
-    private turnoService: TurnoService
+    private turnoService: TurnoService,
+    private asignacionService: AsignacionService
   ) {}
 
   private intervalId: any;
@@ -191,7 +193,7 @@ export class Horario implements OnInit {
     }
 
     const requests = fechasSemana.map(f => 
-      this.http.get<any[]>(`${this.apiUrl}/fecha/${f}`).pipe(catchError(() => of([])))
+      this.asignacionService.listarPorFecha(f).pipe(catchError(() => of([])))
     );
 
     forkJoin(requests).subscribe({
@@ -330,29 +332,23 @@ export class Horario implements OnInit {
       fecha: this.turnoActual.dia
     };
 
-    if (this.esEdicion) {
-      this.http.put(`${this.apiUrl}/${this.turnoActual.id}`, payload).subscribe({
+    if (this.esEdicion && this.turnoActual.id) {
+      this.asignacionService.editar(this.turnoActual.id, payload).subscribe({
         next: () => {
           this.lanzarToast('Actualizado con éxito');
           this.cargarTurnos();
           this.resetForm();
         },
-        error: (err) => {
-          console.error(err);
-          this.lanzarToast('Error al actualizar');
-        }
+        error: () => this.lanzarToast('Error al actualizar')
       });
     } else {
-      this.http.post(this.apiUrl, payload).subscribe({
+      this.asignacionService.crear(payload).subscribe({
         next: () => {
           this.lanzarToast('Guardado con éxito');
           this.cargarTurnos();
           this.resetForm();
         },
-        error: (err) => {
-          console.error(err);
-          this.lanzarToast('Error al guardar');
-        }
+        error: () => this.lanzarToast('Error al guardar')
       });
     }
   }
@@ -367,7 +363,7 @@ export class Horario implements OnInit {
 
   eliminar() {
     if (this.turnoIdSeleccionado !== null) {
-      this.http.delete(`${this.apiUrl}/${this.turnoIdSeleccionado}`).subscribe({
+      this.asignacionService.eliminar(this.turnoIdSeleccionado).subscribe({
         next: () => {
           this.lanzarToast('Eliminado correctamente');
           this.mostrarConfirmacion = false;
