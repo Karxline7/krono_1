@@ -257,14 +257,14 @@ export class Horario implements OnInit {
   // --- MÉTODOS DE ACCIÓN ---
   onTurnoChange() {
     if (this.turnoActual.turnoId != null) {
-       const t = this.turnosDisponibles.find(x => x.id === Number(this.turnoActual.turnoId));
-       if (t) {
-         this.turnoActual.horaInicio = t.horainicio || '';
-         this.turnoActual.horaFin = t.horafin || '';
-         this.turnoActual.break = t.horabreak || '';
-         this.turnoActual.almuerzo = t.horaalmuerzo || '';
-         this.turnoActual.esDescanso = (t.nombre === 'Descanso');
-       }
+      const t = this.turnosDisponibles.find(x => x.id === Number(this.turnoActual.turnoId));
+      if (t) {
+        this.turnoActual.horaInicio = t.horainicio || '';
+        this.turnoActual.horaFin = t.horafin || '';
+        this.turnoActual.break = t.horabreak || '';
+        this.turnoActual.almuerzo = t.horaalmuerzo || '';
+        this.turnoActual.esDescanso = (t.nombre === 'Descanso');
+      }
     }
   }
 

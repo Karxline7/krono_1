@@ -12,6 +12,15 @@
             <form (ngSubmit)="enviarSolicitud()">
                 <div class="input-group">
                     <div class="custom-select-wrapper">
+                        <select class="custom-select p-inputtext w-full" [(ngModel)]="nuevaSolicitud.asignacionTurnoId" name="asignacionTurnoId" required>
+                            <option value="" disabled selected hidden>Seleccione el Turno</option>
+                            <option *ngFor="let asig of misAsignaciones" [value]="asig.id">{{ asig.label }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="custom-select-wrapper">
                         <select class="custom-select p-inputtext w-full" [(ngModel)]="nuevaSolicitud.tipo" name="tipo" required>
                             <option value="" disabled selected hidden>Tipo de Solicitud</option>
                             <option value="1">Cambio de turno</option>
