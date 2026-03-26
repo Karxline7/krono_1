@@ -40,11 +40,6 @@
         </select>
 
         <input type="date" [(ngModel)]="turnoActual.dia" name="dia" class="p-inputtext" required>
-        
-        <input type="time" [(ngModel)]="turnoActual.horaInicio" name="horaInicio" placeholder="Inicio" class="p-inputtext" readonly>
-        
-        <input type="time" [(ngModel)]="turnoActual.horaFin" name="horaFin" placeholder="Fin" class="p-inputtext" readonly>
-
         <button type="submit" [class]="esEdicion ? 'btn-actualizar' : 'btn-guardar-verde'">
           <i [class]="esEdicion ? 'pi pi-refresh' : 'pi pi-save'"></i>
           {{ esEdicion ? 'Actualizar' : 'Guardar' }}
