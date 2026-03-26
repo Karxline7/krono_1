@@ -22,7 +22,7 @@
 }
 
 /* --- BOTONES --- */
-button {
+button:not(.p-button) {
   @include button-base;
 
   &.btn-azul-nuevo {
@@ -93,7 +93,47 @@ button {
         &.bold { font-weight: 600; }
         &.acciones {
           display: flex;
-          gap: 10px;
+          gap: 12px;
+          justify-content: flex-start;
+
+          // Sobrescribir estilos globales para botones de PrimeNG en la tabla
+          ::ng-deep button.p-button {
+            width: 38px !important;
+            height: 38px !important;
+            padding: 0 !important;
+            border-radius: 10px !important;
+            transition: all 0.2s ease;
+            
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+
+            // Asegurar que el icono se vea
+            .p-button-icon {
+              font-size: 1.1rem;
+            }
+          }
+
+          .p-button-info {
+            background-color: #e3f2fd !important;
+            color: #2196f3 !important;
+            border: none !important;
+            
+            &:hover {
+              background-color: #bbdefb !important;
+            }
+          }
+
+          .p-button-danger {
+            background-color: #ffebee !important;
+            color: #f44336 !important;
+            border: none !important;
+
+            &:hover {
+              background-color: #ffcdd2 !important;
+            }
+          }
         }
       }
 
