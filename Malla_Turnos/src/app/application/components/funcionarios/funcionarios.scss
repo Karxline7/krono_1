@@ -42,7 +42,7 @@ button:not(.p-button) {
     }
   }
 
-  &.btn-guardar-verde { background: $green-success; color: rgb(255, 0, 0); border-radius: 10px; }
+  &.btn-guardar-verde { background: $green-success; color: rgb(255, 255, 255); border-radius: 10px; }
   &.btn-actualizar    { background: $blue-active; color: #0d47a1; border-radius: 10px; }
   &.btn-rojo          { background: $red-danger; color: rgb(219, 17, 17); }
   &.btn-gris          { background: #e0e0e0; color: #333; }
@@ -70,75 +70,82 @@ button:not(.p-button) {
   border: 1px solid $border-color;
   overflow: hidden;
 
-  .tabla-funcionarios {
-    width: 100%;
-    border-collapse: collapse;
-
-    thead th {
-      background: #fff;
-      padding: 20px;
-      color: #333;
-      border-bottom: 1px solid $border-color;
-      text-align: left;
-    }
-
-    tbody tr {
-      background: #fff;
-      color: #444;
-
-      td {
+  /* Estilos para el componente p-table con la clase tabla-funcionarios */
+  ::ng-deep .tabla-funcionarios {
+    .p-datatable-table {
+      width: 100%;
+      border-collapse: collapse;
+      
+      thead th {
+        background: #fff;
         padding: 20px;
-        border-bottom: 1px solid #f0f0f0;
+        color: #333;
+        border-bottom: 1px solid $border-color;
+        text-align: left;
+      }
 
-        &.bold { font-weight: 600; }
-        &.acciones {
-          display: flex;
-          gap: 12px;
-          justify-content: flex-start;
+      tbody tr {
+        background: #fff;
+        color: #444;
 
-          // Sobrescribir estilos globales para botones de PrimeNG en la tabla
-          ::ng-deep button.p-button {
-            width: 38px !important;
-            height: 38px !important;
-            padding: 0 !important;
-            border-radius: 10px !important;
-            transition: all 0.2s ease;
-            
-            &:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        td {
+          padding: 20px;
+          border-bottom: 1px solid #f0f0f0;
+
+          &.bold { font-weight: 600; }
+          
+          &.acciones {
+            display: flex !important;
+            gap: 12px;
+            justify-content: flex-start;
+            align-items: center;
+
+            // Botones de PrimeNG en la tabla
+            button.p-button {
+              width: 38px !important;
+              height: 38px !important;
+              padding: 0 !important;
+              border-radius: 10px !important;
+              display: flex !important;
+              justify-content: center !important;
+              align-items: center !important;
+              transition: all 0.2s ease;
+              
+              &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+              }
+
+              .p-button-icon {
+                font-size: 1.1rem;
+              }
             }
 
-            // Asegurar que el icono se vea
-            .p-button-icon {
-              font-size: 1.1rem;
+            .p-button-info {
+              background-color: #e3f2fd !important;
+              color: #2196f3 !important;
+              border: none !important;
+              
+              &:hover {
+                background-color: #bbdefb !important;
+              }
             }
-          }
 
-          .p-button-info {
-            background-color: #e3f2fd !important;
-            color: #2196f3 !important;
-            border: none !important;
-            
-            &:hover {
-              background-color: #bbdefb !important;
-            }
-          }
+            .p-button-danger {
+              background-color: #ffebee !important;
+              color: #f44336 !important;
+              border: none !important;
 
-          .p-button-danger {
-            background-color: #ffebee !important;
-            color: #f44336 !important;
-            border: none !important;
-
-            &:hover {
-              background-color: #ffcdd2 !important;
+              &:hover {
+                background-color: #ffcdd2 !important;
+              }
             }
           }
         }
-      }
 
-      &:hover {
-        background: #f9f9f9;
+        &:hover {
+          background: #f9f9f9;
+        }
       }
     }
   }
