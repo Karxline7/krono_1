@@ -21,7 +21,7 @@
   }
 }
 
-/* --- BOTONES --- */
+/* --- BOTONES GENERALES --- */
 button:not(.p-button) {
   @include button-base;
 
@@ -42,35 +42,20 @@ button:not(.p-button) {
     }
   }
 
-  &.btn-guardar-verde { background: $green-success; color: rgb(255, 255, 255); border-radius: 10px; }
+  &.btn-guardar-verde { background: $green-success; color: white; border-radius: 10px; }
   &.btn-actualizar    { background: $blue-active; color: #0d47a1; border-radius: 10px; }
-  &.btn-rojo          { background: $red-danger; color: rgb(219, 17, 17); }
+  &.btn-rojo          { background: $red-danger; color: white; }
   &.btn-gris          { background: #e0e0e0; color: #333; }
-  
-  &.btn-accion {
-    background: transparent;
-    padding: 5px;
-    border-radius: 5px;
-    
-    img {
-      width: 20px;
-      height: 20px;
-    }
-
-    &:hover {
-      background: #f0f0f0;
-    }
-  }
 }
 
-/* --- TABLA --- */
+/* --- TABLA Y ACCIONES --- */
 .tabla-wrapper {
   @include card-style;
   padding: 0;
   border: 1px solid $border-color;
   overflow: hidden;
 
-  /* Estilos para el componente p-table con la clase tabla-funcionarios */
+  /* Forzamos la entrada a los componentes de PrimeNG */
   ::ng-deep .tabla-funcionarios {
     .p-datatable-table {
       width: 100%;
@@ -89,27 +74,29 @@ button:not(.p-button) {
         color: #444;
 
         td {
-          padding: 20px;
+          padding: 15px 20px;
           border-bottom: 1px solid #f0f0f0;
 
           &.bold { font-weight: 600; }
           
+          /* CLASE CRÍTICA: Contenedor de botones Editar/Eliminar */
           &.acciones {
             display: flex !important;
-            gap: 12px;
+            gap: 10px;
             justify-content: flex-start;
             align-items: center;
+            min-height: 60px; /* Asegura que la fila no colapse los botones */
 
-            // Botones de PrimeNG en la tabla
-            button.p-button {
+            .p-button {
               width: 38px !important;
               height: 38px !important;
               padding: 0 !important;
               border-radius: 10px !important;
-              display: flex !important;
+              display: inline-flex !important; /* Forzamos visualización */
               justify-content: center !important;
               align-items: center !important;
               transition: all 0.2s ease;
+              border: none !important;
               
               &:hover {
                 transform: translateY(-2px);
@@ -119,25 +106,24 @@ button:not(.p-button) {
               .p-button-icon {
                 font-size: 1.1rem;
               }
-            }
 
-            .p-button-info {
-              background-color: #e3f2fd !important;
-              color: #2196f3 !important;
-              border: none !important;
-              
-              &:hover {
-                background-color: #bbdefb !important;
+              /* Colores usando tus variables de SASS */
+              &.p-button-info {
+                background-color: #e3f2fd !important;
+                color: $blue-primary !important;
+                
+                &:hover {
+                  background-color: #bbdefb !important;
+                }
               }
-            }
 
-            .p-button-danger {
-              background-color: #ffebee !important;
-              color: #f44336 !important;
-              border: none !important;
+              &.p-button-danger {
+                background-color: #ffebee !important;
+                color: $red-danger !important;
 
-              &:hover {
-                background-color: #ffcdd2 !important;
+                &:hover {
+                  background-color: #ffcdd2 !important;
+                }
               }
             }
           }
@@ -147,6 +133,90 @@ button:not(.p-button) {
           background: #f9f9f9;
         }
       }
+    }
+  }
+}
+
+/* --- FORMULARIO CON ANIMACIÓN --- */
+.form-container {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.4s ease-in-out;
+  opacity: 0;
+
+  &.abierto {
+    max-height: 500px; /* Ajustado para dar espacio a inputs */
+    opacity: 1;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: $radius-md;
+    border: 1px solid $border-color;
+  }
+
+  .form-horizontal {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+
+    input, select {
+      @include input-base;
+      flex: 1;
+      min-width: 180px;
+      border-radius: 10px;
+      height: 45px;
+    }
+    
+    .botones-form {
+        display: flex;
+        gap: 10px;
+    }
+  }
+}
+
+/* --- DIÁLOGO DE ELIMINACIÓN --- */
+:host ::ng-deep {
+  .dialogo-premium {
+    .p-dialog-header {
+      border-radius: 20px 20px 0 0;
+      padding: 20px;
+      .p-dialog-title { font-weight: 700; }
+    }
+
+    .p-dialog-content {
+      padding: 0 25px 25px;
+      .modal-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        
+        .alerta-circulo {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          background: #fef2f2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          i { font-size: 30px; color: $red-danger; }
+        }
+      }
+    }
+
+    .p-dialog-footer {
+      border-radius: 0 0 20px 20px;
+      padding: 0 25px 25px;
+      .botones-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+    }
+
+    .p-dialog-mask {
+      backdrop-filter: blur(4px);
     }
   }
 }
@@ -176,136 +246,6 @@ button:not(.p-button) {
       color: #0d47a1;
       border-color: $blue-active;
     }
-
-    &:hover:not(.active) {
-      background: #f0f0f0;
-    }
-  }
-}
-
-/* --- FORMULARIO --- */
-.form-container {
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.4s ease-in-out;
-  opacity: 0;
-
-  &.abierto {
-    max-height: 300px;
-    opacity: 1;
-    margin-bottom: 30px;
-  }
-
-  .form-horizontal {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    flex-wrap: wrap;
-
-    input, select {
-      @include input-base;
-      flex: 1;
-      min-width: 150px;
-      border-radius: 10px;
-    }
-  }
-}
-
-/* --- DIALOGO PREMIUM (ELIMINAR) --- */
-:host ::ng-deep {
-  .dialogo-premium {
-    .p-dialog-header {
-      background: white;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-      padding: 20px 25px 10px;
-      border-bottom: none;
-      
-      .p-dialog-title {
-        font-weight: 700;
-        color: #333;
-        font-size: 1.25rem;
-      }
-    }
-
-    .p-dialog-content {
-      background: white;
-      padding: 0 25px 25px;
-      
-      .modal-body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-        padding-top: 10px;
-
-        .alerta-circulo {
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
-          background-color: #fef2f2;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border: 4px solid #fff;
-          box-shadow: 0 0 0 2px #fee2e2;
-
-          i {
-            font-size: 40px;
-            color: $red-danger;
-          }
-        }
-
-        .titulo-alerta {
-          margin: 0;
-          font-weight: 700;
-          color: #111;
-          font-size: 1.5rem;
-        }
-
-        .texto-confirmacion {
-          color: #666;
-          line-height: 1.5;
-          max-width: 80%;
-          font-size: 0.95rem;
-        }
-      }
-    }
-
-    .p-dialog-footer {
-      background: white;
-      border-bottom-left-radius: 20px;
-      border-bottom-right-radius: 20px;
-      padding: 0 25px 25px;
-      border-top: none;
-
-      .botones-container {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-
-        button {
-          padding: 12px 24px;
-          font-weight: 600;
-          border-radius: 12px;
-          transition: all 0.2s;
-
-          &.p-button-danger {
-            background-color: $red-danger;
-            border-color: $red-danger;
-            &:hover {
-              background-color: darken($red-danger, 5%) !important;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  /* Overlay masking */
-  .p-dialog-mask {
-    backdrop-filter: blur(4px);
-    background-color: rgba(0, 0, 0, 0.4) !important;
   }
 }
 

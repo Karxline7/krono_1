@@ -42,7 +42,7 @@
         </div>
 
         <div class="tabla-wrapper">
-            <p-table [value]="listaFuncionarios" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+            <p-table [value]="listaFuncionarios" styleClass="p-datatable-striped tabla-funcionarios" [tableStyle]="{'min-width': '50rem'}">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Nombre</th>
@@ -58,11 +58,19 @@
                         <td>{{ f.tipoDocumento }}</td>
                         <td>{{ f.numeroDocumento }}</td>
                         <td>{{ f.cargoNombre }}</td>
-                        <td class="acciones">
-                            <button pButton icon="pi pi-pencil" class="p-button-text p-button-info" 
-                                    (click)="seleccionarFuncionario(f, 'editar')" pTooltip="Editar"></button>
-                            <button pButton icon="pi pi-trash" class="p-button-text p-button-danger" 
-                                    (click)="seleccionarFuncionario(f, 'eliminar')" pTooltip="Eliminar"></button>
+                        <td>
+                            <div class="acciones-container">
+                                <button pButton icon="pi pi-pencil" 
+                                        class="p-button-rounded p-button-text p-button-info" 
+                                        (click)="seleccionarFuncionario(f, 'editar')" 
+                                        pTooltip="Editar">
+                                </button>
+                                <button pButton icon="pi pi-trash" 
+                                        class="p-button-rounded p-button-text p-button-danger" 
+                                        (click)="seleccionarFuncionario(f, 'eliminar')" 
+                                        pTooltip="Eliminar">
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 </ng-template>
