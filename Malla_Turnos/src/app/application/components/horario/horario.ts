@@ -125,6 +125,11 @@ export class Horario implements OnInit {
   }, 300000);
   }
 
+refresh() {
+  this.cargarCatalogos();
+  this.cargarTurnos();
+}
+
   ngOnDestroy() {
   if (this.intervalId) {
     clearInterval(this.intervalId);

@@ -43,10 +43,6 @@ export class CartasTurnos implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.cargarTurnos();
-    // Lo configuramos a 5 segundos como tenías, o 10 para mayor estabilidad
-    this.syncInterval = setInterval(() => {
-      this.refresh();
-    }, 5000);
   }
 
   ngOnDestroy() {
@@ -57,10 +53,8 @@ export class CartasTurnos implements OnInit, OnDestroy {
   }
 
   refresh() {
-    // Solo refresca si el usuario NO tiene un formulario abierto (agregar o editar)
-    if (!this.accionActual) {
       this.cargarTurnos();
-    }
+    
   }
 
   cargarTurnos() {
