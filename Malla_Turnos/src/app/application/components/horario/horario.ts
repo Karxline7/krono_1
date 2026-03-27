@@ -119,15 +119,12 @@ export class Horario implements OnInit {
 
   ngOnInit() {
     this.cargarCatalogos();
-
-    this.intervalId = setInterval(() => {
-    this.cargarTurnos();
-  }, 300000);
   }
 
 refresh() {
-  this.cargarCatalogos();
-  this.cargarTurnos();
+  if (!this.mostrarFormulario && !this.mostrarConfirmacion) {
+    this.cargarTurnos();
+  }
 }
 
   ngOnDestroy() {
