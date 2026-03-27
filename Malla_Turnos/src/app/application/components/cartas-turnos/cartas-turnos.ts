@@ -53,8 +53,9 @@ export class CartasTurnos implements OnInit, OnDestroy {
   }
 
   refresh() {
+    if (!this.accionActual && !this.cargando) {
       this.cargarTurnos();
-    
+    }
   }
 
   cargarTurnos() {

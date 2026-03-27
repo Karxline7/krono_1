@@ -41,9 +41,6 @@ procesandoAccion: boolean = false;
 
   ngOnInit(): void {
     this.cargarDatos();
-    this.syncInterval = setInterval(() => {
-      this.refresh();
-    }, 3000);
   }
 
   ngOnDestroy(): void {
@@ -52,13 +49,8 @@ procesandoAccion: boolean = false;
     }
   }
   refresh() {
-    // Solo refrescamos si no estamos procesando un botón de aceptar/rechazar
     if (!this.procesandoAccion) {
-      if (this.tiposSolicitud.length > 0) {
-        this.cargarSolicitudes();
-      } else {
-        this.cargarDatos();
-      }
+      this.cargarSolicitudes();
     }
   }
 

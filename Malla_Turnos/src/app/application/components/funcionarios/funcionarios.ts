@@ -75,7 +75,7 @@ export class Funcionarios implements OnInit, OnDestroy {
 
   onGuardar() {
     // Asegurar tipos correctos para el backend
-    const dataToSend = { 
+    const dataToSend = {
       ...this.funcionarioActual,
       numeroDocumento: Number(this.funcionarioActual.numeroDocumento),
       rolId: Number(this.funcionarioActual.rolId),
