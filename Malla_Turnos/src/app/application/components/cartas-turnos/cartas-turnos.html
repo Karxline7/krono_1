@@ -9,6 +9,7 @@
       <div class="hero-info">
         <span class="h4">{{ stat.cantidad }}</span>
       </div>
+      <small>Personas totales</small>
     </div>
   </div>
 
@@ -53,6 +54,7 @@
           <th>Hora Fin</th>
           <th>Almuerzo</th>
           <th>Break</th>
+          <th>Personas</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -64,14 +66,13 @@
           <td><span class="fw-bold">{{ turno.horaFin }}</span></td>
           <td><span class="fw-bold">{{ turno.horaalmuerzo }}</span></td>
           <td><span class="fw-bold">{{ turno.horabreak }}</span></td>
+          <td><span class="fw-bold">{{ turno.cantidadPersonas }}</span></td>
           <td>
             <button class="btn btn-sm btn-outline-warning border-0 me-1" (click)="seleccionarTurno(turno, 'editar')" title="Editar">
               <i class="bi bi-pencil-fill"></i>
-              Editar
             </button>
             <button class="btn btn-sm btn-outline-danger border-0" (click)="seleccionarTurno(turno, 'eliminar')" title="Eliminar">
               <i class="bi bi-trash-fill"></i>
-              Eliminar
             </button>
           </td>
         </tr>

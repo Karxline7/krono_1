@@ -229,9 +229,16 @@ export class Horario implements OnInit {
        const w = map.get(a.funcionarioId);
        if (!w) return;
 
-       const t = this.turnosDisponibles.find(x => x.id === a.turnoId);
-       const tNombre = t ? t.nombre : 'Descanso';
-       const esDescanso = t ? t.nombre === 'Descanso' : true;
+       const t = this.turnosDisponibles.find(x => Number(x.id) === Number(a.turnoId));
+       
+       if (!t) {
+         // Si el turno no existe en los disponibles, no lo mostramos como Descanso automáticamente
+         // Esto evita que aparezcan "descansos" aleatorios cuando hay inconsistencias
+         return;
+       }
+
+       const tNombre = t.nombre;
+       const esDescanso = tNombre.toLowerCase().includes('descanso');
        
        if (t && t.horabreak) w.break = t.horabreak;
        if (t && t.horaalmuerzo) w.almuerzo = t.horaalmuerzo;
@@ -257,13 +264,13 @@ export class Horario implements OnInit {
   // --- MÉTODOS DE ACCIÓN ---
   onTurnoChange() {
     if (this.turnoActual.turnoId != null) {
-      const t = this.turnosDisponibles.find(x => x.id === Number(this.turnoActual.turnoId));
+      const t = this.turnosDisponibles.find(x => Number(x.id) === Number(this.turnoActual.turnoId));
       if (t) {
         this.turnoActual.horaInicio = t.horainicio || '';
         this.turnoActual.horaFin = t.horafin || '';
         this.turnoActual.break = t.horabreak || '';
         this.turnoActual.almuerzo = t.horaalmuerzo || '';
-        this.turnoActual.esDescanso = (t.nombre === 'Descanso');
+        this.turnoActual.esDescanso = t.nombre.toLowerCase().includes('descanso');
       }
     }
   }
