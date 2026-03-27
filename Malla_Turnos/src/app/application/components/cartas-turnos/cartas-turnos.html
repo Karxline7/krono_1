@@ -5,18 +5,18 @@
 
   <div class="cards-wrapper">
     <div *ngFor="let stat of statsDinamicas" class="hero-card">
-      <span class="text-uppercase" style="font-size: 0.8rem; color: #555;">{{ stat.nombre }}</span>
+      <span class="text-uppercase">{{ stat.nombre }}</span>
       <div class="hero-info">
-        <span class="h4 m-0">{{ stat.cantidad }}</span>
+        <span class="h4">{{ stat.cantidad }}</span>
       </div>
-      <small class="text-muted mt-1" style="font-size: 10px;">Personas totales</small>
+      <small>Personas totales</small>
     </div>
   </div>
 
   <hr class="my-5" style="opacity: 0.1;">
 
-  <div class="form-card mb-5">
-    <h5 class="mb-4 text-start" style="color: #666;">
+  <div class="form-card">
+    <h5 class="mb-4 text-start fw-bold" style="color: #64748b;">
       {{ accionActual === 'editar' ? '📝 Editar Turno' : 'Agregar Nuevo Turno' }}
     </h5>
     
@@ -27,28 +27,34 @@
         }"></ng-container>
 
         <div class="input-container">
-          <button *ngIf="accionActual !== 'editar'" class="btn-guardar-turno" (click)="onGuardar()">
+          <button *ngIf="accionActual !== 'editar'" class="btn-guardar-turno" (click)="onGuardar()" [disabled]="!turnoForm.form.valid">
             Guardar Turno
           </button>
-          <button *ngIf="accionActual === 'editar'" class="btn-guardar-turno" style="background: #3b9dfa;" (click)="onActualizar()">
-            Actualizar
-          </button>
+          <div *ngIf="accionActual === 'editar'" style="display: flex; gap: 10px;">
+            <button class="btn-guardar-turno" style="background: #3b9dfa;" (click)="onActualizar()" [disabled]="!turnoForm.form.valid">
+                Actualizar
+              </button>
+              <button class="btn-guardar-turno" style="background: #f1f5f9; color: #64748b; box-shadow: none;" (click)="resetForms()">
+                Cancelar
+              </button>
+          </div>
         </div>
         
       </div>
     </form>
   </div>
 
-  <div class="table-responsive" style="border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+  <div class="table-responsive mt-5">
     <table class="turnos-table">
       <thead>
         <tr>
           <th>Nombre</th>
           <th>Tipo</th>
-          <th>Horar inicio</th>
-          <th>Hora fin</th>
+          <th>Horario Inicio</th>
+          <th>Hora Fin</th>
           <th>Almuerzo</th>
           <th>Break</th>
+          <th>Personas</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -56,25 +62,17 @@
         <tr *ngFor="let turno of turnos">
           <td class="fw-bold">{{ turno.nombre }}</td>
           <td><span class="badge">{{ turno.tipo }}</span></td>
-          <td>
-            <span class="fw-bold">{{ turno.horaInicio }}</span>
-          </td>
-          <td>
-            <span class="fw-bold">{{ turno.horaFin }}</span>
-          </td>
-          <td>
-            <span class="fw-bold">{{ turno.horaalmuerzo }}</span>
-          </td>
-          <td>
-            <span class="fw-bold">{{ turno.horabreak }}</span>
-          </td>
+          <td><span class="fw-bold">{{ turno.horaInicio }}</span></td>
+          <td><span class="fw-bold">{{ turno.horaFin }}</span></td>
+          <td><span class="fw-bold">{{ turno.horaalmuerzo }}</span></td>
+          <td><span class="fw-bold">{{ turno.horabreak }}</span></td>
           <td><span class="fw-bold">{{ turno.cantidadPersonas }}</span></td>
           <td>
-            <button class="btn btn-sm btn-outline-warning border-0 me-1" (click)="seleccionarTurno(turno, 'editar')">
-              <i class="bi bi-pencil"></i> Editar
+            <button class="btn btn-sm btn-outline-warning border-0 me-1" (click)="seleccionarTurno(turno, 'editar')" title="Editar">
+              <i class="bi bi-pencil-fill"></i>
             </button>
-            <button class="btn btn-sm btn-outline-danger border-0" (click)="seleccionarTurno(turno, 'eliminar')">
-              <i class="bi bi-trash"></i> Eliminar
+            <button class="btn btn-sm btn-outline-danger border-0" (click)="seleccionarTurno(turno, 'eliminar')" title="Eliminar">
+              <i class="bi bi-trash-fill"></i>
             </button>
           </td>
         </tr>
@@ -86,22 +84,22 @@
 <ng-template #formFields let-modelo="modelo">
   <div class="input-container">
     <small>Nombre del Turno</small>
-    <input type="text" name="nombre" [(ngModel)]="modelo.nombre" placeholder="Ej: Mañana A">
+    <input type="text" name="nombre" [(ngModel)]="modelo.nombre" placeholder="Ej: Mañana A" required>
   </div>
 
   <div class="input-container">
-    <small>Tipo</small>
-    <input type="text" name="tipo" [(ngModel)]="modelo.tipo" placeholder="Ej: Operativo">
+    <small>Tipo de Turno</small>
+    <input type="text" name="tipo" [(ngModel)]="modelo.tipo" placeholder="Ej: Operativo" required>
   </div>
 
   <div class="input-container">
-    <small>Inicio</small>
-    <input type="time" name="horaInicio" [(ngModel)]="modelo.horaInicio">
+    <small>Hora Inicio</small>
+    <input type="time" name="horaInicio" [(ngModel)]="modelo.horaInicio" required>
   </div>
 
   <div class="input-container">
-    <small>Fin</small>
-    <input type="time" name="horaFin" [(ngModel)]="modelo.horaFin">
+    <small>Hora Fin</small>
+    <input type="time" name="horaFin" [(ngModel)]="modelo.horaFin" required>
   </div>
 
   <div class="input-container">
