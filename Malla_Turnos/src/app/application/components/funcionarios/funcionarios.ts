@@ -55,13 +55,8 @@ export class Funcionarios implements OnInit, OnDestroy {
 
   getInitFuncionario(): Funcionario {
     return {
-      nombre: '', 
-      tipoDocumento: '', 
-      numeroDocumento: null,
-      contrasena: '', 
-      rolId: null, 
-      cargoId: null,
-      areaId: null
+      nombre: '', tipoDocumento: '', numeroDocumento: null,
+      contrasena: '', rolId: null, cargoId: null, areaId: null,
     };
   }
 

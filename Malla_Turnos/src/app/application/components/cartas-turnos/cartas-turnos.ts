@@ -83,8 +83,9 @@ export class CartasTurnos implements OnInit, OnDestroy {
 
   get statsDinamicas() {
     const resumen = this.turnos.reduce((acc: any, t) => {
+      const nombre = t.nombre || 'Sin nombre';
       const personas = t.cantidadPersonas || 0;
-      acc[t.tipo] = (acc[t.tipo] || 0) + personas;
+      acc[nombre] = (acc[nombre] || 0) + personas;
       return acc;
     }, {});
     
