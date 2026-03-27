@@ -44,7 +44,7 @@ export class Funcionarios implements OnInit, OnDestroy {
 
     this.intervalId = setInterval(() => {
       this.refresh();
-    }, 3000);
+    }, 5000);
   }
 
   ngOnDestroy(): void {

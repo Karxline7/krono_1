@@ -41,6 +41,11 @@ procesandoAccion: boolean = false;
 
   ngOnInit(): void {
     this.cargarDatos();
+
+    // Iniciamos el intervalo de sincronización cada 5 segundos
+    this.syncInterval = setInterval(() => {
+      this.refresh();
+    }, 5000);
   }
 
   ngOnDestroy(): void {

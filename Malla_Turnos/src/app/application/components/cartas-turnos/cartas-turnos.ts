@@ -43,6 +43,11 @@ export class CartasTurnos implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.cargarTurnos();
+    
+    // Iniciamos el intervalo de actualización automática cada 5 segundos
+    this.syncInterval = setInterval(() => {
+      this.refresh();
+    }, 5000);
   }
 
   ngOnDestroy() {

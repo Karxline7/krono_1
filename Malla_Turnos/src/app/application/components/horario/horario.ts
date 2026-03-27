@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -80,7 +80,7 @@ export interface TurnoSemanal {
   templateUrl: './horario.html',
   styleUrls: ['./horario.scss']
 })
-export class Horario implements OnInit {
+export class Horario implements OnInit, OnDestroy {
   
   // --- PROPIEDADES ---
   apiUrl = 'http://localhost:8081/api/asignaciones'; // Cambia esto por tu URL real
@@ -119,6 +119,11 @@ export class Horario implements OnInit {
 
   ngOnInit() {
     this.cargarCatalogos();
+
+    // Iniciamos la sincronización cada 5 segundos (Background Polling)
+    this.intervalId = setInterval(() => {
+      this.refresh();
+    }, 5000);
   }
 
 refresh() {
