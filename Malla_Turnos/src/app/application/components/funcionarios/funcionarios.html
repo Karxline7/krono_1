@@ -11,32 +11,50 @@
         </div>
 
         <div class="form-container" [class.abierto]="mostrarFormulario">
-            <form (ngSubmit)="onGuardar()" #funcionarioForm="ngForm" class="form-horizontal">
+            <form (ngSubmit)="onGuardar()" #funcionarioForm="ngForm" class="form-grid">
                 
-                <input type="text" pInputText [(ngModel)]="funcionarioActual.nombre" name="nombre" placeholder="Nombre completo" required>
+                <div class="form-field">
+                    <label>Nombre Completo</label>
+                    <input type="text" pInputText [(ngModel)]="funcionarioActual.nombre" name="nombre" placeholder="Nombre completo" required>
+                </div>
                 
-                <select [(ngModel)]="funcionarioActual.tipoDocumento" name="tipoDocumento" class="p-inputtext" required>
-                    <option value="" disabled selected>Tipo de documento</option>
-                    <option value="C.C">Cédula de ciudadanía</option>
-                    <option value="T.I">Tarjeta de identidad</option>
-                    <option value="C.E">Cédula de extranjería</option>
-                    <option value="P.S">Pasaporte</option>
-                    <option value="P.E.P">Permiso especial de permanencia</option>
-                </select>
+                <div class="form-field">
+                    <label>Tipo Documento</label>
+                    <select [(ngModel)]="funcionarioActual.tipoDocumento" name="tipoDocumento" class="p-inputtext" required>
+                        <option value="" disabled>Seleccione...</option>
+                        <option value="C.C">Cédula de ciudadanía</option>
+                        <option value="T.I">Tarjeta de identidad</option>
+                        <option value="C.E">Cédula de extranjería</option>
+                        <option value="P.S">Pasaporte</option>
+                        <option value="P.E.P">Permiso especial de permanencia</option>
+                    </select>
+                </div>
 
-                <input type="number" pInputText [(ngModel)]="funcionarioActual.numeroDocumento" name="numeroDocumento" placeholder="Número de documento" [disabled]="esEdicion" required>
+                <div class="form-field">
+                    <label>Número Documento</label>
+                    <input type="number" pInputText [(ngModel)]="funcionarioActual.numeroDocumento" name="numeroDocumento" placeholder="Número de documento" [disabled]="esEdicion" required>
+                </div>
                 
-                <input type="number" pInputText [(ngModel)]="funcionarioActual.rolId" name="rolId" placeholder="ID de Rol" [disabled]="esEdicion" required>
+                <div class="form-field">
+                    <label>Rol ID</label>
+                    <input type="number" pInputText [(ngModel)]="funcionarioActual.rolId" name="rolId" placeholder="ID de Rol" [disabled]="esEdicion" required>
+                </div>
                 
-                <input type="number" pInputText [(ngModel)]="funcionarioActual.cargoId" name="cargoId" placeholder="ID de Cargo" required>
+                <div class="form-field">
+                    <label>Cargo ID</label>
+                    <input type="number" pInputText [(ngModel)]="funcionarioActual.cargoId" name="cargoId" placeholder="ID de Cargo" required>
+                </div>
 
-                <input type="password" pInputText [(ngModel)]="funcionarioActual.contrasena" name="contrasena" placeholder="Contraseña" *ngIf="!esEdicion" required>
+                <div class="form-field" *ngIf="!esEdicion">
+                    <label>Contraseña</label>
+                    <input type="password" pInputText [(ngModel)]="funcionarioActual.contrasena" name="contrasena" placeholder="Contraseña" required>
+                </div>
                 
                 <div class="botones-form">
+                    <button type="button" class="btn-cancelar" (click)="toggleFormulario()">Cancelar</button>
                     <button type="submit" [class]="esEdicion ? 'btn-actualizar' : 'btn-guardar-verde'" [disabled]="!funcionarioForm.form.valid">
-                        {{ esEdicion ? 'Actualizar' : 'Guardar' }}
+                        {{ esEdicion ? 'Actualizar Funcionario' : 'Guardar Funcionario' }}
                     </button>
-                    <button type="button" *ngIf="esEdicion" class="btn-cancelar" (click)="resetForm()">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -49,7 +67,7 @@
                         <th>Tipo documento</th>
                         <th>Número de documento</th>
                         <th>Cargo</th>
-                        <th>Acciones</th>
+                        <th class="text-center">Acciones</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-f>
@@ -58,9 +76,9 @@
                         <td>{{ f.tipoDocumento }}</td>
                         <td>{{ f.numeroDocumento }}</td>
                         <td>{{ f.cargoNombre }}</td>
-                        <td>
-                            <p-button  icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-info" (click)="seleccionarFuncionario(f, 'editar')"></button>
-                            <p-button  icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="seleccionarFuncionario(f, 'eliminar')"></button>
+                        <td class="acciones">
+                            <p-button icon="pi pi-pencil" tooltipPosition="top" pTooltip="Editar" class="p-button-rounded p-button-text p-button-info" (click)="seleccionarFuncionario(f, 'editar')"></p-button>
+                            <p-button icon="pi pi-trash" tooltipPosition="top" pTooltip="Eliminar" class="p-button-rounded p-button-text p-button-danger" (click)="seleccionarFuncionario(f, 'eliminar')"></p-button>
                         </td>
                     </tr>
                 </ng-template>

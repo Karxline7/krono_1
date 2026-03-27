@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from '../../../../../node_modules/rxjs/dist/types';
+import { Observable } from 'rxjs';
 
 export interface Funcionario {
   id?: number;

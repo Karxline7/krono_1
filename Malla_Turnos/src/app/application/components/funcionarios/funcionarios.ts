@@ -26,8 +26,6 @@ export class Funcionarios implements OnInit, OnDestroy {
   listaFuncionarios: Funcionario[] = [];
   funcionarioActual: Funcionario = this.getInitFuncionario();
   
-  syncInterval: any;
-  
   mostrarFormulario = false;
   esEdicion = false;
   mostrarModalEliminar = false;
@@ -37,9 +35,9 @@ export class Funcionarios implements OnInit, OnDestroy {
   verToast = false;
   mensajeToast = '';
 
-  constructor(private FuncionarioService: FuncionarioService) {}
-
   private intervalId: any;
+
+  constructor(private FuncionarioService: FuncionarioService) {}
 
   ngOnInit(): void {
     this.cargarFuncionarios();

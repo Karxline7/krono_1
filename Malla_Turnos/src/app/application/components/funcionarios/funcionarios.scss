@@ -6,6 +6,12 @@
   padding: 40px;
   background-color: $bg-main;
   min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+
+  .contenedor-tabla {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 
   .header-tabla {
     display: flex;
@@ -14,9 +20,11 @@
     margin-bottom: 30px;
 
     .titulo-pagina {
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: $dark-text;
       margin: 0;
+      letter-spacing: -0.5px;
     }
   }
 }
@@ -24,28 +32,51 @@
 /* --- BOTONES GENERALES --- */
 button:not(.p-button) {
   @include button-base;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
 
   &.btn-azul-nuevo {
     background: $blue-primary;
     color: white;
     border-radius: $radius-md;
-    padding: 10px 25px;
-    font-weight: 600;
-
-    span {
-      font-size: 0.8em;
-      margin-left: 8px;
-    }
+    padding: 12px 24px;
+    box-shadow: 0 4px 14px rgba($blue-primary, 0.3);
 
     &:hover {
-      background: color-mix(in srgb, $blue-primary, black 5%);
+      background: darken($blue-primary, 10%);
+      transform: translateY(-2px);
     }
   }
 
-  &.btn-guardar-verde { background: $green-success; color: white; border-radius: 10px; }
-  &.btn-actualizar    { background: $blue-active; color: #0d47a1; border-radius: 10px; }
-  &.btn-rojo          { background: $red-danger; color: white; }
-  &.btn-gris          { background: #e0e0e0; color: #333; }
+  &.btn-guardar-verde { 
+    background: $green-success; 
+    color: white; 
+    border-radius: $radius-sm;
+    padding: 10px 20px;
+  }
+
+  &.btn-actualizar { 
+    background: $blue-active; 
+    color: white; 
+    border-radius: $radius-sm;
+    padding: 10px 20px;
+  }
+
+  &.btn-cancelar {
+    background: #f1f5f9;
+    color: #64748b;
+    border-radius: $radius-sm;
+    padding: 10px 20px;
+    
+    &:hover {
+        background: #e2e8f0;
+        color: #1e293b;
+    }
+  }
 }
 
 /* --- TABLA Y ACCIONES --- */
@@ -54,178 +85,185 @@ button:not(.p-button) {
   padding: 0;
   border: 1px solid $border-color;
   overflow: hidden;
+  margin-top: 20px;
 
-  /* Estilos específicos para p-table */
   :host ::ng-deep .tabla-funcionarios {
-    .p-datatable-table {
-      width: 100%;
-      border-collapse: collapse;
-      
-      thead th {
-        background: #f8f9fa;
-        padding: 20px;
-        color: #333;
-        border-bottom: 1px solid $border-color;
-        text-align: left;
+    .p-datatable-thead > tr > th {
+      background: #f8fafc;
+      padding: 18px 20px;
+      color: #64748b;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid $border-color;
+    }
+
+    .p-datatable-tbody > tr {
+      background: #fff;
+      transition: background 0.2s;
+
+      td {
+        padding: 16px 20px;
+        border-bottom: 1px solid #f1f5f9;
+        color: #334155;
+
+        &.bold { 
+          font-weight: 600; 
+          color: $dark-text;
+        }
       }
 
-      tbody tr {
-        background: #fff;
-        color: #444;
+      &:hover {
+        background: #fdfdfd;
+      }
+    }
 
-        td {
-          padding: 15px 20px;
-          border-bottom: 1px solid #f0f0f0;
+    /* Contenedor de botones de acción */
+    .acciones {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
 
-          &.bold { font-weight: 600; }
-          
-          /* CLASE CRÍTICA: Contenedor de botones Editar/Eliminar */
-          &.acciones {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-start;
-            align-items: center;
-
-            .p-button {
-              width: 38px !important;
-              height: 38px !important;
-              background-color: #0d47a1;
-              padding: 0 !important;
-              border-radius: 10px !important;
-              display: inline-flex !important; /* Forzamos visualización */
-              justify-content: center !important;
-              align-items: center !important;
-              transition: all 0.2s ease;
-              border: none !important;
-              
-              &:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-              }
-
-              .p-button-icon {
-                font-size: 1.1rem;
-              }
-
-              /* Colores usando tus variables de SASS */
-              &.p-button-info {
-                background-color: #e3f2fd !important;
-                color: $blue-primary !important;
-                
-                &:hover {
-                  background-color: #bbdefb !important;
-                }
-              }
-
-              &.p-button-danger {
-                background-color: #ffebee !important;
-                color: $red-danger !important;
-
-                &:hover {
-                  background-color: #ffcdd2 !important;
-                }
-              }
-            }
-          }
+      .p-button {
+        &.p-button-info {
+          background: rgba($blue-primary, 0.1) !important;
+          color: $blue-primary !important;
+          border: none !important;
+          &:hover { background: rgba($blue-primary, 0.2) !important; }
         }
 
-        &:hover {
-          background: #f9f9f9;
+        &.p-button-danger {
+          background: rgba($red-danger, 0.1) !important;
+          color: $red-danger !important;
+          border: none !important;
+          &:hover { background: rgba($red-danger, 0.2) !important; }
         }
       }
     }
   }
 }
 
-/* --- FORMULARIO CON ANIMACIÓN --- */
+/* --- FORMULARIO GRID --- */
 .form-container {
   max-height: 0;
   overflow: hidden;
-  transition: all 0.4s ease-in-out;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0;
+  transform: translateY(-10px);
 
   &.abierto {
-    max-height: 500px; /* Ajustado para dar espacio a inputs */
+    max-height: 800px;
     opacity: 1;
+    transform: translateY(0);
     margin-bottom: 30px;
-    padding: 20px;
+    padding: 30px;
     background: white;
-    border-radius: $radius-md;
-    border: 1px solid $border-color;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-soft;
+    border: 1px solid rgba($border-color, 0.5);
   }
 
-  .form-horizontal {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    flex-wrap: wrap;
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    align-items: flex-end;
 
-    input, select, .p-inputtext {
-      @include input-base;
-      flex: 1 1 200px;
-      border-radius: 10px;
-      height: 45px;
-      border: 1px solid $border-color;
-      padding: 0 15px;
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
 
-      &:focus {
-        border-color: $blue-primary;
-        outline: none;
-        box-shadow: 0 0 0 2px rgba($blue-primary, 0.1);
+      label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #64748b;
+        margin-left: 4px;
+      }
+
+      input, select, .p-inputtext {
+        @include input-base;
+        height: 48px;
+        width: 100%;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+
+        &:focus {
+            background: white;
+            border-color: $blue-primary;
+            box-shadow: 0 0 0 3px rgba($blue-primary, 0.1);
+        }
       }
     }
-    
+
     .botones-form {
-        display: flex;
-        gap: 10px;
-        margin-left: auto; /* Empuja los botones a la derecha */
-        min-width: fit-content;
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 10px;
+      padding-top: 20px;
+      border-top: 1px solid #f1f5f9;
     }
   }
 }
 
-/* --- DIÁLOGO DE ELIMINACIÓN --- */
+/* --- DIÁLOGO PREMIUM --- */
 :host ::ng-deep {
   .dialogo-premium {
     .p-dialog-header {
-      border-radius: 20px 20px 0 0;
-      padding: 20px;
-      .p-dialog-title { font-weight: 700; }
+      background: white;
+      border-bottom: none;
+      padding: 24px 24px 0;
+      .p-dialog-title { font-weight: 700; color: $dark-text; }
     }
 
     .p-dialog-content {
-      padding: 0 25px 25px;
+      background: white !important; /* Asegurar fondo sólido */
+      padding: 24px;
+      
       .modal-body {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 15px;
+        gap: 20px;
         
         .alerta-circulo {
-          width: 70px;
-          height: 70px;
+          width: 80px;
+          height: 80px;
           border-radius: 50%;
-          background: #fef2f2;
+          background: rgba($red-danger, 0.05);
           display: flex;
           align-items: center;
           justify-content: center;
-          i { font-size: 30px; color: $red-danger; }
+          i { font-size: 36px; color: $red-danger; }
         }
+
+        .titulo-alerta { font-size: 1.5rem; font-weight: 700; color: $dark-text; }
+        .texto-confirmacion { color: #64748b; line-height: 1.6; }
       }
     }
 
     .p-dialog-footer {
-      border-radius: 0 0 20px 20px;
-      padding: 0 25px 25px;
-      .botones-container {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
+      background: white;
+      border-top: none;
+      padding: 0 24px 24px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+
+      .p-button {
+        border-radius: $radius-sm;
+        padding: 10px 20px;
+        font-weight: 600;
       }
     }
 
     .p-dialog-mask {
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.4); /* Fondo semi-transparente para resaltar el modal */
     }
   }
 }
@@ -235,25 +273,33 @@ button:not(.p-button) {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 8px;
+  margin-top: 30px;
 
   .btn-pag, .btn-pag-nav {
-    min-width: 35px;
-    height: 35px;
-    border-radius: 50%;
+    min-width: 40px;
+    height: 40px;
+    border-radius: 10px;
     background: white;
-    border: 1px solid $border-color;
+    border: 1px solid #e2e8f0;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     font-weight: 600;
+    transition: all 0.2s;
+    color: #64748b;
+
+    &:hover:not(.active) {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
 
     &.active {
-      background: $blue-active;
-      color: #0d47a1;
-      border-color: $blue-active;
+      background: $blue-primary;
+      color: white;
+      border-color: $blue-primary;
+      box-shadow: 0 4px 10px rgba($blue-primary, 0.3);
     }
   }
 }
@@ -261,21 +307,16 @@ button:not(.p-button) {
 .text-center { text-align: center; }
 .m-0 { margin: 0; }
 
-/* --- FEEDBACK VISUAL (TOAST MANUAL) --- */
-.toast-manual {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: #2c3e50;
-  color: white;
-  padding: 12px 25px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  z-index: 9999;
-  animation: slideIn 0.3s ease-out;
+/* --- TOAST --- */
+.toast-mensaje {
+    animation: slideIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    display: flex;
+    align-items: center;
+    min-width: 300px;
+    font-weight: 500;
+}
 
-  @keyframes slideIn {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
+@keyframes slideIn {
+    from { transform: translateX(120%); }
+    to { transform: translateX(0); }
 }
