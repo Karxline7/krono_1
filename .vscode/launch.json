@@ -3,6 +3,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "MallaTurnosApplication",
+      "request": "launch",
+      "mainClass": "com.datacenter.mallaturnos.MallaTurnosApplication",
+      "projectName": "malla-turnos"
+    },
+    {
       "name": "ng serve",
       "type": "chrome",
       "request": "launch",

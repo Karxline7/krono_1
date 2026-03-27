@@ -55,14 +55,14 @@ button:not(.p-button) {
   border: 1px solid $border-color;
   overflow: hidden;
 
-  /* Forzamos la entrada a los componentes de PrimeNG */
-  ::ng-deep .tabla-funcionarios {
+  /* Estilos específicos para p-table */
+  :host ::ng-deep .tabla-funcionarios {
     .p-datatable-table {
       width: 100%;
       border-collapse: collapse;
       
       thead th {
-        background: #fff;
+        background: #f8f9fa;
         padding: 20px;
         color: #333;
         border-bottom: 1px solid $border-color;
@@ -81,15 +81,15 @@ button:not(.p-button) {
           
           /* CLASE CRÍTICA: Contenedor de botones Editar/Eliminar */
           &.acciones {
-            display: flex !important;
+            display: flex;
             gap: 10px;
             justify-content: flex-start;
             align-items: center;
-            min-height: 60px; /* Asegura que la fila no colapse los botones */
 
             .p-button {
               width: 38px !important;
               height: 38px !important;
+              background-color: #0d47a1;
               padding: 0 !important;
               border-radius: 10px !important;
               display: inline-flex !important; /* Forzamos visualización */
@@ -160,17 +160,26 @@ button:not(.p-button) {
     align-items: center;
     flex-wrap: wrap;
 
-    input, select {
+    input, select, .p-inputtext {
       @include input-base;
-      flex: 1;
-      min-width: 180px;
+      flex: 1 1 200px;
       border-radius: 10px;
       height: 45px;
+      border: 1px solid $border-color;
+      padding: 0 15px;
+
+      &:focus {
+        border-color: $blue-primary;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba($blue-primary, 0.1);
+      }
     }
     
     .botones-form {
         display: flex;
         gap: 10px;
+        margin-left: auto; /* Empuja los botones a la derecha */
+        min-width: fit-content;
     }
   }
 }
@@ -251,3 +260,22 @@ button:not(.p-button) {
 
 .text-center { text-align: center; }
 .m-0 { margin: 0; }
+
+/* --- FEEDBACK VISUAL (TOAST MANUAL) --- */
+.toast-manual {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #2c3e50;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 9999;
+  animation: slideIn 0.3s ease-out;
+
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+}
