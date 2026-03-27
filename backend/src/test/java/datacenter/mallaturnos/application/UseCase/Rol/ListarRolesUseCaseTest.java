@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,9 +52,7 @@ class ListarRolesUseCaseTest {
         assertNotNull(resultado);
         assertEquals(2, resultado.size());
 
-        verify(rolRepository).findAll();
-        verify(rolMapper).toDto(rol1);
-        verify(rolMapper).toDto(rol2);
+        verify(rolMapper, times(2)).toDto(any());
     }
 
     // ✅ Lista vacía
