@@ -55,8 +55,13 @@ export class Funcionarios implements OnInit, OnDestroy {
 
   getInitFuncionario(): Funcionario {
     return {
-      nombre: '', tipoDocumento: '', numeroDocumento: null,
-      contrasena: '', rolId: null, cargoId: null, areaId: null,
+      nombre: '', 
+      tipoDocumento: '', 
+      numeroDocumento: null,
+      contrasena: '', 
+      rolId: null, 
+      cargoId: null,
+      areaId: null
     };
   }
 
@@ -79,8 +84,7 @@ export class Funcionarios implements OnInit, OnDestroy {
       ...this.funcionarioActual,
       numeroDocumento: Number(this.funcionarioActual.numeroDocumento),
       rolId: Number(this.funcionarioActual.rolId),
-      cargoId: Number(this.funcionarioActual.cargoId),
-      areaId: Number(this.funcionarioActual.areaId)
+      cargoId: Number(this.funcionarioActual.cargoId)
     };
 
     if (this.esEdicion && this.funcionarioActual.id) {

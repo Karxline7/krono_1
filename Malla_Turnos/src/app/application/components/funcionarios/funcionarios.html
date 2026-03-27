@@ -77,8 +77,12 @@
                         <td>{{ f.numeroDocumento }}</td>
                         <td>{{ f.cargoNombre }}</td>
                         <td class="acciones">
-                            <p-button icon="pi pi-pencil" tooltipPosition="top" pTooltip="Editar" class="p-button-rounded p-button-text p-button-info" (click)="seleccionarFuncionario(f, 'editar')"></p-button>
-                            <p-button icon="pi pi-trash" tooltipPosition="top" pTooltip="Eliminar" class="p-button-rounded p-button-text p-button-danger" (click)="seleccionarFuncionario(f, 'eliminar')"></p-button>
+                            <button class="btn btn-sm btn-outline-warning border-0 me-1" (click)="seleccionarFuncionario(f, 'editar')">
+                                <i class="bi bi-pencil"></i> Editar
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger border-0" (click)="seleccionarFuncionario(f, 'eliminar')">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
                         </td>
                     </tr>
                 </ng-template>
