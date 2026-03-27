@@ -9,10 +9,6 @@
 
     <div class="filtros-container">
       <div class="selector-group">
-        <select [(ngModel)]="filtroSemana" class="p-inputtext">
-          <option value="">Todas las semanas</option>
-          <option *ngFor="let s of semanas" [value]="s">{{ s }}</option>
-        </select>
 
         <select [(ngModel)]="filtroTurno" class="p-inputtext">
           <option value="">Todos los turnos</option>
@@ -54,7 +50,6 @@
         <ng-template pTemplate="header">
           <tr>
             <th>Funcionario</th>
-            <th>Semana</th>
             <th>Lunes</th>
             <th>Martes</th>
             <th>Miércoles</th>
@@ -68,7 +63,6 @@
         <ng-template pTemplate="body" let-t>
           <tr>
             <td class="font-bold">{{ t.funcionario }}</td>
-            <td><small>{{ t.semana }}</small></td>
             
             <ng-container *ngFor="let dia of diasSemana">
               <td (click)="seleccionarCelda($any(t)[dia], t.funcionarioId, $any(t.fechas)[dia])"
