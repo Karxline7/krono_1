@@ -121,6 +121,7 @@ export class Horario implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.cargarCatalogos();
+    this.cargarTurnos();
 
     // Iniciamos la sincronización cada 5 segundos (Background Polling)
     this.intervalId = setInterval(() => {
@@ -329,7 +330,7 @@ refresh() {
   }
 
   abrirEditar() {
-    if (this.turnoIdcionado) {
+    if (this.turnoIdSeleccionado) {
       this.esEdicion = true;
       this.mostrarFormulario = true;
     } else {

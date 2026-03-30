@@ -68,7 +68,7 @@ export class CartasTurnos implements OnInit, OnDestroy {
     this.turnoService.listar().subscribe({
       next: (data: any[]) => {
         this.turnos = data.map(t => ({
-          ...t, 
+          ...t,
           // Mantenemos tu lógica de personas (ojo: el random cambiará cada 5s si el back no trae el dato)
           cantidadPersonas: t.cantidadPersonas || Math.floor(Math.random() * 10) + 1
         }));
