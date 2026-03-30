@@ -121,7 +121,7 @@ export class Horario implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.cargarCatalogos();
-    this.cargarTurnos();
+    // No llamamos a cargarTurnos aquí porque cargarCatalogos ya lo hace al terminar.
 
     // Iniciamos la sincronización cada 5 segundos (Background Polling)
     this.intervalId = setInterval(() => {
@@ -344,16 +344,15 @@ refresh() {
   }
 
   onGuardar() {
-    // Asegurar tipos correctos para el backend como en funcionarios.ts
-    const payload: any = {
-      funcionarioId: Number(this.turnoActual.funcionarioId),
-      turnoId: Number(this.turnoActual.turnoId),
-      fecha: this.turnoActual.dia
-    };
-
     if (this.esEdicion && this.turnoActual.id) {
-      payload.id = this.turnoActual.id; // Solo incluimos ID si es actualización
-      this.asignacionService.editar(this.turnoActual.id, payload).subscribe({
+      // Payload específico para edición según el DTO del backend
+      const payloadEdit = {
+        nuevoFuncionarioId: Number(this.turnoActual.funcionarioId),
+        nuevoTurnoId: Number(this.turnoActual.turnoId),
+        nuevaFecha: this.turnoActual.dia
+      };
+
+      this.asignacionService.editar(Number(this.turnoActual.id), payloadEdit).subscribe({
         next: () => {
           this.lanzarToast('¡Actualizado con éxito!');
           this.cargarTurnos();
@@ -362,7 +361,14 @@ refresh() {
         error: () => this.lanzarToast('Error al actualizar')
       });
     } else {
-      this.asignacionService.crear(payload).subscribe({
+      // Payload estándar para creación (asumiendo que usa los nombres originales)
+      const payloadCrear = {
+        funcionarioId: Number(this.turnoActual.funcionarioId),
+        turnoId: Number(this.turnoActual.turnoId),
+        fecha: this.turnoActual.dia
+      };
+
+      this.asignacionService.crear(payloadCrear).subscribe({
         next: () => {
           this.lanzarToast('¡Guardado con éxito!');
           this.cargarTurnos();
@@ -424,9 +430,12 @@ refresh() {
   }
 
   lanzarToast(msg: string) {
-    this.mensajeToast = msg;
-    this.verToast = true;
-    setTimeout(() => (this.verToast = false), 3000);
+    // Usamos setTimeout para evitar el error ExpressionChangedAfterItHasBeenCheckedError
+    setTimeout(() => {
+      this.mensajeToast = msg;
+      this.verToast = true;
+      setTimeout(() => (this.verToast = false), 3000);
+    }, 0);
   }
 
 
