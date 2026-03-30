@@ -23,7 +23,7 @@
     </div>
 
     <div class="form-container" [class.abierto]="mostrarFormulario">
-      <form (ngSubmit)="guardar()" class="form-horizontal">
+      <form (ngSubmit)="onGuardar()" class="form-horizontal">
         
         <select [(ngModel)]="turnoActual.funcionarioId" name="funcionarioId" class="p-inputtext" required>
           <option [ngValue]="null">Funcionario</option>

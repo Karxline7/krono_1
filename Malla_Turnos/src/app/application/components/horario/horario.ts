@@ -129,7 +129,7 @@ export class Horario implements OnInit, OnDestroy {
   }
 
 refresh() {
-  if (!this.mostrarFormulario && !this.mostrarConfirmacion) {
+  if (!this.mostrarFormulario && (!this.mostrarConfirmacion)) {
     this.cargarTurnos();
   }
 }
@@ -288,7 +288,8 @@ refresh() {
     if (!funcionarioId) return;
 
     if (diaObj) {
-      if (this.turnoIdSeleccionado === diaObj.id) {
+      // Si ya estaba seleccionado este mismo ID, lo deseleccionamos
+      if (this.turnoIdSeleccionado === diaObj.id && this.mostrarFormulario) {
         this.resetForm();
       } else {
         this.turnoIdSeleccionado = diaObj.id;
@@ -314,10 +315,11 @@ refresh() {
           turnoId: diaObj.turnoId
         };
         this.onTurnoChange();
-        this.esEdicion = true; // Listo para editar si se desea
-        this.mostrarFormulario = false;
+        this.esEdicion = true;
+        this.mostrarFormulario = true; // Abrir formulario inmediatamente como en funcionarios.ts
       }
     } else {
+      // Es una celda vacía, preparamos para crear
       this.resetForm();
       this.turnoActual.funcionarioId = funcionarioId;
       this.turnoActual.dia = fechaDia;
@@ -327,7 +329,7 @@ refresh() {
   }
 
   abrirEditar() {
-    if (this.turnoIdSeleccionado) {
+    if (this.turnoIdcionado) {
       this.esEdicion = true;
       this.mostrarFormulario = true;
     } else {
@@ -340,18 +342,18 @@ refresh() {
     if (!this.mostrarFormulario) this.resetForm();
   }
 
-  guardar() {
-    // Construir el payload que espera el backend (sin datos extras de la UI)
+  onGuardar() {
+    // Asegurar tipos correctos para el backend como en funcionarios.ts
     const payload = {
-      funcionarioId: this.turnoActual.funcionarioId,
-      turnoId: this.turnoActual.turnoId,
+      funcionarioId: Number(this.turnoActual.funcionarioId),
+      turnoId: Number(this.turnoActual.turnoId),
       fecha: this.turnoActual.dia
     };
 
     if (this.esEdicion && this.turnoActual.id) {
       this.asignacionService.editar(this.turnoActual.id, payload).subscribe({
         next: () => {
-          this.lanzarToast('Actualizado con éxito');
+          this.lanzarToast('¡Actualizado con éxito!');
           this.cargarTurnos();
           this.resetForm();
         },
@@ -360,7 +362,7 @@ refresh() {
     } else {
       this.asignacionService.crear(payload).subscribe({
         next: () => {
-          this.lanzarToast('Guardado con éxito');
+          this.lanzarToast('¡Guardado con éxito!');
           this.cargarTurnos();
           this.resetForm();
         },
