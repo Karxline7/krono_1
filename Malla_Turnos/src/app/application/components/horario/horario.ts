@@ -345,13 +345,14 @@ refresh() {
 
   onGuardar() {
     // Asegurar tipos correctos para el backend como en funcionarios.ts
-    const payload = {
+    const payload: any = {
       funcionarioId: Number(this.turnoActual.funcionarioId),
       turnoId: Number(this.turnoActual.turnoId),
       fecha: this.turnoActual.dia
     };
 
     if (this.esEdicion && this.turnoActual.id) {
+      payload.id = this.turnoActual.id; // Solo incluimos ID si es actualización
       this.asignacionService.editar(this.turnoActual.id, payload).subscribe({
         next: () => {
           this.lanzarToast('¡Actualizado con éxito!');
