@@ -42,6 +42,8 @@ export interface AsignacionDia {
   esDescanso: boolean;
   break: string;
   almuerzo: string;
+  horaInicio: string;  // Added
+  horaFin: string;    // Added
 }
 
 export interface TurnoSemanal {
@@ -233,16 +235,13 @@ refresh() {
     });
 
     asignacionesFlat.forEach(a => {
-       const w = map.get(a.funcionarioId);
-       if (!w) return;
+      const w = map.get(a.funcionarioId);
+      if (!w) return;
 
-       const t = this.turnosDisponibles.find(x => Number(x.id) === Number(a.turnoId));
-       
-       if (!t) {
-         // Si el turno no existe en los disponibles, no lo mostramos como Descanso automáticamente
-         // Esto evita que aparezcan "descansos" aleatorios cuando hay inconsistencias
-         return;
-       }
+      const t = this.turnosDisponibles.find(x => Number(x.id) === Number(a.turnoId));
+      if (!t) {
+        return;
+      }
 
        const tNombre = t.nombre;
        const esDescanso = tNombre.toLowerCase().includes('descanso');
@@ -253,7 +252,10 @@ refresh() {
        const dMes = a.fecha.split('-')[2];
        const diaObj: AsignacionDia = {
           id: a.id, turnoId: a.turnoId, turnoNombre: tNombre, diaMes: dMes, 
-          esDescanso: esDescanso, break: t ? t.horabreak || '—' : '—', almuerzo: t ? t.horaalmuerzo || '—' : '—'
+          esDescanso: esDescanso, break: t ? t.horabreak || '—' : '—', 
+          almuerzo: t ? t.horaalmuerzo || '—' : '—',
+          horaInicio: t ? t.horainicio || '—' : '—',
+          horaFin: t ? t.horafin || '—' : '—'
        };
 
        if (a.fecha === fechasSemana[0]) w.lunes = diaObj;

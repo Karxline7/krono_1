@@ -71,8 +71,17 @@
                 
                 <div class="dia-mes">{{ getDiaMes($any(t.fechas)[dia]) }}</div>
                 
-                <div *ngIf="$any(t)[dia]" class="tag-container">
+                <div *ngIf="$any(t)[dia]" class="tag-container p-2">
                   <p-tag [value]="$any(t)[dia].turnoNombre" [severity]="$any(t)[dia].esDescanso ? 'secondary' : 'info'"></p-tag>
+                  <div class="turn-details mt-1 text-xs">
+                    <div class="time-range font-bold" *ngIf="!$any(t)[dia].esDescanso">
+                      {{ $any(t)[dia].horaInicio }} - {{ $any(t)[dia].horaFin }}
+                    </div>
+                    <div class="break-info" *ngIf="$any(t)[dia].break || $any(t)[dia].almuerzo">
+                      <span *ngIf="$any(t)[dia].break">B: {{ $any(t)[dia].break }}</span>
+                      <span *ngIf="$any(t)[dia].almuerzo" class="ml-1">A: {{ $any(t)[dia].almuerzo }}</span>
+                    </div>
+                  </div>
                 </div>
                 
                 <div *ngIf="!$any(t)[dia]" class="add-icon">
