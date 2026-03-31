@@ -60,8 +60,8 @@
         </div>
 
         <div class="tabla-wrapper">
-            <p-table [value]="listaFuncionarios" styleClass="p-datatable-striped tabla-funcionarios" [tableStyle]="{'min-width': '50rem'}">
-                <ng-template pTemplate="header">
+            <table class="tabla-funcionarios">
+                <thead>
                     <tr>
                         <th>Nombre</th>
                         <th>Tipo documento</th>
@@ -69,24 +69,24 @@
                         <th>Cargo</th>
                         <th class="text-center">Acciones</th>
                     </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-f>
-                    <tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let f of listaFuncionarios">
                         <td class="bold">{{ f.nombre }}</td>
-                        <td>{{ f.tipoDocumento }}</td>
+                        <td><span class="badge">{{ f.tipoDocumento }}</span></td>
                         <td>{{ f.numeroDocumento }}</td>
                         <td>{{ f.cargoNombre }}</td>
                         <td class="acciones">
-                            <button class="btn btn-sm btn-outline-warning border-0 me-1" (click)="seleccionarFuncionario(f, 'editar')">
+                            <button class="btn btn-sm btn-outline-warning" (click)="seleccionarFuncionario(f, 'editar')" title="Editar">
                                 <i class="bi bi-pencil"></i> Editar
                             </button>
-                            <button class="btn btn-sm btn-outline-danger border-0" (click)="seleccionarFuncionario(f, 'eliminar')">
+                            <button class="btn btn-sm btn-outline-danger" (click)="seleccionarFuncionario(f, 'eliminar')" title="Eliminar">
                                 <i class="bi bi-trash"></i> Eliminar
                             </button>
                         </td>
                     </tr>
-                </ng-template>
-            </p-table>
+                </tbody>
+            </table>
         </div>
 
         <div class="paginacion-container">
