@@ -113,6 +113,13 @@ public class UsuarioPersistenceAdapter implements UsuarioRepositoryPort {
         jpaRepository.deleteById(id);
     }
 
+    @Override
+    public String obtenerNombrePorId(Long id) {
+        return jpaRepository.findById(id)
+                .map(usuario -> usuario.getNombre())
+                .orElse("Usuario");
+    }
+
     /**
      * Convierte de Entity JPA a Modelo de Dominio
      */

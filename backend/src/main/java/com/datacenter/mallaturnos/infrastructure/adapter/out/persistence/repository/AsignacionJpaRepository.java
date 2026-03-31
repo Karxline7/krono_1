@@ -31,6 +31,10 @@ public interface AsignacionJpaRepository
             LocalDate fin
     );
 
+    List<AsignacionTurnoJpaEntity> findByFuncionario_Id(Long funcionarioId);
+
+    List<AsignacionTurnoJpaEntity> findByFuncionario_AreaId(Long areaId);
+
     List<AsignacionTurnoJpaEntity> findByFecha(LocalDate fecha);
 
         @Query("""

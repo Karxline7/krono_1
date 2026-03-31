@@ -20,4 +20,5 @@ public interface UsuarioRepositoryPort {
     List<UsuarioDto> findAllWithCargo();
     void delete(Long id);
     Usuario save(Usuario usuario);
+    String obtenerNombrePorId(Long id);
 }

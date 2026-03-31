@@ -1,5 +1,6 @@
 package com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.adapter;
 
+import com.datacenter.mallaturnos.application.Dto.AsignacionTurno.AsignacionTurnoDto;
 import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.AsignacionTurnoJpaEntity;
 import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.entity.UsuarioJpaEntity;
@@ -88,6 +89,30 @@ public class AsignacionPersistenceAdapter implements AsignacionRepositoryPort {
         jpaRepository.deleteById(id);
     }
 
+    @Override
+    public List<AsignacionTurnoDto> listarAsignaciones() {
+        return jpaRepository.findAll()
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AsignacionTurnoDto> listarAsignacionesPorUsuario(Long usuarioId) {
+        return jpaRepository.findByFuncionario_Id(usuarioId)
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AsignacionTurnoDto> listarAsignacionesPorArea(Long areaId) {
+        return jpaRepository.findByFuncionario_AreaId(areaId)
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
 private AsignacionTurno toDomain(AsignacionTurnoJpaEntity entity) {
     return new AsignacionTurno(
             entity.getId(),
@@ -97,7 +122,17 @@ private AsignacionTurno toDomain(AsignacionTurnoJpaEntity entity) {
     );
 }
 
-   private AsignacionTurnoJpaEntity toEntity(AsignacionTurno domain) {
+private AsignacionTurnoDto toDto(AsignacionTurnoJpaEntity entity) {
+    AsignacionTurnoDto dto = new AsignacionTurnoDto();
+    dto.setId(entity.getId());
+    dto.setFuncionarioId(entity.getFuncionario().getId());
+    dto.setTurnoId(entity.getTurnoId());
+    dto.setFecha(entity.getFecha());
+
+    return dto;
+}
+
+private AsignacionTurnoJpaEntity toEntity(AsignacionTurno domain) {
 
     UsuarioJpaEntity funcionario = new UsuarioJpaEntity();
     funcionario.setId(domain.getFuncionarioId());
