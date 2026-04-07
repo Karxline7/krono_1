@@ -26,11 +26,11 @@
                     </div>
 
                     <div class="columna trabajo" *ngIf="!asig.esDescanso">
-                        <div class="bloque-hora" style="margin-bottom: 5px;">{{ asig.horaInicio || '?' }}</div>
+                        <div class="bloque-hora" style="margin-bottom: 5px;">{{ asig.horaInicio || asig.horaInicio }}</div>
                         <div class="bloque-romper" *ngIf="asig.horabreak || asig.horaalmuerzo" style="font-size: 0.75em; padding: 4px; border-radius: 4px;">
-                            {{ asig.horabreak ? asig.horabreak : asig.horaalmuerzo }}
+                            {{ asig.horabreak ? asig.horabreak : asig.horaalmuerzo }}|{{ asig.horaalmuerzo ? asig.horaalmuerzo : asig.horabreak }}
                         </div>
-                        <div class="bloque-hora" style="margin-top: 5px;">{{ asig.horaFin || '?' }}</div>
+                        <div class="bloque-hora" style="margin-top: 5px;">{{ asig.horaFin || asig.horaFin }}</div>
                     </div>
                 </ng-container>
             </div>
