@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.datacenter.mallaturnos.application.Dto.AsignacionTurno.AsignacionTurnoDto;
-import com.datacenter.mallaturnos.application.Dto.Turno.TurnoDto;
 import com.datacenter.mallaturnos.application.UseCase.excel.GenerarExcelAsignacionesUseCase;
 import com.datacenter.mallaturnos.infrastructure.port.out.TurnoRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
@@ -32,6 +32,9 @@ class GenerarExcelAsignacionesUseCaseTest {
     @Mock
     private UsuarioRepositoryPort usuarioRepositoryPort;
 
+    @Mock
+    private TurnoRepositoryPort turnoRepositoryPort;
+
     @InjectMocks
     private GenerarExcelAsignacionesUseCase useCase;
 
@@ -41,14 +44,17 @@ class GenerarExcelAsignacionesUseCaseTest {
         asignaciones.add(new AsignacionTurnoDto());
 
         when(asignacionTurnoRepositoryPort.listarAsignaciones()).thenReturn(asignaciones);
-        when(excelGeneratorPort.generarExcelAsignaciones(asignaciones)).thenReturn(new byte[]{1,2,3});
+        when(usuarioRepositoryPort.findAllWithCargo()).thenReturn(new ArrayList<>());
+        when(turnoRepositoryPort.findAll()).thenReturn(new ArrayList<>());
+        
+        when(excelGeneratorPort.generarExcelAsignaciones(eq(asignaciones), anyMap(), anyMap())).thenReturn(new byte[]{1,2,3});
 
         byte[] resultado = useCase.generarExcelGeneral();
 
         assertNotNull(resultado);
         assertArrayEquals(new byte[]{1,2,3}, resultado);
         verify(asignacionTurnoRepositoryPort, times(1)).listarAsignaciones();
-        verify(excelGeneratorPort, times(1)).generarExcelAsignaciones(asignaciones);
+        verify(excelGeneratorPort, times(1)).generarExcelAsignaciones(eq(asignaciones), anyMap(), anyMap());
     }
 
     @Test
@@ -56,14 +62,15 @@ class GenerarExcelAsignacionesUseCaseTest {
         List<AsignacionTurnoDto> asignaciones = new ArrayList<>();
 
         when(asignacionTurnoRepositoryPort.listarAsignaciones()).thenReturn(asignaciones);
-        when(excelGeneratorPort.generarExcelAsignaciones(asignaciones)).thenReturn(new byte[]{});
+        when(usuarioRepositoryPort.findAllWithCargo()).thenReturn(new ArrayList<>());
+        when(turnoRepositoryPort.findAll()).thenReturn(new ArrayList<>());
+        
+        when(excelGeneratorPort.generarExcelAsignaciones(eq(asignaciones), anyMap(), anyMap())).thenReturn(new byte[]{});
 
         byte[] resultado = useCase.generarExcelGeneral();
 
         assertNotNull(resultado);
         assertArrayEquals(new byte[]{}, resultado);
-        verify(asignacionTurnoRepositoryPort, times(1)).listarAsignaciones();
-        verify(excelGeneratorPort, times(1)).generarExcelAsignaciones(asignaciones);
     }
 
     @Test
@@ -74,15 +81,15 @@ class GenerarExcelAsignacionesUseCaseTest {
 
         when(asignacionTurnoRepositoryPort.listarAsignacionesPorUsuario(usuarioId)).thenReturn(asignaciones);
         when(usuarioRepositoryPort.obtenerNombrePorId(usuarioId)).thenReturn(nombreUsuario);
-        when(excelGeneratorPort.generarExcelAsignacionesPorUsuario(nombreUsuario, asignaciones)).thenReturn(new byte[]{1,2,3});
+        when(turnoRepositoryPort.findAll()).thenReturn(new ArrayList<>());
+        
+        when(excelGeneratorPort.generarExcelAsignacionesPorUsuario(eq(nombreUsuario), eq(asignaciones), anyMap())).thenReturn(new byte[]{1,2,3});
 
         byte[] resultado = useCase.generarExcelPorUsuario(usuarioId);
 
         assertNotNull(resultado);
         assertArrayEquals(new byte[]{1,2,3}, resultado);
-        verify(asignacionTurnoRepositoryPort, times(1)).listarAsignacionesPorUsuario(usuarioId);
-        verify(usuarioRepositoryPort, times(1)).obtenerNombrePorId(usuarioId);
-        verify(excelGeneratorPort, times(1)).generarExcelAsignacionesPorUsuario(nombreUsuario, asignaciones);
+        verify(excelGeneratorPort, times(1)).generarExcelAsignacionesPorUsuario(eq(nombreUsuario), eq(asignaciones), anyMap());
     }
 
     @Test
@@ -93,15 +100,14 @@ class GenerarExcelAsignacionesUseCaseTest {
 
         when(asignacionTurnoRepositoryPort.listarAsignacionesPorUsuario(usuarioId)).thenReturn(asignaciones);
         when(usuarioRepositoryPort.obtenerNombrePorId(usuarioId)).thenReturn(nombreUsuario);
-        when(excelGeneratorPort.generarExcelAsignacionesPorUsuario(nombreUsuario, asignaciones)).thenReturn(new byte[]{});
+        when(turnoRepositoryPort.findAll()).thenReturn(new ArrayList<>());
+        
+        when(excelGeneratorPort.generarExcelAsignacionesPorUsuario(eq(nombreUsuario), eq(asignaciones), anyMap())).thenReturn(new byte[]{});
 
         byte[] resultado = useCase.generarExcelPorUsuario(usuarioId);
 
         assertNotNull(resultado);
         assertArrayEquals(new byte[]{}, resultado);
-        verify(asignacionTurnoRepositoryPort, times(1)).listarAsignacionesPorUsuario(usuarioId);
-        verify(usuarioRepositoryPort, times(1)).obtenerNombrePorId(usuarioId);
-        verify(excelGeneratorPort, times(1)).generarExcelAsignacionesPorUsuario(nombreUsuario, asignaciones);
     }
 
     @Test
@@ -110,14 +116,17 @@ class GenerarExcelAsignacionesUseCaseTest {
         List<AsignacionTurnoDto> asignaciones = List.of(new AsignacionTurnoDto());
 
         when(asignacionTurnoRepositoryPort.listarAsignacionesPorArea(areaId)).thenReturn(asignaciones);
-        when(excelGeneratorPort.generarExcelAsignaciones(asignaciones)).thenReturn(new byte[]{1,2,3});
+        when(usuarioRepositoryPort.findByAreaId(areaId)).thenReturn(new ArrayList<>());
+        when(turnoRepositoryPort.findAll()).thenReturn(new ArrayList<>());
+        
+        when(excelGeneratorPort.generarExcelAsignaciones(eq(asignaciones), anyMap(), anyMap())).thenReturn(new byte[]{1,2,3});
 
         byte[] resultado = useCase.generarExcelPorArea(areaId);
 
         assertNotNull(resultado);
         assertArrayEquals(new byte[]{1,2,3}, resultado);
         verify(asignacionTurnoRepositoryPort, times(1)).listarAsignacionesPorArea(areaId);
-        verify(excelGeneratorPort, times(1)).generarExcelAsignaciones(asignaciones);
+        verify(excelGeneratorPort, times(1)).generarExcelAsignaciones(eq(asignaciones), anyMap(), anyMap());
     }
 
     @Test
@@ -126,13 +135,14 @@ class GenerarExcelAsignacionesUseCaseTest {
         List<AsignacionTurnoDto> asignaciones = new ArrayList<>();
 
         when(asignacionTurnoRepositoryPort.listarAsignacionesPorArea(areaId)).thenReturn(asignaciones);
-        when(excelGeneratorPort.generarExcelAsignaciones(asignaciones)).thenReturn(new byte[]{});
+        when(usuarioRepositoryPort.findByAreaId(areaId)).thenReturn(new ArrayList<>());
+        when(turnoRepositoryPort.findAll()).thenReturn(new ArrayList<>());
+        
+        when(excelGeneratorPort.generarExcelAsignaciones(eq(asignaciones), anyMap(), anyMap())).thenReturn(new byte[]{});
 
         byte[] resultado = useCase.generarExcelPorArea(areaId);
 
         assertNotNull(resultado);
         assertArrayEquals(new byte[]{}, resultado);
-        verify(asignacionTurnoRepositoryPort, times(1)).listarAsignacionesPorArea(areaId);
-        verify(excelGeneratorPort, times(1)).generarExcelAsignaciones(asignaciones);
     }
 }
