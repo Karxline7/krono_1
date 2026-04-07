@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { NavbarUser } from '../../shared/navbar-user/navbar-user';
 import { ButtonModule } from 'primeng/button';
+import { ReportesService } from '../../../domain/services/reportes/reportes';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -42,7 +43,28 @@ export class HorarioUser implements OnInit, OnDestroy {
   diasTexto: DiaInfo[] = [];
   misAsignacionesSemana: DiaAsignacion[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private reportesService: ReportesService
+  ) {}
+
+  descargarReporte() {
+    this.reportesService.descargarReporteGeneral().subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `mi_reporte_turnos_${new Date().toISOString().split('T')[0]}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      },
+      error: (error) => {
+        console.error('Error al descargar el reporte personal:', error);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.cargarDatos();

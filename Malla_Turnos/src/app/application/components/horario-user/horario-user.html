@@ -11,7 +11,12 @@
         </div>
 
         <div class="horario-container">
-            <h2 class="titulo-seccion">Turnos</h2>
+            <div class="header-horario-user">
+                <h2 class="titulo-seccion">Turnos</h2>
+                <button class="btn-descargar-horario" (click)="descargarReporte()">
+                    <i class="pi pi-file-excel"></i> Descargar
+                </button>
+            </div>
             <div class="grilla-horario">
                 <!-- Etiquetas de día generadas dinámicamente -->
                 <div class="dia-label" *ngFor="let dia of diasTexto">

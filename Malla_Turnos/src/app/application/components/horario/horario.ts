@@ -13,6 +13,7 @@ import { catchError } from 'rxjs/operators';
 import { FuncionarioService } from '../../../domain/services/Funcionarios/funcionarios';
 import { TurnoService } from '../../../domain/services/cartas-turnos/cartas-turnos';
 import { AsignacionService } from '../../../domain/services/horario/horario';
+import { ReportesService } from '../../../domain/services/reportes/reportes';
 
 // --- INTERFACES ---
 export interface Turno {
@@ -114,8 +115,27 @@ export class Horario implements OnInit, OnDestroy {
     private http: HttpClient,
     private funcionarioService: FuncionarioService,
     private turnoService: TurnoService,
-    private asignacionService: AsignacionService
+    private asignacionService: AsignacionService,
+    private reportesService: ReportesService
   ) {}
+
+  descargarReporte() {
+    this.reportesService.descargarReporteGeneral().subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'reporte_asignaciones.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      },
+      error: (error) => {
+        console.error('Error al descargar el reporte:', error);
+      }
+    });
+  }
 
   private intervalId: any;
 

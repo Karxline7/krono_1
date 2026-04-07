@@ -59,11 +59,43 @@ body, html {
     padding-left: 30px;
 }
 
-.titulo-seccion {
-    text-align: center;
-    margin: 0 0 25px 0;
-    font-size: 2rem;
-    font-weight: bold;
+.header-horario-user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+
+    .titulo-seccion {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .btn-descargar-horario {
+        background-color: #4ebf7b;
+        color: white;
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: #43a86b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
 }
 
 .grilla-horario {

@@ -1,0 +1,25 @@
+<app-navbar-user></app-navbar-user>
+
+<section class="seccion-reportes">
+    <header class="titulo-reportes">
+        <h1>Mis Reportes</h1>
+        <p>Descarga el resumen de tus turnos asignados</p>
+    </header>
+
+    <main class="contenedor-reportes">
+        <div class="control-wrapper">
+            <select name="Reportes" id="Reportes" class="select-personalizado p-inputtext">
+                <option value="" disabled selected hidden>Seleccione Periodo</option>
+                <option value="1">Mes Actual</option>
+                <option value="2">Mes Anterior</option>
+                <option value="3">Último Trimestre</option>
+            </select>
+        </div>
+
+        <div class="contenedor-boton">
+            <button type="button" class="btn-descargar w-full" (click)="descargarReportePersonal()">
+                Descargar Excel
+            </button>
+        </div>
+    </main>
+</section>

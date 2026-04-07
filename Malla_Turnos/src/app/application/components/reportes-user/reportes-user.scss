@@ -1,0 +1,120 @@
+/* Contenedor Principal */
+.seccion-reportes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    padding: 60px 20px;
+    background-color: #f8f9fa;
+    min-height: calc(100vh - 80px);
+}
+
+.titulo-reportes {
+    text-align: center;
+    margin-bottom: 50px;
+
+    h1 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: #7f8c8d;
+        font-size: 16px;
+    }
+}
+
+/* Alineación de los controles */
+.contenedor-reportes {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; 
+    align-items: center;
+    justify-content: center;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    width: 100%;
+    max-width: 450px;
+}
+
+@media (min-width: 768px) {
+    .contenedor-reportes {
+        flex-direction: row;
+        max-width: 700px;
+        gap: 30px;
+    }
+}
+
+/* Estilos del Selector */
+.control-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.select-personalizado {
+    background-color: #f1f0ff; 
+    color: #5e4bb6;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 15px 45px 15px 20px;
+    border-radius: 12px;
+    border: 2px solid #e0dbff;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: #9d88ff;
+        background-color: #ffffff;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: #9d88ff;
+        box-shadow: 0 0 0 3px rgba(157, 136, 255, 0.2);
+    }
+}
+
+/* Icono del selector */
+.control-wrapper::after {
+    content: "▼";
+    font-size: 12px;
+    color: #5e4bb6;
+    position: absolute;
+    right: 20px;
+    pointer-events: none;
+}
+
+/* Estilos del Botón */
+.btn-descargar {
+    background: linear-gradient(135deg, #4ebf7b 0%, #3ba865 100%);
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 15px 30px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(78, 191, 123, 0.3);
+    transition: all 0.3s transform ease;
+    white-space: nowrap;
+    width: 100%;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(78, 191, 123, 0.4);
+        background: linear-gradient(135deg, #59ce8a 0%, #43a86b 100%);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}

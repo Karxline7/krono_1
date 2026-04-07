@@ -7,6 +7,7 @@ import { SolicitudesUser } from './application/components/solicitudes-user/solic
 import { Horario } from './application/components/horario/horario';
 import { Funcionarios } from './application/components/funcionarios/funcionarios';
 import { Reportes } from './application/components/reportes/reportes';
+import { ReportesUser } from './application/components/reportes-user/reportes-user';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -16,7 +17,6 @@ export const routes: Routes = [
     { path: 'cartas-turnos', component: CartasTurnos },
     { path: 'horario', component: Horario },
     { path: 'funcionarios', component : Funcionarios },
-    { path: 'reportes', component: Reportes },
     // User routes
     { path: 'solicitudes-user', component: SolicitudesUser },
     { path: 'horario-user', component: HorarioUser }

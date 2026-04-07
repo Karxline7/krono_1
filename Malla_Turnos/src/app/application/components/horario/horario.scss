@@ -37,11 +37,35 @@ $shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
   background-color: $bg-main;
   min-height: 100vh;
 
-  .top-header h1 {
-    text-align: center;
-    color: $dark-text;
-    font-weight: 300;
+  .top-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
     margin-bottom: 30px;
+
+    h1 {
+      text-align: center;
+      color: $dark-text;
+      font-weight: 300;
+      margin: 0;
+    }
+
+    .btn-descargar-horario {
+      position: absolute;
+      right: 0;
+      background-color: #4ebf7b;
+      color: white;
+      padding: 10px 15px;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      
+      &:hover {
+        background-color: #43a86b;
+        transform: translateY(-1px);
+      }
+    }
   }
 }
 
