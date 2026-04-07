@@ -18,6 +18,7 @@ export class SolicitudesUser implements OnInit {
   private apiUrl = 'http://localhost:8081/api/solicitudes';
   private asignacionesUrl = 'http://localhost:8081/api/asignaciones';
   private turnosUrl = 'http://localhost:8081/api/turnos';
+  private tiposSolicitudUrl = 'http://localhost:8081/api/tipos-solicitud';
 
   // El usuario actual para el que se gestionan las solicitudes (Funcionario ID = 1)
   funcionarioId = 1;
@@ -30,6 +31,7 @@ export class SolicitudesUser implements OnInit {
 
   misAsignaciones: any[] = [];
   turnosDisponibles: any[] = [];
+  tiposSolicitud: any[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -38,16 +40,27 @@ export class SolicitudesUser implements OnInit {
   }
 
   cargarDatos() {
+    const fechas = this.generarFechasSemana();
+    
+    // Crear peticiones para cada día de la semana (técnica compatible con el backend actual)
+    const asignacionesRequests = fechas.map(f => 
+       this.http.get<any[]>(`${this.asignacionesUrl}/fecha/${f}`).pipe(catchError(() => of([])))
+    );
+
     forkJoin({
-      asignaciones: this.http.get<any[]>(this.asignacionesUrl).pipe(catchError(() => of([]))),
-      turnos: this.http.get<any[]>(this.turnosUrl).pipe(catchError(() => of([])))
+      asignacionesPorDia: forkJoin(asignacionesRequests),
+      turnos: this.http.get<any[]>(this.turnosUrl).pipe(catchError(() => of([]))),
+      tipos: this.http.get<any[]>(this.tiposSolicitudUrl).pipe(catchError(() => of([])))
     }).subscribe({
-      next: ({ asignaciones, turnos }) => {
+      next: ({ asignacionesPorDia, turnos, tipos }) => {
         this.turnosDisponibles = turnos;
+        this.tiposSolicitud = tipos;
         
+        // Aplanar todos los días de asignaciones en un solo array
+        const todasAsignaciones = asignacionesPorDia.flat();
+
         // Filtrar asignaciones SOLO PARA EL USUARIO ACTUAL (Funcionario 1)
-        // Usamos una comparación flexible con Number() y soporta varios nombres de campo
-        const asignacionesUsuario = asignaciones.filter(a => {
+        const asignacionesUsuario = todasAsignaciones.filter(a => {
           const fId = a.funcionarioId !== undefined ? a.funcionarioId : (a.funcionario_id || a.idFuncionario);
           return Number(fId) === Number(this.funcionarioId);
         });
@@ -69,6 +82,30 @@ export class SolicitudesUser implements OnInit {
         console.error('Error al cargar datos para solicitudes', error);
       }
     });
+  }
+
+  // Helper para generar las fechas de la semana de programación (Viernes base)
+  generarFechasSemana(): string[] {
+    const d = new Date();
+    const day = d.getDay();
+    let diff = 5 - day;
+    if (diff < 0) diff += 7;
+    d.setDate(d.getDate() + diff); 
+    
+    const baseDate = new Date(d.toISOString().split('T')[0] + 'T00:00:00');
+    const dayOfWeek = baseDate.getDay();
+    const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    
+    const monday = new Date(baseDate.getTime());
+    monday.setDate(baseDate.getDate() + diffToMonday);
+
+    const fechas: string[] = [];
+    for(let i=0; i<14; i++) { // Traemos 14 días (2 semanas) para dar margen al usuario
+        const dSemana = new Date(monday.getTime());
+        dSemana.setDate(monday.getDate() + i);
+        fechas.push(dSemana.toISOString().split('T')[0]);
+    }
+    return fechas;
   }
 
   enviarSolicitud() {

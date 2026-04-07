@@ -23,8 +23,7 @@
                     <div class="custom-select-wrapper">
                         <select class="custom-select p-inputtext w-full" [(ngModel)]="nuevaSolicitud.tipo" name="tipo" required>
                             <option value="" disabled selected hidden>Tipo de Solicitud</option>
-                            <option value="1">Cambio de turno</option>
-                            <option value="2">Eliminacion de turno</option>
+                            <option *ngFor="let tipo of tiposSolicitud" [value]="tipo.id">{{ tipo.nombre }}</option>
                         </select>
                     </div>
                 </div>
