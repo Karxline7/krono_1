@@ -9,7 +9,7 @@ import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-solicitudes-user',
-  standalone: true,   
+  standalone: true,
   imports: [CommonModule, FormsModule, NavbarUser, ButtonModule],
   templateUrl: './solicitudes-user.html',
   styleUrl: './solicitudes-user.scss',
@@ -18,6 +18,9 @@ export class SolicitudesUser implements OnInit {
   private apiUrl = 'http://localhost:8081/api/solicitudes';
   private asignacionesUrl = 'http://localhost:8081/api/asignaciones';
   private turnosUrl = 'http://localhost:8081/api/turnos';
+
+  // El usuario actual para el que se gestionan las solicitudes (Funcionario ID = 1)
+  funcionarioId = 1;
 
   nuevaSolicitud = {
     asignacionTurnoId: '',
@@ -42,15 +45,14 @@ export class SolicitudesUser implements OnInit {
       next: ({ asignaciones, turnos }) => {
         this.turnosDisponibles = turnos;
         
-        // Asumiendo que funcionarioId = 1 es el usuario actual hasta tener autenticación real
-        const funcionarioId = 1; 
-        const asignacionesUsuario = asignaciones.filter(a => a.funcionarioId === funcionarioId);
+        // Filtrar asignaciones SOLO PARA EL USUARIO ACTUAL (Funcionario 1)
+        const asignacionesUsuario = asignaciones.filter(a => Number(a.funcionarioId) === this.funcionarioId);
         
         // Ordenar por fecha para mejor presentación
         asignacionesUsuario.sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
         
         this.misAsignaciones = asignacionesUsuario.map(a => {
-          const turno = this.turnosDisponibles.find(t => t.id === a.turnoId);
+          const turno = this.turnosDisponibles.find(t => Number(t.id) === Number(a.turnoId));
           return {
             id: a.id,
             fecha: a.fecha,

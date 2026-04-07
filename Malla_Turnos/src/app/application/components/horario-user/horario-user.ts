@@ -33,7 +33,7 @@ export class HorarioUser implements OnInit, OnDestroy {
 
   syncInterval: any;
 
-  // Emulando el usuario actual que inició sesión (Funcionario ID = 1)
+  // El usuario actual para el que se traen los datos (Funcionario ID = 1)
   funcionarioId = 1;
 
   nombreUsuario = 'Cargando...'; 
@@ -71,25 +71,26 @@ export class HorarioUser implements OnInit, OnDestroy {
     );
 
     forkJoin({
-      funcionario: this.http.get<any>(`${this.baseApiUrl}/funcionarios/${this.funcionarioId}`).pipe(catchError(() => of(null))),
+      funcionario: this.http.get<any>(`${this.baseApiUrl}/usuarios/${this.funcionarioId}`).pipe(catchError(() => of(null))),
       turnos: this.http.get<any[]>(`${this.baseApiUrl}/turnos`).pipe(catchError(() => of([]))),
       asignacionesPorDia: forkJoin(asignacionesRequests)
     }).subscribe({
       next: ({ funcionario, turnos, asignacionesPorDia }) => {
         if (funcionario) {
           this.nombreUsuario = funcionario.nombre || 'Usuario Registrado';
+          this.cargoUsuario = funcionario.cargoNombre || funcionario.cargo || 'Funcionario';
         }
 
         const turnosMap = new Map<number, any>();
         turnos.forEach(t => turnosMap.set(t.id, t));
 
         this.misAsignacionesSemana = asignacionesPorDia.map((asignacionesDelDia, index) => {
-          // Filtrar rigurosamente SOLO POR LA ID DEL USUARIO ACTIVO (nadie más que él)
-          const miAsignacion = asignacionesDelDia.find((a: any) => a.funcionarioId === this.funcionarioId);
+          // Filtrar rigurosamente SOLO POR LA ID DEL USUARIO (Funcionario 1)
+          const miAsignacion = asignacionesDelDia.find((a: any) => Number(a.funcionarioId) === Number(this.funcionarioId));
 
           if (miAsignacion) {
             const t = turnosMap.get(miAsignacion.turnoId);
-            const esDescanso = t ? t.nombre === 'Descanso' : true;
+            const esDescanso = t ? t.nombre.toLowerCase().includes('descanso') : true;
             return {
               fecha: fechas[index],
               esDescanso: esDescanso,
