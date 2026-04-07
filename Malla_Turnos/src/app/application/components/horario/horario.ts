@@ -255,8 +255,8 @@ refresh() {
           id: a.id, turnoId: a.turnoId, turnoNombre: tNombre, diaMes: dMes, 
           esDescanso: esDescanso, break: t ? t.horabreak || '—' : '—', 
           almuerzo: t ? t.horaalmuerzo || '—' : '—',
-          horaInicio: t ? t.horainicio || '—' : '—',
-          horaFin: t ? t.horafin || '—' : '—'
+          horaInicio: t ? t.horaInicio || '—' : '—',
+          horaFin: t ? t.horaFin || '—' : '—'
        };
 
        if (a.fecha === fechasSemana[0]) w.lunes = diaObj;
@@ -276,8 +276,8 @@ refresh() {
     if (this.turnoActual.turnoId != null) {
       const t = this.turnosDisponibles.find(x => Number(x.id) === Number(this.turnoActual.turnoId));
       if (t) {
-        this.turnoActual.horaInicio = t.horainicio || '';
-        this.turnoActual.horaFin = t.horafin || '';
+        this.turnoActual.horaInicio = t.horaInicio || '';
+        this.turnoActual.horaFin = t.horaFin || '';
         this.turnoActual.break = t.horabreak || '';
         this.turnoActual.almuerzo = t.horaalmuerzo || '';
         this.turnoActual.esDescanso = t.nombre.toLowerCase().includes('descanso');

@@ -98,8 +98,8 @@ export class HorarioUser implements OnInit, OnDestroy {
             return {
               fecha: fechas[index],
               esDescanso: esDescanso,
-              horaInicio: t?.horainicio || '',
-              horaFin: t?.horafin || '',
+              horaInicio: t?.horaInicio || '',
+              horaFin: t?.horaFin || '',
               horabreak: t?.horabreak || '',
               horaalmuerzo: t?.horaalmuerzo || '',
               turnoNombre: t?.nombre || 'Descanso'
