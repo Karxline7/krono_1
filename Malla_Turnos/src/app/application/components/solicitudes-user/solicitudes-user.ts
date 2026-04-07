@@ -46,13 +46,17 @@ export class SolicitudesUser implements OnInit {
         this.turnosDisponibles = turnos;
         
         // Filtrar asignaciones SOLO PARA EL USUARIO ACTUAL (Funcionario 1)
-        const asignacionesUsuario = asignaciones.filter(a => Number(a.funcionarioId) === this.funcionarioId);
+        // Usamos una comparación flexible con Number() y soporta varios nombres de campo
+        const asignacionesUsuario = asignaciones.filter(a => {
+          const fId = a.funcionarioId !== undefined ? a.funcionarioId : (a.funcionario_id || a.idFuncionario);
+          return Number(fId) === Number(this.funcionarioId);
+        });
         
         // Ordenar por fecha para mejor presentación
         asignacionesUsuario.sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
         
         this.misAsignaciones = asignacionesUsuario.map(a => {
-          const turno = this.turnosDisponibles.find(t => Number(t.id) === Number(a.turnoId));
+          const turno = this.turnosDisponibles.find(t => Number(t.id) === Number(a.turnoId || a.turno_id));
           return {
             id: a.id,
             fecha: a.fecha,

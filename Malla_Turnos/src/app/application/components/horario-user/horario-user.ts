@@ -71,25 +71,29 @@ export class HorarioUser implements OnInit, OnDestroy {
     );
 
     forkJoin({
-      funcionario: this.http.get<any>(`${this.baseApiUrl}/usuarios/${this.funcionarioId}`).pipe(catchError(() => of(null))),
+      usuarios: this.http.get<any[]>(`${this.baseApiUrl}/usuarios`).pipe(catchError(() => of([]))),
       turnos: this.http.get<any[]>(`${this.baseApiUrl}/turnos`).pipe(catchError(() => of([]))),
       asignacionesPorDia: forkJoin(asignacionesRequests)
     }).subscribe({
-      next: ({ funcionario, turnos, asignacionesPorDia }) => {
+      next: ({ usuarios, turnos, asignacionesPorDia }) => {
+        // Buscar el usuario 1 entre todos los usuarios
+        const funcionario = usuarios.find(u => Number(u.id) === Number(this.funcionarioId));
         if (funcionario) {
           this.nombreUsuario = funcionario.nombre || 'Usuario Registrado';
           this.cargoUsuario = funcionario.cargoNombre || funcionario.cargo || 'Funcionario';
+        } else {
+          this.nombreUsuario = 'Usuario no encontrado';
         }
 
         const turnosMap = new Map<number, any>();
-        turnos.forEach(t => turnosMap.set(t.id, t));
+        turnos.forEach(t => turnosMap.set(Number(t.id), t));
 
         this.misAsignacionesSemana = asignacionesPorDia.map((asignacionesDelDia, index) => {
-          // Filtrar rigurosamente SOLO POR LA ID DEL USUARIO (Funcionario 1)
+          // Filtrar rigurosamente por la ID del usuario (Funcionario 1)
           const miAsignacion = asignacionesDelDia.find((a: any) => Number(a.funcionarioId) === Number(this.funcionarioId));
 
           if (miAsignacion) {
-            const t = turnosMap.get(miAsignacion.turnoId);
+            const t = turnosMap.get(Number(miAsignacion.turnoId));
             const esDescanso = t ? t.nombre.toLowerCase().includes('descanso') : true;
             return {
               fecha: fechas[index],
