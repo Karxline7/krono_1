@@ -49,7 +49,7 @@ export class HorarioUser implements OnInit, OnDestroy {
   ) {}
 
   descargarReporte() {
-    this.reportesService.descargarReporteGeneral().subscribe({
+    this.reportesService.descargarReportePorUsuario(this.funcionarioId).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
