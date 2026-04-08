@@ -2,7 +2,10 @@ package com.datacenter.mallaturnos.application.UseCase.turno;
 
 import com.datacenter.mallaturnos.domain.model.Turno;
 import com.datacenter.mallaturnos.infrastructure.port.in.turno.EliminarTurnoUseCasePort;
+import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPort;
 import com.datacenter.mallaturnos.infrastructure.port.out.TurnoRepositoryPort;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -15,9 +18,11 @@ import java.util.Optional;
 public class EliminarTurnoUseCase implements EliminarTurnoUseCasePort {
 
     private final TurnoRepositoryPort turnoRepository;
+    private final AsignacionRepositoryPort asignacionRepository;
 
-    public EliminarTurnoUseCase(TurnoRepositoryPort turnoRepository) {
+    public EliminarTurnoUseCase(TurnoRepositoryPort turnoRepository, AsignacionRepositoryPort asignacionRepository) {
         this.turnoRepository = turnoRepository;
+        this.asignacionRepository = asignacionRepository;
     }
 
     /**
@@ -25,18 +30,23 @@ public class EliminarTurnoUseCase implements EliminarTurnoUseCasePort {
      * @param id ID del turno a eliminar
      * @return true si se eliminó exitosamente
      */
+    @Transactional
     public boolean eliminarTurno(Long id) {
-        
-        // Verificar que el turno existe
+
         Optional<Turno> turnoExistente = turnoRepository.findById(id);
-        
-        if (!turnoExistente.isPresent()) {
+
+        if (turnoExistente.isEmpty()) {
             throw new IllegalArgumentException("Turno no encontrado con ID: " + id);
         }
 
-        // Eliminar turno
+        // 🔥 1. borrar asignaciones de ese turno
+        asignacionRepository.deleteByTurnoId(id);
+
+        // 🔥 2. borrar turno
         turnoRepository.delete(id);
-        
+
         return true;
     }
+
+
 }

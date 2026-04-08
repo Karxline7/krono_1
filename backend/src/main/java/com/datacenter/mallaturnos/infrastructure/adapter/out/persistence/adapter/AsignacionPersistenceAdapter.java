@@ -83,12 +83,10 @@ public class AsignacionPersistenceAdapter implements AsignacionRepositoryPort {
         AsignacionTurnoJpaEntity entity;
 
         if (asignacion.getId() != null) {
-            // 🔥 EDITAR (traer la existente)
             entity = jpaRepository.findById(asignacion.getId())
                     .orElseThrow(() -> new RuntimeException("Asignación no encontrada"));
 
         } else {
-            // 🔥 CREAR
             entity = new AsignacionTurnoJpaEntity();
         }
 
@@ -108,6 +106,11 @@ public class AsignacionPersistenceAdapter implements AsignacionRepositoryPort {
     @Override
     public void delete(Long id) {
         jpaRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteByTurnoId(Long turnoId) {
+        jpaRepository.deleteByTurnoId(turnoId);
     }
 
     @Override

@@ -21,5 +21,6 @@ public interface AsignacionRepositoryPort {
     List<AsignacionTurnoDto> listarAsignaciones();
     List<AsignacionTurnoDto> listarAsignacionesPorUsuario(Long usuarioId);
     List<AsignacionTurnoDto> listarAsignacionesPorArea(Long areaId);
+    void deleteByTurnoId(Long turnoId);
     void delete(Long id);
 }

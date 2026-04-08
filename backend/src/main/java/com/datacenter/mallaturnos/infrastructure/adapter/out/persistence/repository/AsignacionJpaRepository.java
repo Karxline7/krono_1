@@ -37,6 +37,8 @@ public interface AsignacionJpaRepository
 
     List<AsignacionTurnoJpaEntity> findByFecha(LocalDate fecha);
 
+    void deleteByTurnoId(Long turnoId);
+
         @Query("""
         SELECT a
         FROM AsignacionTurnoJpaEntity a
@@ -47,5 +49,5 @@ public interface AsignacionJpaRepository
                 Long areaId,
                 LocalDate inicio,
                 LocalDate fin
-);
+        );
 }
