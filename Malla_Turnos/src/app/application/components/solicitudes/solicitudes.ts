@@ -88,6 +88,13 @@ cargarSolicitudes() {
             nombreTipoSolicitud: tipo ? tipo.nombre : 'Tipo ' + solicitud.tipoSolicitudId
           };
         });
+
+        // Ordenar para que las solicitudes pendientes queden arriba
+        solList.sort((a, b) => {
+          const estadoA = a.estado?.toUpperCase() === 'PENDIENTE' ? 0 : 1;
+          const estadoB = b.estado?.toUpperCase() === 'PENDIENTE' ? 0 : 1;
+          return estadoA - estadoB;
+        });
         
         this.solicitudes.set(solList);
 
