@@ -16,6 +16,7 @@ export interface Turno {
 @Injectable({providedIn: 'root'})
 export class TurnoService {
   private apiUrl = 'http://localhost:8081/api/turnos'; // Ajusta tu puerto
+  private apiUrlAsignaciones = 'http://localhost:8081/api/asignaciones';
 
   constructor(private http: HttpClient) {}
 

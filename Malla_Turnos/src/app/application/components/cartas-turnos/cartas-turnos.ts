@@ -14,6 +14,8 @@ import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
 import { DialogModule } from 'primeng/dialog';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 
 @Component({
@@ -72,9 +74,16 @@ export class CartasTurnos implements OnInit, OnDestroy {
 
   cargarTurnos() {
     this.cargando = true;
+    
+    // Obtenemos la fecha de hoy para saber cuántas personas tienen el turno actualmente
+    const hoy = new Date().toISOString().split('T')[0];
+
     forkJoin({
       turnos: this.turnoService.listar(),
-      asignaciones: this.asignacionService.listar()
+      asignaciones: this.asignacionService.listarPorFecha(hoy).pipe(
+        // Si hay error al listar asignaciones (ej. endpoint falla), retornamos arreglo vacío
+        catchError(() => of([]))
+      )
     }).pipe(
       finalize(() => this.cargando = false)
     ).subscribe({
