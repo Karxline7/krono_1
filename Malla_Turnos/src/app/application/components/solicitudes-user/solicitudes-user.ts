@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -14,13 +14,11 @@ import { catchError } from 'rxjs/operators';
   templateUrl: './solicitudes-user.html',
   styleUrl: './solicitudes-user.scss',
 })
-export class SolicitudesUser implements OnInit, OnDestroy {
+export class SolicitudesUser implements OnInit {
   private apiUrl = 'http://localhost:8081/api/solicitudes';
   private asignacionesUrl = 'http://localhost:8081/api/asignaciones';
   private turnosUrl = 'http://localhost:8081/api/turnos';
   private tiposSolicitudUrl = 'http://localhost:8081/api/tipos-solicitud';
-
-  syncInterval: any;
 
   // El usuario actual para el que se gestionan las solicitudes (Funcionario ID = 1)
   funcionarioId = 1;
@@ -38,53 +36,39 @@ export class SolicitudesUser implements OnInit, OnDestroy {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.cargarCatalogos();
-    this.cargarAsignaciones();
-
-    this.syncInterval = setInterval(() => {
-      this.refresh();
-    }, 5000);
+    this.cargarDatos();
   }
 
-  ngOnDestroy() {
-    if (this.syncInterval) {
-      clearInterval(this.syncInterval);
-    }
-  }
-
-  refresh() {
-    this.cargarAsignaciones();
-  }
-
-  cargarCatalogos() {
-    forkJoin({
-      turnos: this.http.get<any[]>(this.turnosUrl).pipe(catchError(() => of([]))),
-      tipos: this.http.get<any[]>(this.tiposSolicitudUrl).pipe(catchError(() => of([])))
-    }).subscribe({
-      next: ({ turnos, tipos }) => {
-        this.turnosDisponibles = turnos;
-        this.tiposSolicitud.set(tipos);
-        this.cargarAsignaciones(); // Re-procesamos con la data cargada
-      }
-    });
-  }
-
-  cargarAsignaciones() {
+  cargarDatos() {
     const fechas = this.generarFechasSemana();
+    
+    // Crear peticiones para cada día de la semana (técnica compatible con el backend actual)
     const asignacionesRequests = fechas.map(f => 
        this.http.get<any[]>(`${this.asignacionesUrl}/fecha/${f}`).pipe(catchError(() => of([])))
     );
 
-    forkJoin(asignacionesRequests).subscribe({
-      next: (asignacionesPorDia) => {
+    forkJoin({
+      asignacionesPorDia: forkJoin(asignacionesRequests),
+      turnos: this.http.get<any[]>(this.turnosUrl).pipe(catchError(() => of([]))),
+      tipos: this.http.get<any[]>(this.tiposSolicitudUrl).pipe(catchError(() => of([])))
+    }).subscribe({
+      next: ({ asignacionesPorDia, turnos, tipos }) => {
+        this.turnosDisponibles = turnos;
+        this.tiposSolicitud.set(tipos);
+
+        // Aplanar todos los días de asignaciones en un solo array
         const todasAsignaciones = asignacionesPorDia.flat();
+
+        // Filtrar asignaciones SOLO PARA EL USUARIO ACTUAL (Funcionario 1)
         const asignacionesUsuario = todasAsignaciones.filter(a => {
+
           const fId = a.funcionarioId !== undefined ? a.funcionarioId : (a.funcionario_id || a.idFuncionario);
           return Number(fId) === Number(this.funcionarioId);
         });
-        
+
+        // Ordenar por fecha para mejor presentación
         asignacionesUsuario.sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
-        
+
         this.misAsignaciones.set(asignacionesUsuario.map(a => {
           const turno = this.turnosDisponibles.find(t => Number(t.id) === Number(a.turnoId || a.turno_id));
           return {
@@ -94,6 +78,9 @@ export class SolicitudesUser implements OnInit, OnDestroy {
             label: `${a.fecha} | ${turno ? turno.nombre : 'Turno'}`
           };
         }));
+      },
+      error: (error) => {
+        console.error('Error al cargar datos para solicitudes', error);
       }
     });
   }
