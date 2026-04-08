@@ -129,11 +129,14 @@
     gap:15px;
 }
  
-.menu-options div{
+.menu-options div,
+.menu-options a {
     display:flex;
     align-items:center;
     gap:10px;
     cursor:pointer;
+    text-decoration: none;
+    color: inherit;
 }
  
 .menu-options img{
