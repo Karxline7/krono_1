@@ -79,8 +79,29 @@ public class AsignacionPersistenceAdapter implements AsignacionRepositoryPort {
 
     @Override
     public AsignacionTurno save(AsignacionTurno asignacion) {
-        AsignacionTurnoJpaEntity entity = toEntity(asignacion);
+
+        AsignacionTurnoJpaEntity entity;
+
+        if (asignacion.getId() != null) {
+            // 🔥 EDITAR (traer la existente)
+            entity = jpaRepository.findById(asignacion.getId())
+                    .orElseThrow(() -> new RuntimeException("Asignación no encontrada"));
+
+        } else {
+            // 🔥 CREAR
+            entity = new AsignacionTurnoJpaEntity();
+        }
+
+        // actualizar campos
+        UsuarioJpaEntity funcionario = new UsuarioJpaEntity();
+        funcionario.setId(asignacion.getFuncionarioId());
+
+        entity.setFuncionario(funcionario);
+        entity.setTurnoId(asignacion.getTurnoId());
+        entity.setFecha(asignacion.getFecha());
+
         AsignacionTurnoJpaEntity saved = jpaRepository.save(entity);
+
         return toDomain(saved);
     }
 
