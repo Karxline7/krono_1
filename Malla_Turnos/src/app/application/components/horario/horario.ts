@@ -104,7 +104,8 @@ export class Horario implements OnInit, OnDestroy {
   // Control de UI
   mostrarFormulario = false;
   esEdicion = false;
-  turnoIdSeleccionado: number | null = null;
+  celdasMap: Record<string, {id: number | null, funcionarioId: number, fecha: string, turnoNombre?: string}> = {};
+  get celdasSeleccionadas() { return Object.values(this.celdasMap); }
   verToast = false;
   mensajeToast = '';
   mostrarConfirmacion = false;
@@ -306,56 +307,117 @@ export class Horario implements OnInit, OnDestroy {
     }
   }
 
+  isCeldaSeleccionada(funcionarioId: number | null, fecha: string): boolean {
+    if (!funcionarioId) return false;
+    return !!this.celdasMap[`${funcionarioId}_${fecha}`];
+  }
+
   seleccionarCelda(diaObj: AsignacionDia | null, funcionarioId: number | null, fechaDia: string) {
     if (!funcionarioId) return;
 
-    if (diaObj) {
-      // Si ya estaba seleccionado este mismo ID, lo deseleccionamos
-      if (this.turnoIdSeleccionado === diaObj.id && this.mostrarFormulario) {
-        this.resetForm();
-      } else {
-        this.turnoIdSeleccionado = diaObj.id;
-        const fObj = new Date(fechaDia + 'T00:00:00');
-        const diasLista = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const key = `${funcionarioId}_${fechaDia}`;
 
-        this.turnoActual = {
-          id: diaObj.id,
-          semana: 'Semana Actual',
-          turno: diaObj.turnoNombre,
-          funcionario: this.usuariosDisponibles().find(u => u.id === funcionarioId)?.nombre || '',
-          dia: fechaDia,
-          diaSemana: diasLista[fObj.getDay()],
-          diaMes: diaObj.diaMes,
-          horaInicio: '',
-          horaFin: '',
-          esDescanso: diaObj.esDescanso,
-          break: diaObj.break,
-          almuerzo: diaObj.almuerzo,
-          compensatorios: '0',
-          vacaciones: '0',
-          funcionarioId: funcionarioId,
-          turnoId: diaObj.turnoId
-        };
-        this.onTurnoChange();
-        this.esEdicion = true;
-        this.mostrarFormulario = true; // Abrir formulario inmediatamente como en funcionarios.ts
-      }
+    if (this.celdasMap[key]) {
+      delete this.celdasMap[key];
     } else {
-      // Es una celda vacía, preparamos para crear
+      const currentSelected = this.celdasSeleccionadas;
+      if (currentSelected.length > 0) {
+        const first = currentSelected[0];
+        const sameRow = currentSelected.every(c => c.funcionarioId === funcionarioId);
+        const sameCol = currentSelected.every(c => c.fecha === fechaDia);
+
+        if (!sameRow && !sameCol) {
+          this.celdasMap = {};
+        } else if (sameRow && !sameCol) {
+          if (funcionarioId !== first.funcionarioId) this.celdasMap = {};
+        } else if (sameCol && !sameRow) {
+          if (fechaDia !== first.fecha) this.celdasMap = {};
+        } else {
+          if (funcionarioId !== first.funcionarioId && fechaDia !== first.fecha) {
+              this.celdasMap = {};
+          }
+        }
+      }
+      this.celdasMap[`${funcionarioId}_${fechaDia}`] = {
+        id: diaObj ? diaObj.id : null,
+        funcionarioId,
+        fecha: fechaDia,
+        turnoNombre: diaObj?.turnoNombre
+      };
+    }
+
+    this.actualizarEstadoFormulario();
+  }
+
+  seleccionarFila(t: any) {
+    this.celdasMap = {};
+    if (!t || !t.funcionarioId) return;
+    this.diasSemana.forEach(dia => {
+        const diaObj = t[dia];
+        const fecha = t.fechas[dia];
+        this.celdasMap[`${t.funcionarioId}_${fecha}`] = {
+           id: diaObj ? diaObj.id : null,
+           funcionarioId: t.funcionarioId,
+           fecha: fecha,
+           turnoNombre: diaObj?.turnoNombre
+        };
+    });
+    this.actualizarEstadoFormulario();
+  }
+
+  seleccionarColumna(dia: string) {
+    this.celdasMap = {};
+    this.turnosFiltrados().forEach((t: any) => {
+        const diaObj = t[dia];
+        const fecha = t.fechas[dia];
+        if(t.funcionarioId) {
+          this.celdasMap[`${t.funcionarioId}_${fecha}`] = {
+             id: diaObj ? diaObj.id : null,
+             funcionarioId: t.funcionarioId,
+             fecha: fecha,
+             turnoNombre: diaObj?.turnoNombre
+          };
+        }
+    });
+    this.actualizarEstadoFormulario();
+  }
+
+  actualizarEstadoFormulario() {
+    const seleccionadas = this.celdasSeleccionadas;
+    if (seleccionadas.length === 0) {
       this.resetForm();
-      this.turnoActual.funcionarioId = funcionarioId;
-      this.turnoActual.dia = fechaDia;
-      this.esEdicion = false;
+    } else if (seleccionadas.length === 1) {
+      const celda = seleccionadas[0];
+      const fObj = new Date(celda.fecha + 'T00:00:00');
+      const diasLista = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+      const turnoAsignado = this.turnosDisponibles().find(t => t.nombre === celda.turnoNombre);
+
+      this.turnoActual = {
+        ...this.inicializarTurno(),
+        id: celda.id || 0,
+        turno: celda.turnoNombre || '',
+        funcionario: this.usuariosDisponibles().find(u => u.id === celda.funcionarioId)?.nombre || '',
+        dia: celda.fecha,
+        diaSemana: diasLista[fObj.getDay()],
+        funcionarioId: celda.funcionarioId,
+        turnoId: turnoAsignado ? turnoAsignado.id : null
+      };
+      this.onTurnoChange();
+      this.esEdicion = !!celda.id;
+      this.mostrarFormulario = true;
+    } else {
+      this.turnoActual = this.inicializarTurno();
+      this.esEdicion = seleccionadas.some(c => c.id !== null);
       this.mostrarFormulario = true;
     }
   }
 
   abrirEditar() {
-    if (this.turnoIdSeleccionado) {
+    if (this.celdasSeleccionadas.length > 0) {
       this.esEdicion = true;
       this.mostrarFormulario = true;
     } else {
-      this.lanzarToast('Selecciona un turno en la tabla para editar');
+      this.lanzarToast('Selecciona turnos en la tabla para editar');
     }
   }
 
@@ -365,54 +427,55 @@ export class Horario implements OnInit, OnDestroy {
   }
 
   onGuardar() {
-    if (this.esEdicion && this.turnoActual.id) {
-      // Payload específico para edición según el DTO del backend
-      const payloadEdit = {
-        nuevoFuncionarioId: Number(this.turnoActual.funcionarioId),
-        nuevoTurnoId: Number(this.turnoActual.turnoId),
-        nuevaFecha: this.turnoActual.dia
-      };
+    const seleccionadas = this.celdasSeleccionadas;
+    if (seleccionadas.length === 0) return;
 
-      this.asignacionService.editar(Number(this.turnoActual.id), payloadEdit).subscribe({
-        next: () => {
-          this.lanzarToast('¡Actualizado con éxito!');
-          this.cargarTurnos();
-          this.resetForm();
-        },
-        error: () => this.lanzarToast('Error al actualizar')
-      });
-    } else {
-      // Payload estándar para creación (asumiendo que usa los nombres originales)
-      const payloadCrear = {
-        funcionarioId: Number(this.turnoActual.funcionarioId),
-        turnoId: Number(this.turnoActual.turnoId),
-        fecha: this.turnoActual.dia
-      };
-
-      this.asignacionService.crear(payloadCrear).subscribe({
-        next: () => {
-          this.lanzarToast('¡Guardado con éxito!');
-          this.cargarTurnos();
-          this.resetForm();
-        },
-        error: () => this.lanzarToast('Error al guardar')
-      });
+    if (!this.turnoActual.turnoId) {
+      this.lanzarToast('Por favor, selecciona un turno.');
+      return;
     }
+
+    const requests = seleccionadas.map(celda => {
+      if (celda.id) {
+        return this.asignacionService.editar(Number(celda.id), {
+          nuevoFuncionarioId: Number(celda.funcionarioId),
+          nuevoTurnoId: Number(this.turnoActual.turnoId),
+          nuevaFecha: celda.fecha
+        }).pipe(catchError(() => of(null)));
+      } else {
+        return this.asignacionService.crear({
+          funcionarioId: Number(celda.funcionarioId),
+          turnoId: Number(this.turnoActual.turnoId),
+          fecha: celda.fecha
+        }).pipe(catchError(() => of(null)));
+      }
+    });
+
+    forkJoin(requests).subscribe({
+      next: () => {
+        this.lanzarToast('¡Guardado con éxito!');
+        this.cargarTurnos();
+        this.resetForm();
+      },
+      error: () => this.lanzarToast('Error al guardar')
+    });
   }
 
   abrirModalEliminar() {
-    if (this.turnoIdSeleccionado !== null) {
+    if (this.celdasSeleccionadas.some(c => c.id !== null)) {
       this.mostrarConfirmacion = true;
     } else {
-      this.lanzarToast('Selecciona un registro para eliminar');
+      this.lanzarToast('Selecciona registros guardados para eliminar');
     }
   }
 
   eliminar() {
-    if (this.turnoIdSeleccionado !== null) {
-      this.asignacionService.eliminar(this.turnoIdSeleccionado).subscribe({
+    const ids = this.celdasSeleccionadas.filter(c => c.id !== null).map(c => c.id as number);
+    if (ids.length > 0) {
+      const requests = ids.map(id => this.asignacionService.eliminar(id).pipe(catchError(() => of(null))));
+      forkJoin(requests).subscribe({
         next: () => {
-          this.lanzarToast('Eliminado correctamente');
+          this.lanzarToast('Eliminados correctamente');
           this.mostrarConfirmacion = false;
           this.cargarTurnos();
           this.resetForm();
@@ -423,6 +486,8 @@ export class Horario implements OnInit, OnDestroy {
           this.mostrarConfirmacion = false;
         }
       });
+    } else {
+       this.mostrarConfirmacion = false;
     }
   }
 
@@ -446,7 +511,7 @@ export class Horario implements OnInit, OnDestroy {
   resetForm() {
     this.turnoActual = this.inicializarTurno();
     this.esEdicion = false;
-    this.turnoIdSeleccionado = null;
+    this.celdasMap = {};
     this.mostrarFormulario = false;
   }
 

@@ -28,7 +28,11 @@
     <div class="form-container" [class.abierto]="mostrarFormulario">
       <form (ngSubmit)="onGuardar()" class="form-horizontal">
         
-        <select [(ngModel)]="turnoActual.funcionarioId" name="funcionarioId" class="p-inputtext" required>
+        <div *ngIf="celdasSeleccionadas.length > 1" class="toast-success mb-3 p-2 text-center" style="background-color: #e0f2fe; color: #0369a1; border-radius: 4px; font-weight: 500;">
+          Selección Múltiple: {{ celdasSeleccionadas.length }} casillas
+        </div>
+
+        <select *ngIf="celdasSeleccionadas.length <= 1" [(ngModel)]="turnoActual.funcionarioId" name="funcionarioId" class="p-inputtext" required>
           <option [ngValue]="null">Funcionario</option>
           <option *ngFor="let u of usuariosDisponibles()" [ngValue]="u.id">{{ u.nombre }}</option>
         </select>
@@ -38,10 +42,10 @@
           <option *ngFor="let t of turnosDisponibles()" [ngValue]="t.id">{{ t.nombre }}</option>
         </select>
 
-        <input type="date" [(ngModel)]="turnoActual.dia" name="dia" class="p-inputtext" required>
-        <button type="submit" [class]="esEdicion ? 'btn-actualizar' : 'btn-guardar-verde'">
-          <i [class]="esEdicion ? 'pi pi-refresh' : 'pi pi-save'"></i>
-          {{ esEdicion ? 'Actualizar' : 'Guardar' }}
+        <input *ngIf="celdasSeleccionadas.length <= 1" type="date" [(ngModel)]="turnoActual.dia" name="dia" class="p-inputtext" required>
+        <button type="submit" [class]="esEdicion && celdasSeleccionadas.length <= 1 ? 'btn-actualizar' : 'btn-guardar-verde'" [disabled]="celdasSeleccionadas.length > 1 && !turnoActual.turnoId">
+          <i [class]="esEdicion && celdasSeleccionadas.length <= 1 ? 'pi pi-refresh' : 'pi pi-save'"></i>
+          {{ esEdicion && celdasSeleccionadas.length <= 1 ? 'Actualizar' : 'Guardar' }}
         </button>
         
         <button type="button" class="btn-cancelar" (click)="resetForm()">Cancelar</button>
@@ -53,23 +57,23 @@
         <ng-template pTemplate="header">
           <tr>
             <th>Funcionario</th>
-            <th>Lunes</th>
-            <th>Martes</th>
-            <th>Miércoles</th>
-            <th>Jueves</th>
-            <th>Viernes</th>
-            <th>Sábado</th>
-            <th>Domingo</th>
+            <th class="cursor-pointer" style="cursor: pointer;" (click)="seleccionarColumna('lunes')">Lunes</th>
+            <th class="cursor-pointer" style="cursor: pointer;" (click)="seleccionarColumna('martes')">Martes</th>
+            <th class="cursor-pointer" style="cursor: pointer;" (click)="seleccionarColumna('miercoles')">Miércoles</th>
+            <th class="cursor-pointer" style="cursor: pointer;" (click)="seleccionarColumna('jueves')">Jueves</th>
+            <th class="cursor-pointer" style="cursor: pointer;" (click)="seleccionarColumna('viernes')">Viernes</th>
+            <th class="cursor-pointer" style="cursor: pointer;" (click)="seleccionarColumna('sabado')">Sábado</th>
+            <th class="cursor-pointer" style="cursor: pointer;" (click)="seleccionarColumna('domingo')">Domingo</th>
           </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-t>
           <tr>
-            <td class="font-bold">{{ t.funcionario }}</td>
+            <td class="font-bold cursor-pointer" style="cursor: pointer;" (click)="seleccionarFila(t)">{{ t.funcionario }}</td>
             
             <ng-container *ngFor="let dia of diasSemana">
               <td (click)="seleccionarCelda($any(t)[dia], t.funcionarioId, $any(t.fechas)[dia])"
-                  [class.fila-seleccionada]="$any(t)[dia] && turnoIdSeleccionado === $any(t)[dia].id"
+                  [class.fila-seleccionada]="isCeldaSeleccionada(t.funcionarioId, $any(t.fechas)[dia])"
                   class="celda-turno">
                 
                 <div class="dia-mes">{{ getDiaMes($any(t.fechas)[dia]) }}</div>
@@ -106,10 +110,10 @@
         <button class="btn-guardar-verde" (click)="toggleFormulario()">
           <i class="pi pi-plus"></i> Agregar Turno
         </button>
-        <button class="btn-actualizar" (click)="abrirEditar()" [disabled]="!turnoIdSeleccionado">
+        <button class="btn-actualizar" (click)="abrirEditar()" [disabled]="celdasSeleccionadas.length === 0">
           <i class="pi pi-pencil"></i> Editar
         </button>
-        <button class="btn-eliminar" (click)="abrirModalEliminar()" [disabled]="!turnoIdSeleccionado">
+        <button class="btn-eliminar" (click)="abrirModalEliminar()" [disabled]="celdasSeleccionadas.length === 0">
           <i class="pi pi-trash"></i> Eliminar
         </button>
       </div>
@@ -119,8 +123,8 @@
   <p-dialog [(visible)]="mostrarConfirmacion" [modal]="true" header="Confirmar Acción" [closable]="false" [style]="{width: '400px'}">
     <div class="text-center">
       <i class="pi pi-exclamation-triangle text-red-500 mb-3" style= "font-size: 2.5rem"></i>
-      <p>¿Estás seguro de eliminar el turno de <strong>{{ turnoActual.funcionario }}</strong>?</p>
-      <p><small>{{ turnoActual.dia | date:'fullDate' }}</small></p>
+      <p>¿Estás seguro de eliminar {{ celdasSeleccionadas.length > 1 ? 'los turnos seleccionados' : 'el turno de ' + turnoActual.funcionario }}?</p>
+      <p *ngIf="celdasSeleccionadas.length === 1"><small>{{ turnoActual.dia | date:'fullDate' }}</small></p>
     </div>
     <ng-template pTemplate="footer">
       <div class="modal-actions">
