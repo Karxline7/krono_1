@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -91,9 +91,9 @@ export class Horario implements OnInit, OnDestroy {
   diasSemana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'] as const;
   funcionarios: string[] = [];
 
-  listaTurnosSemanales: TurnoSemanal[] = [];
-  turnosDisponibles: any[] = [];
-  usuariosDisponibles: any[] = [];
+  listaTurnosSemanales = signal<TurnoSemanal[]>([]);
+  turnosDisponibles = signal<any[]>([]);
+  usuariosDisponibles = signal<any[]>([]);
 
   // Filtros superiores
   fechaFiltro = this.getUpcomingFriday();
@@ -168,9 +168,9 @@ export class Horario implements OnInit, OnDestroy {
       turnos: this.turnoService.listar().pipe(catchError(() => of([])))
     }).subscribe({
       next: ({ usuarios, turnos }) => {
-        this.usuariosDisponibles = usuarios;
+        this.usuariosDisponibles.set(usuarios);
         this.funcionarios = usuarios.map(u => u.nombre);
-        this.turnosDisponibles = turnos;
+        this.turnosDisponibles.set(turnos);
         
         // Una vez cargados los catálogos, se cargan los turnos de la semana
         this.cargarTurnos();
@@ -192,8 +192,8 @@ export class Horario implements OnInit, OnDestroy {
     return d.toISOString().split('T')[0];
   }
 
-  get turnosFiltrados(): TurnoSemanal[] {
-    return this.listaTurnosSemanales.filter(t => {
+  turnosFiltrados = computed(() => {
+    return this.listaTurnosSemanales().filter(t => {
       const okSemana = !this.filtroSemana || t.semana === this.filtroSemana;
       const okFuncionario = !this.filtroFuncionario || t.funcionario === this.filtroFuncionario;
       const okTurno = !this.filtroTurno || [
@@ -203,7 +203,7 @@ export class Horario implements OnInit, OnDestroy {
       
       return okSemana && okTurno && okFuncionario;
     });
-  }
+  });
 
   // --- OPERACIONES API ---
   cargarTurnos() {
@@ -234,7 +234,7 @@ export class Horario implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error al cargar asignaciones', error);
-        this.listaTurnosSemanales = [];
+        this.listaTurnosSemanales.set([]);
       }
     });
   }
@@ -242,7 +242,7 @@ export class Horario implements OnInit, OnDestroy {
   procesarTurnosSemanales(asignacionesFlat: any[], fechasSemana: string[]) {
     const map = new Map<number, TurnoSemanal>();
 
-    this.usuariosDisponibles.forEach(u => {
+    this.usuariosDisponibles().forEach(u => {
       map.set(u.id, {
         funcionarioId: u.id,
         funcionario: u.nombre,
@@ -260,7 +260,7 @@ export class Horario implements OnInit, OnDestroy {
       const w = map.get(a.funcionarioId);
       if (!w) return;
 
-      const t = this.turnosDisponibles.find(x => Number(x.id) === Number(a.turnoId));
+      const t = this.turnosDisponibles().find(x => Number(x.id) === Number(a.turnoId));
       if (!t) {
         return;
       }
@@ -289,13 +289,13 @@ export class Horario implements OnInit, OnDestroy {
        else if (a.fecha === fechasSemana[6]) w.domingo = diaObj;
     });
 
-    this.listaTurnosSemanales = Array.from(map.values());
+    this.listaTurnosSemanales.set(Array.from(map.values()));
   }
 
   // --- MÉTODOS DE ACCIÓN ---
   onTurnoChange() {
     if (this.turnoActual.turnoId != null) {
-      const t = this.turnosDisponibles.find(x => Number(x.id) === Number(this.turnoActual.turnoId));
+      const t = this.turnosDisponibles().find(x => Number(x.id) === Number(this.turnoActual.turnoId));
       if (t) {
         this.turnoActual.horaInicio = t.horaInicio || '';
         this.turnoActual.horaFin = t.horaFin || '';
@@ -322,7 +322,7 @@ export class Horario implements OnInit, OnDestroy {
           id: diaObj.id,
           semana: 'Semana Actual',
           turno: diaObj.turnoNombre,
-          funcionario: this.usuariosDisponibles.find(u => u.id === funcionarioId)?.nombre || '',
+          funcionario: this.usuariosDisponibles().find(u => u.id === funcionarioId)?.nombre || '',
           dia: fechaDia,
           diaSemana: diasLista[fObj.getDay()],
           diaMes: diaObj.diaMes,

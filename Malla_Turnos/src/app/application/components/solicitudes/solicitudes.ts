@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -32,9 +32,9 @@ export class Solicitudes implements OnInit, OnDestroy {
 
   syncInterval: any;
 
-  solicitudes: SolicitudUI[] = [];
+  solicitudes = signal<SolicitudUI[]>([]);
   solicitudSeleccionada: SolicitudUI | null = null;
-  tiposSolicitud: any[] = [];
+  tiposSolicitud = signal<any[]>([]);
 
 procesandoAccion: boolean = false;
   constructor(private http: HttpClient) {}
@@ -65,7 +65,7 @@ procesandoAccion: boolean = false;
     // Primero cargamos los tipos de solicitud para poder mapear sus nombres
     this.http.get<any[]>(this.tiposUrl).subscribe({
       next: (tipos) => {
-        this.tiposSolicitud = tipos;
+        this.tiposSolicitud.set(tipos);
         this.cargarSolicitudes();
       },
       error: (e) => {
@@ -81,24 +81,26 @@ cargarSolicitudes() {
         // Guardamos el ID de la solicitud que el usuario tenía seleccionada antes del refresh
         const idSeleccionadoPreviamente = this.solicitudSeleccionada?.id;
 
-        this.solicitudes = data.map(solicitud => {
-          const tipo = this.tiposSolicitud.find(t => t.id === solicitud.tipoSolicitudId);
+        const solList = data.map(solicitud => {
+          const tipo = this.tiposSolicitud().find(t => t.id === solicitud.tipoSolicitudId);
           return {
             ...solicitud,
             nombreTipoSolicitud: tipo ? tipo.nombre : 'Tipo ' + solicitud.tipoSolicitudId
           };
         });
+        
+        this.solicitudes.set(solList);
 
         // Lógica de Selección Inteligente:
-        if (this.solicitudes.length > 0) {
+        if (solList.length > 0) {
           // 1. Intentamos buscar la solicitud que ya estaba seleccionada para no perder el foco
-          const seleccionadaAunExiste = this.solicitudes.find(s => s.id === idSeleccionadoPreviamente);
+          const seleccionadaAunExiste = solList.find(s => s.id === idSeleccionadoPreviamente);
           
           if (seleccionadaAunExiste) {
             this.solicitudSeleccionada = seleccionadaAunExiste;
           } else {
             // 2. Si ya no existe (porque otro la aprobó/rechazó), volvemos a la primera
-            this.solicitudSeleccionada = this.solicitudes[0];
+            this.solicitudSeleccionada = solList[0];
           }
         } else {
           this.solicitudSeleccionada = null;

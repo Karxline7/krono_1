@@ -25,7 +25,7 @@
                 </div>
 
                 <!-- Columnas de trabajo o descanso generadas dinámicamente -->
-                <ng-container *ngFor="let asig of misAsignacionesSemana">
+                <ng-container *ngFor="let asig of misAsignacionesSemana()">
                     <div class="columna descanso" *ngIf="asig.esDescanso">
                         Descanso
                     </div>

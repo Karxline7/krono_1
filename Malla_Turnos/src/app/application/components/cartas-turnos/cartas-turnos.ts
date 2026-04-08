@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Para *ngIf y *ngFor
 import { FormsModule } from '@angular/forms';   // Para [(ngModel)]
 import { TurnoService, Turno } from '../../../domain/services/cartas-turnos/cartas-turnos';
@@ -23,7 +23,7 @@ import { DialogModule } from 'primeng/dialog';
   styleUrls: ['./cartas-turnos.scss']
 })
 export class CartasTurnos implements OnInit, OnDestroy {
-  turnos: Turno[] = [];
+  turnos = signal<Turno[]>([]);
   accionActual: 'agregar' | 'editar' | null = null;
   turnoSeleccionado: Turno | null = null;
   syncInterval: any;
@@ -72,10 +72,11 @@ export class CartasTurnos implements OnInit, OnDestroy {
       finalize(() => this.cargando = false)
     ).subscribe({
       next: (data: any[]) => {
-        this.turnos = data.map(t => ({
+        const turnosMapeados = data.map(t => ({
           ...t,
           cantidadPersonas: t.cantidadPersonas || Math.floor(Math.random() * 10) + 1
         }));
+        this.turnos.set(turnosMapeados);
       },
       error: (err) => {
         console.error('Error al cargar los turnos:', err);
@@ -83,8 +84,8 @@ export class CartasTurnos implements OnInit, OnDestroy {
     });
   }
 
-  get statsDinamicas() {
-    const resumen = this.turnos.reduce((acc: any, t) => {
+  statsDinamicas = computed(() => {
+    const resumen = this.turnos().reduce((acc: any, t) => {
       const nombre = t.nombre || 'Sin nombre';
       const personas = t.cantidadPersonas || 0;
       acc[nombre] = (acc[nombre] || 0) + personas;
@@ -95,7 +96,7 @@ export class CartasTurnos implements OnInit, OnDestroy {
       nombre: key,
       cantidad: resumen[key]
     }));
-  }
+  });
 
   onGuardar() {
     this.turnoService.crear(this.nuevoTurno).subscribe(() => {

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { NavbarUser } from '../../shared/navbar-user/navbar-user';
@@ -41,7 +41,7 @@ export class HorarioUser implements OnInit, OnDestroy {
   cargoUsuario = 'Funcionario';
 
   diasTexto: DiaInfo[] = [];
-  misAsignacionesSemana: DiaAsignacion[] = [];
+  misAsignacionesSemana = signal<DiaAsignacion[]>([]);
   
   // Catálogos cacheados para evitar re-descargar todo cada 5s
   usuariosCache: any[] = [];
@@ -131,7 +131,7 @@ export class HorarioUser implements OnInit, OnDestroy {
         const turnosMap = new Map<number, any>();
         this.turnosCache.forEach(t => turnosMap.set(Number(t.id), t));
 
-        this.misAsignacionesSemana = asignacionesPorDia.map((asignacionesDelDia, index) => {
+        this.misAsignacionesSemana.set(asignacionesPorDia.map((asignacionesDelDia, index) => {
           const miAsignacion = asignacionesDelDia.find((a: any) => Number(a.funcionarioId) === Number(this.funcionarioId));
 
           if (miAsignacion) {
@@ -157,7 +157,7 @@ export class HorarioUser implements OnInit, OnDestroy {
               turnoNombre: 'Descanso'
             };
           }
-        });
+        }));
       }
     });
   }

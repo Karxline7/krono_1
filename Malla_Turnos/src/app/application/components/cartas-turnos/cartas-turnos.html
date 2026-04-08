@@ -4,7 +4,7 @@
   <h2 class="Titulo_Contenedor">Gestión de Turnos</h2>
 
   <div class="cards-wrapper">
-    <div *ngFor="let stat of statsDinamicas" class="hero-card">
+    <div *ngFor="let stat of statsDinamicas()" class="hero-card">
       <span class="text-uppercase">{{ stat.nombre }}</span>
       <div class="hero-info">
         <span class="h4">{{ stat.cantidad }}</span>
@@ -59,7 +59,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let turno of turnos">
+        <tr *ngFor="let turno of turnos()">
           <td class="fw-bold">{{ turno.nombre }}</td>
           <td><span class="badge">{{ turno.tipo }}</span></td>
           <td><span class="fw-bold">{{ turno.horaInicio }}</span></td>

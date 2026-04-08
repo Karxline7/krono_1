@@ -11,7 +11,7 @@
                 <img src="assets/Logo_Data_Center.png" alt="Data Center Colombia" class="logo-img">
             </div>
             <div class="lista-usuarios">
-                <div *ngFor="let solicitud of solicitudes" 
+                <div *ngFor="let solicitud of solicitudes()" 
                      class="usuario-item" 
                      [class.seleccionado]="solicitudSeleccionada?.id === solicitud.id"
                      (click)="seleccionarSolicitud(solicitud)">

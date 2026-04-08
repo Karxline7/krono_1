@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -31,9 +31,9 @@ export class SolicitudesUser implements OnInit, OnDestroy {
     descripcion: ''
   };
 
-  misAsignaciones: any[] = [];
+  misAsignaciones = signal<any[]>([]);
   turnosDisponibles: any[] = [];
-  tiposSolicitud: any[] = [];
+  tiposSolicitud = signal<any[]>([]);
 
   constructor(private http: HttpClient) {}
 
@@ -63,7 +63,7 @@ export class SolicitudesUser implements OnInit, OnDestroy {
     }).subscribe({
       next: ({ turnos, tipos }) => {
         this.turnosDisponibles = turnos;
-        this.tiposSolicitud = tipos;
+        this.tiposSolicitud.set(tipos);
         this.cargarAsignaciones(); // Re-procesamos con la data cargada
       }
     });
@@ -85,7 +85,7 @@ export class SolicitudesUser implements OnInit, OnDestroy {
         
         asignacionesUsuario.sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
         
-        this.misAsignaciones = asignacionesUsuario.map(a => {
+        this.misAsignaciones.set(asignacionesUsuario.map(a => {
           const turno = this.turnosDisponibles.find(t => Number(t.id) === Number(a.turnoId || a.turno_id));
           return {
             id: a.id,
@@ -93,7 +93,7 @@ export class SolicitudesUser implements OnInit, OnDestroy {
             turnoNombre: turno ? turno.nombre : 'Turno',
             label: `${a.fecha} | ${turno ? turno.nombre : 'Turno'}`
           };
-        });
+        }));
       }
     });
   }
