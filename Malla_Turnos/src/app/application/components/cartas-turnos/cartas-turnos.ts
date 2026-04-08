@@ -2,9 +2,10 @@ import { Component, OnInit, OnDestroy, signal, computed, WritableSignal } from '
 import { CommonModule } from '@angular/common'; // Para *ngIf y *ngFor
 import { FormsModule } from '@angular/forms';   // Para [(ngModel)]
 import { TurnoService, Turno } from '../../../domain/services/cartas-turnos/cartas-turnos';
+import { AsignacionService } from '../../../domain/services/horario/horario';
 import { Navbar } from "../../shared/navbar/navbar";
 import { TableModule } from 'primeng/table';
-import { finalize } from 'rxjs';
+import { forkJoin, finalize } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -40,7 +41,10 @@ export class CartasTurnos implements OnInit, OnDestroy {
     cantidadPersonas: 0 
   };
 
-  constructor(private turnoService: TurnoService) {}
+  constructor(
+    private turnoService: TurnoService,
+    private asignacionService: AsignacionService
+  ) {}
 
   ngOnInit() {
     this.cargarTurnos();
@@ -68,13 +72,28 @@ export class CartasTurnos implements OnInit, OnDestroy {
 
   cargarTurnos() {
     this.cargando = true;
-    this.turnoService.listar().pipe(
+    forkJoin({
+      turnos: this.turnoService.listar(),
+      asignaciones: this.asignacionService.listar()
+    }).pipe(
       finalize(() => this.cargando = false)
     ).subscribe({
-      next: (data: any[]) => {
-        const turnosMapeados = data.map(t => ({
+      next: ({ turnos, asignaciones }) => {
+        const conteoPorTurno = asignaciones.reduce((acc: Record<number, Set<number>>, asig: any) => {
+          if (asig.turnoId) {
+            if (!acc[asig.turnoId]) {
+              acc[asig.turnoId] = new Set<number>();
+            }
+            if (asig.funcionarioId) {
+              acc[asig.turnoId].add(asig.funcionarioId);
+            }
+          }
+          return acc;
+        }, {});
+
+        const turnosMapeados = turnos.map(t => ({
           ...t,
-          cantidadPersonas: t.cantidadPersonas || Math.floor(Math.random() * 10) + 1
+          cantidadPersonas: t.id && conteoPorTurno[t.id] ? conteoPorTurno[t.id].size : 0
         }));
         this.turnos.set(turnosMapeados);
       },
