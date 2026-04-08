@@ -42,6 +42,10 @@ export class HorarioUser implements OnInit, OnDestroy {
 
   diasTexto: DiaInfo[] = [];
   misAsignacionesSemana: DiaAsignacion[] = [];
+  
+  // Catálogos cacheados para evitar re-descargar todo cada 5s
+  usuariosCache: any[] = [];
+  turnosCache: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -67,10 +71,16 @@ export class HorarioUser implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.cargarDatos();
+    // 1. Cargamos catálogos una sola vez al inicio
+    this.cargarCatalogos();
+    
+    // 2. Cargamos las asignaciones inmediatamente
+    this.cargarAsignaciones();
+
+    // 3. Iniciamos el intervalo de sincronización
     this.syncInterval = setInterval(() => {
       this.refresh();
-    }, 5000); // Refresca cada 5 segundos para mantener actualizado en el fondo
+    }, 5000);
   }
 
   ngOnDestroy(): void {
@@ -79,39 +89,49 @@ export class HorarioUser implements OnInit, OnDestroy {
     }
   }
 
-  cargarDatos(): void {
+  cargarCatalogos(): void {
+    forkJoin({
+      usuarios: this.http.get<any[]>(`${this.baseApiUrl}/usuarios`).pipe(catchError(() => of([]))),
+      turnos: this.http.get<any[]>(`${this.baseApiUrl}/turnos`).pipe(catchError(() => of([])))
+    }).subscribe({
+      next: ({ usuarios, turnos }) => {
+        this.usuariosCache = usuarios;
+        this.turnosCache = turnos;
+        this.procesarInformacionUsuario();
+        this.cargarAsignaciones(); // Re-procesamos con la data de catálogos
+      }
+    });
+  }
+
+  procesarInformacionUsuario(): void {
+    const funcionario = this.usuariosCache.find(u => Number(u.id) === Number(this.funcionarioId));
+    if (funcionario) {
+      this.nombreUsuario = funcionario.nombre || 'Usuario Registrado';
+      this.cargoUsuario = funcionario.cargoNombre || funcionario.cargo || 'Funcionario';
+    } else {
+      this.nombreUsuario = 'Usuario no encontrado';
+    }
+  }
+
+  cargarAsignaciones(): void {
     const fechas = this.generarFechasSemana();
     const nombresDias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
     this.diasTexto = fechas.map((f, i) => ({
       nombre: nombresDias[i],
-      fecha: f.split('-')[2] + '/' + f.split('-')[1] // DD/MM visual
+      fecha: f.split('-')[2] + '/' + f.split('-')[1]
     }));
 
     const asignacionesRequests = fechas.map(f =>
       this.http.get<any[]>(`${this.baseApiUrl}/asignaciones/fecha/${f}`).pipe(catchError(() => of([])))
     );
 
-    forkJoin({
-      usuarios: this.http.get<any[]>(`${this.baseApiUrl}/usuarios`).pipe(catchError(() => of([]))),
-      turnos: this.http.get<any[]>(`${this.baseApiUrl}/turnos`).pipe(catchError(() => of([]))),
-      asignacionesPorDia: forkJoin(asignacionesRequests)
-    }).subscribe({
-      next: ({ usuarios, turnos, asignacionesPorDia }) => {
-        // Buscar el usuario 1 entre todos los usuarios
-        const funcionario = usuarios.find(u => Number(u.id) === Number(this.funcionarioId));
-        if (funcionario) {
-          this.nombreUsuario = funcionario.nombre || 'Usuario Registrado';
-          this.cargoUsuario = funcionario.cargoNombre || funcionario.cargo || 'Funcionario';
-        } else {
-          this.nombreUsuario = 'Usuario no encontrado';
-        }
-
+    forkJoin(asignacionesRequests).subscribe({
+      next: (asignacionesPorDia) => {
         const turnosMap = new Map<number, any>();
-        turnos.forEach(t => turnosMap.set(Number(t.id), t));
+        this.turnosCache.forEach(t => turnosMap.set(Number(t.id), t));
 
         this.misAsignacionesSemana = asignacionesPorDia.map((asignacionesDelDia, index) => {
-          // Filtrar rigurosamente por la ID del usuario (Funcionario 1)
           const miAsignacion = asignacionesDelDia.find((a: any) => Number(a.funcionarioId) === Number(this.funcionarioId));
 
           if (miAsignacion) {
@@ -138,9 +158,6 @@ export class HorarioUser implements OnInit, OnDestroy {
             };
           }
         });
-      },
-      error: (error) => {
-        console.error('Error general al cargar la grilla de turnos', error);
       }
     });
   }
@@ -170,6 +187,6 @@ export class HorarioUser implements OnInit, OnDestroy {
   }
 
   refresh() {
-    this.cargarDatos();
+    this.cargarAsignaciones();
   }
 }

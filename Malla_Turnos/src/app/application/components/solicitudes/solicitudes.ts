@@ -40,8 +40,8 @@ procesandoAccion: boolean = false;
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
+    // Solo cargamos datos una vez, ya que cargarDatos() ya llama internamente a cargarSolicitudes()
     this.cargarDatos();
-    this.cargarSolicitudes();
 
     // Iniciamos el intervalo de sincronización cada 5 segundos
     this.syncInterval = setInterval(() => {
@@ -55,6 +55,7 @@ procesandoAccion: boolean = false;
     }
   }
   refresh() {
+    // Refrescamos siempre que no estemos procesando una acción (aprobación/rechazo)
     if (!this.procesandoAccion) {
       this.cargarSolicitudes();
     }

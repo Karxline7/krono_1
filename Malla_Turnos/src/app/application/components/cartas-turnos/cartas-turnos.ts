@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';   // Para [(ngModel)]
 import { TurnoService, Turno } from '../../../domain/services/cartas-turnos/cartas-turnos';
 import { Navbar } from "../../shared/navbar/navbar";
 import { TableModule } from 'primeng/table';
+import { finalize } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -58,25 +59,26 @@ export class CartasTurnos implements OnInit, OnDestroy {
   }
 
   refresh() {
-    if (!this.accionActual && !this.cargando) {
+    // Si no estamos editando ni agregando, refrescamos. 
+    // Quitamos 'cargando' de la condición para evitar que se bloquee si una petición falla
+    if (!this.accionActual) {
       this.cargarTurnos();
     }
   }
 
   cargarTurnos() {
-    this.cargando = true; // Iniciamos estado de carga
-    this.turnoService.listar().subscribe({
+    this.cargando = true;
+    this.turnoService.listar().pipe(
+      finalize(() => this.cargando = false)
+    ).subscribe({
       next: (data: any[]) => {
         this.turnos = data.map(t => ({
           ...t,
-          // Mantenemos tu lógica de personas (ojo: el random cambiará cada 5s si el back no trae el dato)
           cantidadPersonas: t.cantidadPersonas || Math.floor(Math.random() * 10) + 1
         }));
-        this.cargando = false;
       },
       error: (err) => {
         console.error('Error al cargar los turnos:', err);
-        this.cargando = false;
       }
     });
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from '../../../../../node_modules/rxjs/dist/types';
+import { Observable } from 'rxjs';
 
 export interface Turno {
   id?: number;
@@ -13,9 +13,7 @@ export interface Turno {
   cantidadPersonas?: number; // Para el contador que pediste
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class TurnoService {
   private apiUrl = 'http://localhost:8081/api/turnos'; // Ajusta tu puerto
 

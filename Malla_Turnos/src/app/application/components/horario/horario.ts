@@ -141,7 +141,7 @@ export class Horario implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.cargarCatalogos();
-    // No llamamos a cargarTurnos aquí porque cargarCatalogos ya lo hace al terminar.
+    this.cargarTurnos(); // Llamamos inmediatamente para traer datos base
 
     // Iniciamos la sincronización cada 5 segundos (Background Polling)
     this.intervalId = setInterval(() => {
@@ -149,11 +149,12 @@ export class Horario implements OnInit, OnDestroy {
     }, 5000);
   }
 
-refresh() {
-  if (!this.mostrarFormulario && (!this.mostrarConfirmacion)) {
-    this.cargarTurnos();
+  refresh() {
+    // Si no hay formularios ni diálogos de confirmación abiertos, refrescamos
+    if (!this.mostrarFormulario && !this.mostrarConfirmacion) {
+      this.cargarTurnos();
+    }
   }
-}
 
   ngOnDestroy() {
   if (this.intervalId) {
