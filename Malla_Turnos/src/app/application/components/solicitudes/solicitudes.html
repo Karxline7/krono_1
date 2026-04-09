@@ -58,3 +58,11 @@
         </ng-template>
     </main>
 </section>
+
+<!-- TOAST -->
+<div *ngIf="verToast" class="toast-mensaje p-3 rounded" 
+     [ngClass]="mensajeToast.includes('Error') ? 'bg-danger text-white' : 'bg-success text-white'" 
+     style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+    <i class="pi" [ngClass]="mensajeToast.includes('Error') ? 'pi-times-circle' : 'pi-check-circle'" style="margin-right: 8px;"></i>
+    {{ mensajeToast }}
+</div>
