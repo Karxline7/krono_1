@@ -79,7 +79,8 @@ export class Funcionarios implements OnInit, OnDestroy {
       ...this.funcionarioActual,
       numeroDocumento: Number(this.funcionarioActual.numeroDocumento),
       rolId: Number(this.funcionarioActual.rolId),
-      cargoId: Number(this.funcionarioActual.cargoId)
+      cargoId: Number(this.funcionarioActual.cargoId),
+      areaId: Number(this.funcionarioActual.areaId)
     };
 
     if (this.esEdicion && this.funcionarioActual.id) {
