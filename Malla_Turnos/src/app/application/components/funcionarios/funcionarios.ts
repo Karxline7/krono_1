@@ -31,8 +31,6 @@ export class Funcionarios implements OnInit, OnDestroy {
   esEdicion = false;
 
   mostrarModalEliminar = false;
-  mostrarModalEditar = false;
-  mostrarModalCrear = false;
 
   idAEliminar: number | null = null;
 
@@ -71,7 +69,7 @@ export class Funcionarios implements OnInit, OnDestroy {
   }
 
   refresh() {
-    if (!this.mostrarFormulario && !this.mostrarModalEliminar && !this.mostrarModalEditar && !this.mostrarModalCrear && !this.procesando) {
+    if (!this.mostrarFormulario && !this.mostrarModalEliminar && !this.procesando) {
       this.cargarFuncionarios();
     }
   }
@@ -88,9 +86,9 @@ export class Funcionarios implements OnInit, OnDestroy {
     if (this.procesando) return;
 
     if (this.esEdicion) {
-      this.mostrarModalEditar = true;
+      this.confirmarEdicion();
     } else {
-      this.mostrarModalCrear = true;
+      this.confirmarCreacion();
     }
   }
 
@@ -112,7 +110,6 @@ export class Funcionarios implements OnInit, OnDestroy {
         this.procesando = false;
         this.lanzarToast("Funcionario creado");
         this.cargarFuncionarios();
-        this.cerrarModalCrear();
         this.resetForm();
       },
       error: () => {
@@ -122,9 +119,6 @@ export class Funcionarios implements OnInit, OnDestroy {
     });
   }
 
-  cerrarModalCrear() {
-    this.mostrarModalCrear = false;
-  }
 
   // 🟡 CONFIRMAR EDITAR
   confirmarEdicion() {
@@ -145,7 +139,6 @@ export class Funcionarios implements OnInit, OnDestroy {
         this.procesando = false;
         this.lanzarToast("Funcionario actualizado");
         this.cargarFuncionarios();
-        this.cerrarModalEditar();
         this.resetForm();
       },
       error: () => {
@@ -155,9 +148,6 @@ export class Funcionarios implements OnInit, OnDestroy {
     });
   }
 
-  cerrarModalEditar() {
-    this.mostrarModalEditar = false;
-  }
 
   seleccionarFuncionario(funcionario: Funcionario, accion: 'editar' | 'eliminar') {
     if (accion === 'eliminar') {

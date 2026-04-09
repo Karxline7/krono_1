@@ -142,25 +142,6 @@
     </ng-template>
 </p-dialog>
 
-<!-- 🟡 MODAL EDITAR (NUEVO) -->
-<p-dialog [(visible)]="mostrarModalEditar" [modal]="true"
-    header="Confirmar actualización" [style]="{width: '400px'}">
-
-    <div class="text-center">
-        <h3>¿Guardar cambios?</h3>
-        <p>Se actualizará la información del funcionario.</p>
-    </div>
-
-    <ng-template pTemplate="footer">
-        <button pButton label="Cancelar"
-            class="p-button-text"
-            (click)="cerrarModalEditar()"></button>
-
-        <button pButton label="Actualizar"
-            class="p-button-warning"
-            (click)="confirmarEdicion()"></button>
-    </ng-template>
-</p-dialog>
 
 <!-- 🟢 TOAST -->
 <div *ngIf="verToast"
