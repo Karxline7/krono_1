@@ -16,25 +16,30 @@ import { TooltipModule } from 'primeng/tooltip';
   selector: 'app-funcionarios',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, Navbar, TableModule, 
+    CommonModule, FormsModule, Navbar, TableModule,
     ButtonModule, InputTextModule, DialogModule, TagModule, TooltipModule
   ],
   templateUrl: './funcionarios.html',
   styleUrl: './funcionarios.scss',
 })
 export class Funcionarios implements OnInit, OnDestroy {
+
   listaFuncionarios: Funcionario[] = [];
   funcionarioActual: Funcionario = this.getInitFuncionario();
-  
+
   mostrarFormulario = false;
   esEdicion = false;
+
   mostrarModalEliminar = false;
+  mostrarModalEditar = false;
+  mostrarModalCrear = false;
+
   idAEliminar: number | null = null;
 
-  // Feedback visual (Toast manual)
   verToast = false;
   mensajeToast = '';
 
+  procesando = false;
   private intervalId: any;
 
   constructor(private FuncionarioService: FuncionarioService) {}
@@ -55,78 +60,103 @@ export class Funcionarios implements OnInit, OnDestroy {
 
   getInitFuncionario(): Funcionario {
     return {
-      nombre: '', tipoDocumento: '', numeroDocumento: null,
-      contrasena: '', rolId: null, cargoId: null, areaId: null,
+      nombre: '',
+      tipoDocumento: '',
+      numeroDocumento: null,
+      contrasena: '',
+      rolId: null,
+      cargoId: null,
+      areaId: null,
     };
   }
 
   refresh() {
-    if (!this.mostrarFormulario && !this.mostrarModalEliminar) {
+    if (!this.mostrarFormulario && !this.mostrarModalEliminar && !this.mostrarModalEditar && !this.mostrarModalCrear && !this.procesando) {
       this.cargarFuncionarios();
     }
   }
 
   cargarFuncionarios() {
     this.FuncionarioService.listar().subscribe({
-      next: (data) => this.listaFuncionarios = data,
+      next: (data) => this.listaFuncionarios = [...data],
       error: () => this.lanzarToast('Error al cargar datos')
     });
   }
 
-  procesando = false;
-
+  // 🔥 BOTÓN GUARDAR
   onGuardar() {
     if (this.procesando) return;
+
+    if (this.esEdicion) {
+      this.mostrarModalEditar = true;
+    } else {
+      this.mostrarModalCrear = true;
+    }
+  }
+
+  // 🟢 CONFIRMAR CREAR
+  confirmarCreacion() {
     this.procesando = true;
 
-    try {
-      // Asegurar tipos correctos para el backend
-      const dataToSend = {
-        ...this.funcionarioActual,
-        numeroDocumento: Number(this.funcionarioActual.numeroDocumento),
-        rolId: Number(this.funcionarioActual.rolId),
-        cargoId: Number(this.funcionarioActual.cargoId),
-        areaId: Number(this.funcionarioActual.areaId)
-      };
+    const dataToSend = {
+      ...this.funcionarioActual,
+      numeroDocumento: Number(this.funcionarioActual.numeroDocumento),
+      rolId: Number(this.funcionarioActual.rolId),
+      cargoId: Number(this.funcionarioActual.cargoId),
+      areaId: Number(this.funcionarioActual.areaId),
+      contrasena: (this.funcionarioActual.contrasena || '123456').toString()
+    };
 
-      if (this.esEdicion && this.funcionarioActual.id) {
-        this.FuncionarioService.editar(this.funcionarioActual.id, dataToSend).subscribe({
-          next: () => {
-            this.procesando = false;
-            this.lanzarToast("¡Actualizado con éxito!");
-            this.cargarFuncionarios();
-            this.resetForm();
-          },
-          error: (err) => {
-            console.error("Error al editar:", err);
-            this.procesando = false;
-            this.lanzarToast("Error al actualizar");
-          }
-        });
-      } else {
-        // Valor por defecto para pass si es creación y asegurar que sea Integer (número)
-        const pass = this.funcionarioActual.contrasena || '123456';
-        dataToSend.contrasena = Number(pass);
-        
-        this.FuncionarioService.crear(dataToSend).subscribe({
-          next: () => {
-            this.procesando = false;
-            this.lanzarToast("¡Guardado con éxito!");
-            this.cargarFuncionarios();
-            this.resetForm();
-          },
-          error: (err) => {
-            console.error("Error al crear:", err);
-            this.procesando = false;
-            this.lanzarToast("Error al guardar");
-          }
-        });
+    this.FuncionarioService.crear(dataToSend).subscribe({
+      next: () => {
+        this.procesando = false;
+        this.lanzarToast("Funcionario creado");
+        this.cargarFuncionarios();
+        this.cerrarModalCrear();
+        this.resetForm();
+      },
+      error: () => {
+        this.procesando = false;
+        this.lanzarToast("Error al crear");
       }
-    } catch (e) {
-      console.error("Error local de ejecución:", e);
-      this.procesando = false;
-      this.lanzarToast("Error interno del sistema");
-    }
+    });
+  }
+
+  cerrarModalCrear() {
+    this.mostrarModalCrear = false;
+  }
+
+  // 🟡 CONFIRMAR EDITAR
+  confirmarEdicion() {
+    if (!this.funcionarioActual.id) return;
+
+    this.procesando = true;
+
+    const dataToSend = {
+      ...this.funcionarioActual,
+      numeroDocumento: Number(this.funcionarioActual.numeroDocumento),
+      rolId: Number(this.funcionarioActual.rolId),
+      cargoId: Number(this.funcionarioActual.cargoId),
+      areaId: Number(this.funcionarioActual.areaId)
+    };
+
+    this.FuncionarioService.editar(this.funcionarioActual.id, dataToSend).subscribe({
+      next: () => {
+        this.procesando = false;
+        this.lanzarToast("Funcionario actualizado");
+        this.cargarFuncionarios();
+        this.cerrarModalEditar();
+        this.resetForm();
+      },
+      error: () => {
+        this.procesando = false;
+        this.lanzarToast("Error al actualizar");
+      }
+    });
+  }
+
+  cerrarModalEditar() {
+    this.mostrarModalEditar = false;
   }
 
   seleccionarFuncionario(funcionario: Funcionario, accion: 'editar' | 'eliminar') {
@@ -135,16 +165,8 @@ export class Funcionarios implements OnInit, OnDestroy {
       this.mostrarModalEliminar = true;
     } else {
       this.funcionarioActual = { ...funcionario };
-      // Note: Backend returns cargoNombre, and expects cargoId for save
       this.esEdicion = true;
       this.mostrarFormulario = true;
-    }
-  }
-
-  toggleFormulario() {
-    this.mostrarFormulario = !this.mostrarFormulario;
-    if (!this.mostrarFormulario) {
-      this.resetForm();
     }
   }
 
@@ -154,15 +176,25 @@ export class Funcionarios implements OnInit, OnDestroy {
         next: () => {
           this.lanzarToast("Funcionario eliminado");
           this.cargarFuncionarios();
-          this.cerrarModal();
+          this.cerrarModalEliminar();
+        },
+        error: () => {
+          this.lanzarToast("Error al eliminar");
         }
       });
     }
   }
 
-  cerrarModal() {
+  cerrarModalEliminar() {
     this.mostrarModalEliminar = false;
     this.idAEliminar = null;
+  }
+
+  toggleFormulario() {
+    this.mostrarFormulario = !this.mostrarFormulario;
+    if (!this.mostrarFormulario) {
+      this.resetForm();
+    }
   }
 
   resetForm() {
@@ -172,8 +204,13 @@ export class Funcionarios implements OnInit, OnDestroy {
   }
 
   lanzarToast(msg: string) {
-    this.mensajeToast = msg;
-    this.verToast = true;
-    setTimeout(() => this.verToast = false, 3000);
+    this.verToast = false;
+
+    setTimeout(() => {
+      this.mensajeToast = msg;
+      this.verToast = true;
+
+      setTimeout(() => this.verToast = false, 3000);
+    }, 50);
   }
 }

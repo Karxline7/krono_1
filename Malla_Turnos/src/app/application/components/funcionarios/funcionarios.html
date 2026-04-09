@@ -2,6 +2,8 @@
 
 <main class="main-content">
     <div class="contenedor-tabla">
+
+        <!-- HEADER -->
         <div class="header-tabla">
             <h1 class="titulo-pagina">Funcionarios</h1>
             <button class="btn-azul-nuevo" (click)="toggleFormulario()">
@@ -10,84 +12,106 @@
             </button>
         </div>
 
+        <!-- FORMULARIO -->
         <div class="form-container" [class.abierto]="mostrarFormulario">
             <form (ngSubmit)="onGuardar()" #funcionarioForm="ngForm" class="form-grid">
-                
+
                 <div class="form-field">
                     <label>Nombre Completo</label>
-                    <input type="text" pInputText [(ngModel)]="funcionarioActual.nombre" name="nombre" placeholder="Nombre completo" required>
+                    <input type="text" pInputText [(ngModel)]="funcionarioActual.nombre" name="nombre" required>
                 </div>
-                
+
                 <div class="form-field">
                     <label>Tipo Documento</label>
                     <select [(ngModel)]="funcionarioActual.tipoDocumento" name="tipoDocumento" class="p-inputtext" required>
                         <option value="" disabled>Seleccione...</option>
-                        <option value="C.C">Cédula de ciudadanía</option>
-                        <option value="T.I">Tarjeta de identidad</option>
-                        <option value="C.E">Cédula de extranjería</option>
+                        <option value="C.C">Cédula</option>
+                        <option value="T.I">Tarjeta</option>
+                        <option value="C.E">Extranjería</option>
                         <option value="P.S">Pasaporte</option>
-                        <option value="P.E.P">Permiso especial de permanencia</option>
+                        <option value="P.E.P">PEP</option>
                     </select>
                 </div>
 
                 <div class="form-field">
                     <label>Número Documento</label>
-                    <input type="number" pInputText [(ngModel)]="funcionarioActual.numeroDocumento" name="numeroDocumento" placeholder="Número de documento" [disabled]="esEdicion" required>
+                    <input type="number" pInputText [(ngModel)]="funcionarioActual.numeroDocumento"
+                        name="numeroDocumento" [disabled]="esEdicion" required>
                 </div>
-                
+
                 <div class="form-field">
                     <label>Rol ID</label>
-                    <input type="number" pInputText [(ngModel)]="funcionarioActual.rolId" name="rolId" placeholder="ID de Rol" [disabled]="esEdicion" required>
+                    <input type="number" pInputText [(ngModel)]="funcionarioActual.rolId"
+                        name="rolId" [disabled]="esEdicion" required>
                 </div>
-                
+
                 <div class="form-field">
                     <label>Cargo ID</label>
-                    <input type="number" pInputText [(ngModel)]="funcionarioActual.cargoId" name="cargoId" placeholder="ID de Cargo" required>
+                    <input type="number" pInputText [(ngModel)]="funcionarioActual.cargoId"
+                        name="cargoId" required>
                 </div>
 
                 <div class="form-field">
                     <label>Área ID</label>
-                    <input type="number" pInputText [(ngModel)]="funcionarioActual.areaId" name="areaId" placeholder="ID de Área" required>
+                    <input type="number" pInputText [(ngModel)]="funcionarioActual.areaId"
+                        name="areaId" required>
                 </div>
 
+                <!-- SOLO EN CREAR -->
                 <div class="form-field" *ngIf="!esEdicion">
                     <label>Contraseña</label>
-                    <input type="password" pInputText [(ngModel)]="funcionarioActual.contrasena" name="contrasena" placeholder="Contraseña" required>
+                    <input type="password" pInputText [(ngModel)]="funcionarioActual.contrasena"
+                        name="contrasena" required>
                 </div>
-                
+
                 <div class="botones-form">
-                    <button type="button" class="btn-cancelar" (click)="toggleFormulario()" [disabled]="procesando">Cancelar</button>
-                    <button type="submit" [class]="esEdicion ? 'btn-actualizar' : 'btn-guardar-verde'" [disabled]="!funcionarioForm.form.valid || procesando">
-                        <i class="pi pi-spin pi-spinner" *ngIf="procesando" style="margin-right: 5px;"></i>
-                        {{ esEdicion ? 'Actualizar Funcionario' : 'Guardar Funcionario' }}
+                    <button type="button" class="btn-cancelar"
+                        (click)="toggleFormulario()" [disabled]="procesando">
+                        Cancelar
+                    </button>
+
+                    <button type="submit"
+                        [class]="esEdicion ? 'btn-actualizar' : 'btn-guardar-verde'"
+                        [disabled]="!funcionarioForm.form.valid || procesando">
+
+                        <i class="pi pi-spin pi-spinner" *ngIf="procesando"></i>
+
+                        {{ esEdicion ? 'Actualizar' : 'Guardar' }}
                     </button>
                 </div>
+
             </form>
         </div>
 
+        <!-- TABLA -->
         <div class="tabla-wrapper">
             <table class="tabla-funcionarios">
                 <thead>
                     <tr>
                         <th>Nombre</th>
                         <th>Tipo documento</th>
-                        <th>Número de documento</th>
+                        <th>Número</th>
                         <th>Cargo</th>
                         <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     <tr *ngFor="let f of listaFuncionarios">
                         <td class="bold">{{ f.nombre }}</td>
                         <td><span class="badge">{{ f.tipoDocumento }}</span></td>
                         <td>{{ f.numeroDocumento }}</td>
                         <td>{{ f.cargoNombre }}</td>
+
                         <td class="acciones">
-                            <button class="btn btn-sm btn-outline-warning" (click)="seleccionarFuncionario(f, 'editar')" title="Editar">
-                                <i class="bi bi-pencil"></i> Editar
+                            <button class="btn btn-outline-warning"
+                                (click)="seleccionarFuncionario(f, 'editar')">
+                                Editar
                             </button>
-                            <button class="btn btn-sm btn-outline-danger" (click)="seleccionarFuncionario(f, 'eliminar')" title="Eliminar">
-                                <i class="bi bi-trash"></i> Eliminar
+
+                            <button class="btn btn-outline-danger"
+                                (click)="seleccionarFuncionario(f, 'eliminar')">
+                                Eliminar
                             </button>
                         </td>
                     </tr>
@@ -95,36 +119,58 @@
             </table>
         </div>
 
-        <div class="paginacion-container">
-            <button class="btn-pag-nav" type="button">《</button>
-            <button class="btn-pag active" type="button">1</button>
-            <button class="btn-pag-nav" type="button">》</button>
-        </div>
     </div>
 </main>
 
-<p-dialog [(visible)]="mostrarModalEliminar" [modal]="true" header="Confirmar acción" 
-    [closable]="true" [style]="{width: '450px'}" styleClass="dialogo-premium">
-    <div class="modal-body">
-        <div class="alerta-circulo">
-            <i class="pi pi-exclamation-triangle"></i>
-        </div>
-        <h2 class="titulo-alerta text-center">¿Estás seguro?</h2>
-        <p class="texto-confirmacion text-center m-0">
-            ¿Realmente deseas eliminar este funcionario? Esta acción <strong>no se puede deshacer</strong>.
-        </p>
+<!-- 🔴 MODAL ELIMINAR -->
+<p-dialog [(visible)]="mostrarModalEliminar" [modal]="true"
+    header="Confirmar eliminación" [style]="{width: '400px'}">
+
+    <div class="text-center">
+        <h3>¿Eliminar funcionario?</h3>
+        <p>Esta acción no se puede deshacer.</p>
     </div>
+
     <ng-template pTemplate="footer">
-        <div class="botones-container">
-            <button pButton label="No, cancelar" icon="pi pi-times" class="p-button-text p-button-secondary" (click)="cerrarModal()"></button>
-            <button pButton label="Sí, eliminar" icon="pi pi-trash" class="p-button-danger p-button-raised" (click)="eliminarConfirmado()"></button>
-        </div>
+        <button pButton label="Cancelar"
+            class="p-button-text"
+            (click)="cerrarModalEliminar()"></button>
+
+        <button pButton label="Eliminar"
+            class="p-button-danger"
+            (click)="eliminarConfirmado()"></button>
     </ng-template>
 </p-dialog>
 
-<div *ngIf="verToast" class="toast-mensaje p-3 rounded" 
-     [ngClass]="mensajeToast.includes('Error') ? 'bg-danger text-white' : 'bg-success text-white'" 
-     style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-    <i class="pi" [ngClass]="mensajeToast.includes('Error') ? 'pi-times-circle' : 'pi-check-circle'" style="margin-right: 8px;"></i>
+<!-- 🟡 MODAL EDITAR (NUEVO) -->
+<p-dialog [(visible)]="mostrarModalEditar" [modal]="true"
+    header="Confirmar actualización" [style]="{width: '400px'}">
+
+    <div class="text-center">
+        <h3>¿Guardar cambios?</h3>
+        <p>Se actualizará la información del funcionario.</p>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <button pButton label="Cancelar"
+            class="p-button-text"
+            (click)="cerrarModalEditar()"></button>
+
+        <button pButton label="Actualizar"
+            class="p-button-warning"
+            (click)="confirmarEdicion()"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- 🟢 TOAST -->
+<div *ngIf="verToast"
+     class="toast-mensaje p-3 rounded"
+     [ngClass]="mensajeToast.includes('Error') ? 'bg-danger text-white' : 'bg-success text-white'"
+     style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+
+    <i class="pi"
+       [ngClass]="mensajeToast.includes('Error') ? 'pi-times-circle' : 'pi-check-circle'">
+    </i>
+
     {{ mensajeToast }}
 </div>
