@@ -56,8 +56,9 @@
                 </div>
                 
                 <div class="botones-form">
-                    <button type="button" class="btn-cancelar" (click)="toggleFormulario()">Cancelar</button>
-                    <button type="submit" [class]="esEdicion ? 'btn-actualizar' : 'btn-guardar-verde'" [disabled]="!funcionarioForm.form.valid">
+                    <button type="button" class="btn-cancelar" (click)="toggleFormulario()" [disabled]="procesando">Cancelar</button>
+                    <button type="submit" [class]="esEdicion ? 'btn-actualizar' : 'btn-guardar-verde'" [disabled]="!funcionarioForm.form.valid || procesando">
+                        <i class="pi pi-spin pi-spinner" *ngIf="procesando" style="margin-right: 5px;"></i>
                         {{ esEdicion ? 'Actualizar Funcionario' : 'Guardar Funcionario' }}
                     </button>
                 </div>

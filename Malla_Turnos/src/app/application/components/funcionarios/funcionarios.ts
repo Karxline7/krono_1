@@ -73,7 +73,12 @@ export class Funcionarios implements OnInit, OnDestroy {
     });
   }
 
+  procesando = false;
+
   onGuardar() {
+    if (this.procesando) return;
+    this.procesando = true;
+
     // Asegurar tipos correctos para el backend
     const dataToSend = {
       ...this.funcionarioActual,
@@ -86,11 +91,15 @@ export class Funcionarios implements OnInit, OnDestroy {
     if (this.esEdicion && this.funcionarioActual.id) {
       this.FuncionarioService.editar(this.funcionarioActual.id, dataToSend).subscribe({
         next: () => {
+          this.procesando = false;
           this.lanzarToast("¡Actualizado con éxito!");
           this.cargarFuncionarios();
           this.resetForm();
         },
-        error: () => this.lanzarToast("Error al actualizar")
+        error: () => {
+          this.procesando = false;
+          this.lanzarToast("Error al actualizar");
+        }
       });
     } else {
       // Valor por defecto para pass si es creación y asegurar que sea Integer (número)
@@ -99,11 +108,15 @@ export class Funcionarios implements OnInit, OnDestroy {
       
       this.FuncionarioService.crear(dataToSend).subscribe({
         next: () => {
+          this.procesando = false;
           this.lanzarToast("¡Guardado con éxito!");
           this.cargarFuncionarios();
           this.resetForm();
         },
-        error: () => this.lanzarToast("Error al guardar")
+        error: () => {
+          this.procesando = false;
+          this.lanzarToast("Error al guardar");
+        }
       });
     }
   }
