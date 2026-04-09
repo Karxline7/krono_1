@@ -36,7 +36,11 @@ export class Solicitudes implements OnInit, OnDestroy {
   solicitudSeleccionada: SolicitudUI | null = null;
   tiposSolicitud = signal<any[]>([]);
 
-procesandoAccion: boolean = false;
+  procesandoAccion: boolean = false;
+
+  verToast = false;
+  mensajeToast = '';
+
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
@@ -126,14 +130,14 @@ cargarSolicitudes() {
       this.procesandoAccion = true; // Bloqueamos el refresh automático momentáneamente
       this.http.put(`${this.apiUrl}/${this.solicitudSeleccionada.id}/aprobar`, {}).subscribe({
         next: () => {
-          alert('Solicitud Aprobada');
+          this.lanzarToast('Solicitud Aprobada con éxito');
           this.procesandoAccion = false;
           this.cargarDatos();
         },
         error: (error) => {
           console.error('Error al aprobar:', error);
           this.procesandoAccion = false;
-          alert('Hubo un error al aprobar la solicitud.');
+          this.lanzarToast('Error: Hubo un error al aprobar la solicitud.');
         }
       });
     }
@@ -144,16 +148,22 @@ cargarSolicitudes() {
       this.procesandoAccion = true; // Bloqueamos el refresh automático
       this.http.put(`${this.apiUrl}/${this.solicitudSeleccionada.id}/denegar`, {}).subscribe({
         next: () => {
-          alert('Solicitud Denegada');
+          this.lanzarToast('Solicitud Denegada');
           this.procesandoAccion = false;
           this.cargarDatos();
         },
         error: (error) => {
           console.error('Error al denegar:', error);
           this.procesandoAccion = false;
-          alert('Hubo un error al denegar la solicitud.');
+          this.lanzarToast('Error: Hubo un error al denegar la solicitud.');
         }
       });
     }
+  }
+
+  lanzarToast(msg: string) {
+    this.mensajeToast = msg;
+    this.verToast = true;
+    setTimeout(() => this.verToast = false, 3000);
   }
 }
