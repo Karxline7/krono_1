@@ -19,16 +19,19 @@ public class SolicitudController {
     private final AprobarSolicitudUseCase aprobarSolicitudUseCase;
     private final DenegarSolicitudUseCase denegarSolicitudUseCase;
     private final ListarSolicitudesUseCase listarSolicitudesUseCase;
+    private final EliminarSolicitudUseCase eliminarSolicitudUseCase;
 
     public SolicitudController(SolicitudTurnoUseCase solicitudTurnoUseCase,
                                AprobarSolicitudUseCase aprobarSolicitudUseCase,
                                DenegarSolicitudUseCase denegarSolicitudUseCase,
                                ListarSolicitudesUseCase listarSolicitudesUseCase,
-                               SolicitudTurnoMapper solicitudTurnoMapper) {
+                               SolicitudTurnoMapper solicitudTurnoMapper,
+                               EliminarSolicitudUseCase eliminarSolicitudUseCase) {
         this.solicitudTurnoUseCase = solicitudTurnoUseCase;
         this.aprobarSolicitudUseCase = aprobarSolicitudUseCase;
         this.denegarSolicitudUseCase = denegarSolicitudUseCase;
         this.listarSolicitudesUseCase = listarSolicitudesUseCase;
+        this.eliminarSolicitudUseCase = eliminarSolicitudUseCase;
     }
 
     @PostMapping("/solicitud")
@@ -58,4 +61,11 @@ public class SolicitudController {
         SolicitudTurnoDto solicitud = denegarSolicitudUseCase.denegarSolicitud(id);
         return ResponseEntity.ok(solicitud);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarSolicitud(@PathVariable Long id) {
+        eliminarSolicitudUseCase.eliminarSolicitud(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

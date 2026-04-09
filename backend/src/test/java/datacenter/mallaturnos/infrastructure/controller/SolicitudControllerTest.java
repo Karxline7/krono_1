@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 public class SolicitudControllerTest {
 
@@ -31,6 +32,7 @@ public class SolicitudControllerTest {
     private DenegarSolicitudUseCase denegarSolicitudUseCase;
     private ListarSolicitudesUseCase listarSolicitudesUseCase;
     private SolicitudTurnoMapper solicitudTurnoMapper;
+    private EliminarSolicitudUseCase eliminarSolicitudUseCase;
 
     @BeforeEach
     void setUp() {
@@ -39,13 +41,15 @@ public class SolicitudControllerTest {
         denegarSolicitudUseCase = Mockito.mock(DenegarSolicitudUseCase.class);
         listarSolicitudesUseCase = Mockito.mock(ListarSolicitudesUseCase.class);
         solicitudTurnoMapper = Mockito.mock(SolicitudTurnoMapper.class);
+        eliminarSolicitudUseCase = Mockito.mock(EliminarSolicitudUseCase.class);
 
         SolicitudController controller = new SolicitudController(
                 solicitudTurnoUseCase,
                 aprobarSolicitudUseCase,
                 denegarSolicitudUseCase,
                 listarSolicitudesUseCase,
-                solicitudTurnoMapper
+                solicitudTurnoMapper,
+                eliminarSolicitudUseCase
         );
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
@@ -103,4 +107,16 @@ public class SolicitudControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
     }
+
+    @Test
+        void eliminarSolicitud_deberiaRetornar204() throws Exception {
+
+        Mockito.doNothing().when(eliminarSolicitudUseCase).eliminarSolicitud(1L);
+
+        mockMvc.perform(delete("/api/solicitudes/1"))
+                .andExpect(status().isNoContent());
+
+        Mockito.verify(eliminarSolicitudUseCase).eliminarSolicitud(1L);
+        }
+
 }

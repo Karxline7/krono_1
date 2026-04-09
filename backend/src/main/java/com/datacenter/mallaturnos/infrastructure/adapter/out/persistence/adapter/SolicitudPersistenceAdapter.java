@@ -67,6 +67,16 @@ public class SolicitudPersistenceAdapter implements SolicitudRepositoryPort {
         return toDomain(saved);
     }
 
+    @Override
+    public boolean existsById(Long id) {
+        return jpaRepository.existsById(id);
+    }
+    
+    @Override
+    public void deleteById(Long id) {
+        jpaRepository.deleteById(id);
+    }
+
     private SolicitudTurno toDomain(SolicitudTurnoJpaEntity entity) {
 
     return new SolicitudTurno(
