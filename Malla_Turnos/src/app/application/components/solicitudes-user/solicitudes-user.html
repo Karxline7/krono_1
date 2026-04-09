@@ -32,7 +32,7 @@
                     <textarea class="description-area p-inputtext w-full" [(ngModel)]="nuevaSolicitud.descripcion" name="descripcion" placeholder="Descripcion" required autoResize="true"></textarea>
                 </div>
 
-                <p-button type="submit" label="Enviar" styleClass="btn-submit w-full"></p-button>
+                <p-button type="submit" label="Enviar" [loading]="enviando" styleClass="btn-submit w-full"></p-button>
             </form>
         </div>
     </section>

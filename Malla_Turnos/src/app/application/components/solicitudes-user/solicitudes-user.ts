@@ -112,11 +112,17 @@ export class SolicitudesUser implements OnInit {
     return fechas;
   }
 
+  enviando = false;
+
   enviarSolicitud() {
+    if (this.enviando) return; // Evitar doble click o submit
+
     if (!this.nuevaSolicitud.asignacionTurnoId || !this.nuevaSolicitud.tipo || !this.nuevaSolicitud.descripcion.trim()) {
       this.lanzarToast('Error: Por favor llene todos los campos, asegurándose de seleccionar un turno');
       return;
     }
+
+    this.enviando = true;
 
     const payload = {
       asignacionTurnoId: Number(this.nuevaSolicitud.asignacionTurnoId),
@@ -129,10 +135,12 @@ export class SolicitudesUser implements OnInit {
       next: () => {
         this.lanzarToast('Solicitud enviada correctamente');
         this.nuevaSolicitud = { asignacionTurnoId: null, tipo: null, descripcion: '' };
+        this.enviando = false;
       },
       error: (error) => {
         console.error('Error al enviar la solicitud', error);
         this.lanzarToast('Error: Hubo un error al enviar la solicitud');
+        this.enviando = false;
       }
     });
   }
