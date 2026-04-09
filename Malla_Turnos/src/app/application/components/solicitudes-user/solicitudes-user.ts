@@ -23,9 +23,9 @@ export class SolicitudesUser implements OnInit {
   // El usuario actual para el que se gestionan las solicitudes (Funcionario ID = 1)
   funcionarioId = 1;
 
-  nuevaSolicitud: { asignacionTurnoId: number | null; tipo: number | null; descripcion: string } = {
-    asignacionTurnoId: null,
-    tipo: null,
+  nuevaSolicitud = {
+    asignacionTurnoId: '',
+    tipo: '',
     descripcion: ''
   };
 
@@ -33,7 +33,10 @@ export class SolicitudesUser implements OnInit {
   turnosDisponibles: any[] = [];
   tiposSolicitud = signal<any[]>([]);
 
-  constructor(private http: HttpClient) {}
+  verToast = false;
+  mensajeToast = '';
+
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.cargarDatos();
@@ -41,10 +44,10 @@ export class SolicitudesUser implements OnInit {
 
   cargarDatos() {
     const fechas = this.generarFechasSemana();
-    
+
     // Crear peticiones para cada día de la semana (técnica compatible con el backend actual)
-    const asignacionesRequests = fechas.map(f => 
-       this.http.get<any[]>(`${this.asignacionesUrl}/fecha/${f}`).pipe(catchError(() => of([])))
+    const asignacionesRequests = fechas.map(f =>
+      this.http.get<any[]>(`${this.asignacionesUrl}/fecha/${f}`).pipe(catchError(() => of([])))
     );
 
     forkJoin({
@@ -91,33 +94,29 @@ export class SolicitudesUser implements OnInit {
     const day = d.getDay();
     let diff = 5 - day;
     if (diff < 0) diff += 7;
-    d.setDate(d.getDate() + diff); 
-    
+    d.setDate(d.getDate() + diff);
+
     const baseDate = new Date(d.toISOString().split('T')[0] + 'T00:00:00');
     const dayOfWeek = baseDate.getDay();
     const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-    
+
     const monday = new Date(baseDate.getTime());
     monday.setDate(baseDate.getDate() + diffToMonday);
 
     const fechas: string[] = [];
-    for(let i=0; i<14; i++) { // Traemos 14 días (2 semanas) para dar margen al usuario
-        const dSemana = new Date(monday.getTime());
-        dSemana.setDate(monday.getDate() + i);
-        fechas.push(dSemana.toISOString().split('T')[0]);
+    for (let i = 0; i < 14; i++) { // Traemos 14 días (2 semanas) para dar margen al usuario
+      const dSemana = new Date(monday.getTime());
+      dSemana.setDate(monday.getDate() + i);
+      fechas.push(dSemana.toISOString().split('T')[0]);
     }
     return fechas;
   }
 
-  enviando = false;
-
   enviarSolicitud() {
     if (!this.nuevaSolicitud.asignacionTurnoId || !this.nuevaSolicitud.tipo || !this.nuevaSolicitud.descripcion) {
-      alert('Por favor llene todos los campos, asegurándose de seleccionar un turno');
+      this.lanzarToast('Error: Por favor llene todos los campos, asegurándose de seleccionar un turno');
       return;
     }
-
-    this.enviando = true;
 
     const payload = {
       asignacionTurnoId: Number(this.nuevaSolicitud.asignacionTurnoId),
@@ -125,15 +124,22 @@ export class SolicitudesUser implements OnInit {
       motivoSolicitud: this.nuevaSolicitud.descripcion,
       estado: 'PENDIENTE'
     };
-     
+
     this.http.post(`${this.apiUrl}/solicitud`, payload).subscribe({
       next: () => {
-        alert('Solicitud enviada exitosamente');
+        this.lanzarToast('Solicitud enviada correctamente');
+        this.nuevaSolicitud = { asignacionTurnoId: '', tipo: '', descripcion: '' };
       },
       error: (error) => {
         console.error('Error al enviar la solicitud', error);
-        alert('Hubo un error al enviar la solicitud');
+        this.lanzarToast('Error: Hubo un error al enviar la solicitud');
       }
     });
+  }
+
+  lanzarToast(msg: string) {
+    this.mensajeToast = msg;
+    this.verToast = true;
+    setTimeout(() => this.verToast = false, 3000);
   }
 }
