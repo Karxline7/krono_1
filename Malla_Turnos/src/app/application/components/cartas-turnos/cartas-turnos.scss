@@ -186,4 +186,18 @@
 }
 
 .btn-outline-warning { color: #f59e0b; &:hover { background: #fef3c7; } }
-.btn-outline-danger { color: #ef4444; &:hover { background: #fee2e2; } }
+.btn-outline-danger { color: #ef4444; &:hover { background: #fee2e2; } }
+
+/* --- TOAST --- */
+.toast-mensaje {
+    animation: slideIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    display: flex;
+    align-items: center;
+    min-width: 300px;
+    font-weight: 500;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(120%); }
+    to { transform: translateX(0); }
+}

@@ -28,7 +28,7 @@
     <div class="form-container" [class.abierto]="mostrarFormulario">
       <form (ngSubmit)="onGuardar()" class="form-horizontal">
         
-        <div *ngIf="celdasSeleccionadas.length > 1" class="toast-success mb-3 p-2 text-center" style="background-color: #e0f2fe; color: #0369a1; border-radius: 4px; font-weight: 500;">
+        <div *ngIf="celdasSeleccionadas.length > 1" class="mb-3 p-2 text-center" style="background-color: #e0f2fe; color: #0369a1; border-radius: 4px; font-weight: 500;">
           Selección Múltiple: {{ celdasSeleccionadas.length }} casillas
         </div>
 
@@ -134,8 +134,11 @@
     </ng-template>
   </p-dialog>
 
-  <div *ngIf="verToast" class="toast-success">
-    <i class="pi pi-check-circle"></i> {{ mensajeToast }}
+  <div *ngIf="verToast" class="toast-mensaje p-3 rounded" 
+       [ngClass]="mensajeToast.includes('Error') || mensajeToast.includes('Selecciona') || mensajeToast.includes('Por favor') ? 'bg-danger text-white' : 'bg-success text-white'" 
+       style="position: fixed; bottom: 25px; right: 25px; z-index: 9999; display: flex; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+      <i class="pi" [ngClass]="mensajeToast.includes('Error') || mensajeToast.includes('Selecciona') || mensajeToast.includes('Por favor') ? 'pi-times-circle' : 'pi-check-circle'" style="margin-right: 8px;"></i>
+      {{ mensajeToast }}
   </div>
 
 </section>

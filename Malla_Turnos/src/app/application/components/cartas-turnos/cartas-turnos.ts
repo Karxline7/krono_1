@@ -33,6 +33,9 @@ export class CartasTurnos implements OnInit, OnDestroy {
   
   cargando: boolean = false;
 
+  verToast = false;
+  mensajeToast = '';
+
   nuevoTurno: Turno = {
     nombre: '',
     horaInicio: '',
@@ -127,9 +130,13 @@ export class CartasTurnos implements OnInit, OnDestroy {
   });
 
   onGuardar() {
-    this.turnoService.crear(this.nuevoTurno).subscribe(() => {
-      this.cargarTurnos();
-      this.resetForms();
+    this.turnoService.crear(this.nuevoTurno).subscribe({
+      next: () => {
+        this.lanzarToast("Turno guardado correctamente");
+        this.cargarTurnos();
+        this.resetForms();
+      },
+      error: () => this.lanzarToast("Error al guardar el turno")
     });
   }
 
@@ -144,19 +151,35 @@ export class CartasTurnos implements OnInit, OnDestroy {
 
   onActualizar() {
     if (this.turnoSeleccionado?.id) {
-      this.turnoService.editar(this.turnoSeleccionado.id, this.turnoSeleccionado).subscribe(() => {
-        this.cargarTurnos();
-        this.resetForms();
+      this.turnoService.editar(this.turnoSeleccionado.id, this.turnoSeleccionado).subscribe({
+        next: () => {
+          this.lanzarToast("Turno actualizado correctamente");
+          this.cargarTurnos();
+          this.resetForms();
+        },
+        error: () => this.lanzarToast("Error al actualizar el turno")
       });
     }
   }
 
   seleccionarTurno(turno: Turno, accion: 'editar' | 'eliminar') {
     if (accion === 'eliminar' && turno.id) {
-      this.turnoService.eliminar(turno.id).subscribe(() => this.cargarTurnos());
+      this.turnoService.eliminar(turno.id).subscribe({
+        next: () => {
+          this.lanzarToast("Turno eliminado correctamente");
+          this.cargarTurnos();
+        },
+        error: () => this.lanzarToast("Error al eliminar el turno")
+      });
     } else {
       this.turnoSeleccionado = { ...turno };
       this.accionActual = 'editar';
     }
+  }
+
+  lanzarToast(msg: string) {
+    this.mensajeToast = msg;
+    this.verToast = true;
+    setTimeout(() => this.verToast = false, 3000);
   }
 }
