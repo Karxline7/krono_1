@@ -23,9 +23,9 @@ export class SolicitudesUser implements OnInit {
   // El usuario actual para el que se gestionan las solicitudes (Funcionario ID = 1)
   funcionarioId = 1;
 
-  nuevaSolicitud = {
-    asignacionTurnoId: '',
-    tipo: '',
+  nuevaSolicitud: { asignacionTurnoId: number | null; tipo: number | null; descripcion: string } = {
+    asignacionTurnoId: null,
+    tipo: null,
     descripcion: ''
   };
 
@@ -113,7 +113,7 @@ export class SolicitudesUser implements OnInit {
   }
 
   enviarSolicitud() {
-    if (!this.nuevaSolicitud.asignacionTurnoId || !this.nuevaSolicitud.tipo || !this.nuevaSolicitud.descripcion) {
+    if (!this.nuevaSolicitud.asignacionTurnoId || !this.nuevaSolicitud.tipo || !this.nuevaSolicitud.descripcion.trim()) {
       this.lanzarToast('Error: Por favor llene todos los campos, asegurándose de seleccionar un turno');
       return;
     }
@@ -128,7 +128,7 @@ export class SolicitudesUser implements OnInit {
     this.http.post(`${this.apiUrl}/solicitud`, payload).subscribe({
       next: () => {
         this.lanzarToast('Solicitud enviada correctamente');
-        this.nuevaSolicitud = { asignacionTurnoId: '', tipo: '', descripcion: '' };
+        this.nuevaSolicitud = { asignacionTurnoId: null, tipo: null, descripcion: '' };
       },
       error: (error) => {
         console.error('Error al enviar la solicitud', error);

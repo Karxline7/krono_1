@@ -13,8 +13,8 @@
                 <div class="input-group">
                     <div class="custom-select-wrapper">
                         <select class="custom-select p-inputtext w-full" [(ngModel)]="nuevaSolicitud.asignacionTurnoId" name="asignacionTurnoId" required>
-                            <option value="" disabled selected hidden>Seleccione el Turno</option>
-                            <option *ngFor="let asig of misAsignaciones()" [value]="asig.id">{{ asig.label }}</option>
+                            <option [ngValue]="null" disabled selected hidden>Seleccione el Turno</option>
+                            <option *ngFor="let asig of misAsignaciones()" [ngValue]="asig.id">{{ asig.label }}</option>
                         </select>
                     </div>
                 </div>
@@ -22,8 +22,8 @@
                 <div class="input-group">
                     <div class="custom-select-wrapper">
                         <select class="custom-select p-inputtext w-full" [(ngModel)]="nuevaSolicitud.tipo" name="tipo" required>
-                            <option value="" disabled selected hidden>Tipo de Solicitud</option>
-                            <option *ngFor="let tipo of tiposSolicitud()" [value]="tipo.id">{{ tipo.nombre }}</option>
+                            <option [ngValue]="null" disabled selected hidden>Tipo de Solicitud</option>
+                            <option *ngFor="let tipo of tiposSolicitud()" [ngValue]="tipo.id">{{ tipo.nombre }}</option>
                         </select>
                     </div>
                 </div>
