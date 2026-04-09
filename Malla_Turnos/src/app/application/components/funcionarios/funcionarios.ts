@@ -79,45 +79,53 @@ export class Funcionarios implements OnInit, OnDestroy {
     if (this.procesando) return;
     this.procesando = true;
 
-    // Asegurar tipos correctos para el backend
-    const dataToSend = {
-      ...this.funcionarioActual,
-      numeroDocumento: Number(this.funcionarioActual.numeroDocumento),
-      rolId: Number(this.funcionarioActual.rolId),
-      cargoId: Number(this.funcionarioActual.cargoId),
-      areaId: Number(this.funcionarioActual.areaId)
-    };
+    try {
+      // Asegurar tipos correctos para el backend
+      const dataToSend = {
+        ...this.funcionarioActual,
+        numeroDocumento: Number(this.funcionarioActual.numeroDocumento),
+        rolId: Number(this.funcionarioActual.rolId),
+        cargoId: Number(this.funcionarioActual.cargoId),
+        areaId: Number(this.funcionarioActual.areaId)
+      };
 
-    if (this.esEdicion && this.funcionarioActual.id) {
-      this.FuncionarioService.editar(this.funcionarioActual.id, dataToSend).subscribe({
-        next: () => {
-          this.procesando = false;
-          this.lanzarToast("¡Actualizado con éxito!");
-          this.cargarFuncionarios();
-          this.resetForm();
-        },
-        error: () => {
-          this.procesando = false;
-          this.lanzarToast("Error al actualizar");
-        }
-      });
-    } else {
-      // Valor por defecto para pass si es creación y asegurar que sea Integer (número)
-      const pass = this.funcionarioActual.contrasena || '123456';
-      dataToSend.contrasena = Number(pass);
-      
-      this.FuncionarioService.crear(dataToSend).subscribe({
-        next: () => {
-          this.procesando = false;
-          this.lanzarToast("¡Guardado con éxito!");
-          this.cargarFuncionarios();
-          this.resetForm();
-        },
-        error: () => {
-          this.procesando = false;
-          this.lanzarToast("Error al guardar");
-        }
-      });
+      if (this.esEdicion && this.funcionarioActual.id) {
+        this.FuncionarioService.editar(this.funcionarioActual.id, dataToSend).subscribe({
+          next: () => {
+            this.procesando = false;
+            this.lanzarToast("¡Actualizado con éxito!");
+            this.cargarFuncionarios();
+            this.resetForm();
+          },
+          error: (err) => {
+            console.error("Error al editar:", err);
+            this.procesando = false;
+            this.lanzarToast("Error al actualizar");
+          }
+        });
+      } else {
+        // Valor por defecto para pass si es creación y asegurar que sea Integer (número)
+        const pass = this.funcionarioActual.contrasena || '123456';
+        dataToSend.contrasena = Number(pass);
+        
+        this.FuncionarioService.crear(dataToSend).subscribe({
+          next: () => {
+            this.procesando = false;
+            this.lanzarToast("¡Guardado con éxito!");
+            this.cargarFuncionarios();
+            this.resetForm();
+          },
+          error: (err) => {
+            console.error("Error al crear:", err);
+            this.procesando = false;
+            this.lanzarToast("Error al guardar");
+          }
+        });
+      }
+    } catch (e) {
+      console.error("Error local de ejecución:", e);
+      this.procesando = false;
+      this.lanzarToast("Error interno del sistema");
     }
   }
 
