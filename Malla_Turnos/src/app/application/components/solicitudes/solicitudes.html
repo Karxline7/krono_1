@@ -57,4 +57,12 @@
             </div>
         </ng-template>
     </main>
+
+    <!-- Toast de Notificaciones -->
+    <div *ngIf="verToast" class="toast-mensaje p-3 rounded" 
+         [ngClass]="mensajeToast.includes('Error') || mensajeToast.includes('Seleccione') || mensajeToast.includes('Por favor') ? 'bg-danger text-white' : 'bg-success text-white'" 
+         style="position: fixed; bottom: 25px; right: 25px; z-index: 9999; display: flex; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <i class="pi" [ngClass]="mensajeToast.includes('Error') || mensajeToast.includes('Seleccione') || mensajeToast.includes('Por favor') ? 'pi-times-circle' : 'pi-check-circle'" style="margin-right: 8px;"></i>
+        {{ mensajeToast }}
+    </div>
 </section>
