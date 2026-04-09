@@ -112,15 +112,8 @@ export class SolicitudesUser implements OnInit {
   enviando = false;
 
   enviarSolicitud() {
-<<<<<<< HEAD
-    if (this.enviando) return; // Evitar doble click o submit
-
-    if (!this.nuevaSolicitud.asignacionTurnoId || !this.nuevaSolicitud.tipo || !this.nuevaSolicitud.descripcion.trim()) {
-      this.lanzarToast('Error: Por favor llene todos los campos, asegurándose de seleccionar un turno');
-=======
     if (!this.nuevaSolicitud.asignacionTurnoId || !this.nuevaSolicitud.tipo || !this.nuevaSolicitud.descripcion) {
       alert('Por favor llene todos los campos, asegurándose de seleccionar un turno');
->>>>>>> parent of 8f9d959c (estilode dde user notificaciones)
       return;
     }
 
@@ -132,26 +125,14 @@ export class SolicitudesUser implements OnInit {
       motivoSolicitud: this.nuevaSolicitud.descripcion,
       estado: 'PENDIENTE'
     };
-
+     
     this.http.post(`${this.apiUrl}/solicitud`, payload).subscribe({
       next: () => {
-<<<<<<< HEAD
-        this.lanzarToast('Solicitud enviada correctamente');
-        this.nuevaSolicitud = { asignacionTurnoId: null, tipo: null, descripcion: '' };
-        this.enviando = false;
-      },
-      error: (error) => {
-        console.error('Error al enviar la solicitud', error);
-        this.lanzarToast('Error: Hubo un error al enviar la solicitud');
-        this.enviando = false;
-=======
-        alert('Solicitud enviada correctamente');
-        this.nuevaSolicitud = { asignacionTurnoId: '', tipo: '', descripcion: '' };
+        alert('Solicitud enviada exitosamente');
       },
       error: (error) => {
         console.error('Error al enviar la solicitud', error);
         alert('Hubo un error al enviar la solicitud');
->>>>>>> parent of 8f9d959c (estilode dde user notificaciones)
       }
     });
   }

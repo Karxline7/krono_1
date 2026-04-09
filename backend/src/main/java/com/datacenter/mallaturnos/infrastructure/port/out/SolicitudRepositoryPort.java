@@ -15,4 +15,6 @@ public interface SolicitudRepositoryPort {
     boolean existsAprobadaForAsignacion(Long asignacionId);
     SolicitudTurno save(SolicitudTurno solicitud);
     List<SolicitudTurno> obtener();
+    boolean existsById(Long id);
+    void deleteById(Long id);
 }
