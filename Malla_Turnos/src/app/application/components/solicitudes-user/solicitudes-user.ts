@@ -33,9 +33,6 @@ export class SolicitudesUser implements OnInit {
   turnosDisponibles: any[] = [];
   tiposSolicitud = signal<any[]>([]);
 
-  verToast = false;
-  mensajeToast = '';
-
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
@@ -115,10 +112,15 @@ export class SolicitudesUser implements OnInit {
   enviando = false;
 
   enviarSolicitud() {
+<<<<<<< HEAD
     if (this.enviando) return; // Evitar doble click o submit
 
     if (!this.nuevaSolicitud.asignacionTurnoId || !this.nuevaSolicitud.tipo || !this.nuevaSolicitud.descripcion.trim()) {
       this.lanzarToast('Error: Por favor llene todos los campos, asegurándose de seleccionar un turno');
+=======
+    if (!this.nuevaSolicitud.asignacionTurnoId || !this.nuevaSolicitud.tipo || !this.nuevaSolicitud.descripcion) {
+      alert('Por favor llene todos los campos, asegurándose de seleccionar un turno');
+>>>>>>> parent of 8f9d959c (estilode dde user notificaciones)
       return;
     }
 
@@ -133,6 +135,7 @@ export class SolicitudesUser implements OnInit {
 
     this.http.post(`${this.apiUrl}/solicitud`, payload).subscribe({
       next: () => {
+<<<<<<< HEAD
         this.lanzarToast('Solicitud enviada correctamente');
         this.nuevaSolicitud = { asignacionTurnoId: null, tipo: null, descripcion: '' };
         this.enviando = false;
@@ -141,13 +144,15 @@ export class SolicitudesUser implements OnInit {
         console.error('Error al enviar la solicitud', error);
         this.lanzarToast('Error: Hubo un error al enviar la solicitud');
         this.enviando = false;
+=======
+        alert('Solicitud enviada correctamente');
+        this.nuevaSolicitud = { asignacionTurnoId: '', tipo: '', descripcion: '' };
+      },
+      error: (error) => {
+        console.error('Error al enviar la solicitud', error);
+        alert('Hubo un error al enviar la solicitud');
+>>>>>>> parent of 8f9d959c (estilode dde user notificaciones)
       }
     });
-  }
-
-  lanzarToast(msg: string) {
-    this.mensajeToast = msg;
-    this.verToast = true;
-    setTimeout(() => this.verToast = false, 3000);
   }
 }

@@ -89,17 +89,3 @@ body, html {
     filter: brightness(0.9);
     transform: translateY(-2px);
 }
-
-/* --- TOAST --- */
-.toast-mensaje {
-    animation: slideIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-    display: flex;
-    align-items: center;
-    min-width: 300px;
-    font-weight: 500;
-}
-
-@keyframes slideIn {
-    from { transform: translateX(120%); }
-    to { transform: translateX(0); }
-}
