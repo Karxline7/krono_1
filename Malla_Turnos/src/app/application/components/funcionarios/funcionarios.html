@@ -57,8 +57,9 @@
 
                 <div class="botones-form">
                     <button type="button" class="btn-cancelar" (click)="toggleFormulario()">Cancelar</button>
-                    <button type="submit" [class]="esEdicion ? 'btn-actualizar' : 'btn-guardar-verde'" [disabled]="!funcionarioForm.form.valid">
-                        {{ esEdicion ? 'Actualizar Funcionario' : 'Guardar Funcionario' }}
+                    <button type="submit" [class]="esEdicion ? 'btn-actualizar' : 'btn-guardar-verde'" [disabled]="!funcionarioForm.form.valid || procesando">
+                        <i class="pi pi-spin pi-spinner" *ngIf="procesando"></i>
+                        {{ procesando ? 'Procesando...' : (esEdicion ? 'Actualizar Funcionario' : 'Guardar Funcionario') }}
                     </button>
                 </div>
             </form>
@@ -115,8 +116,8 @@
     </div>
     <ng-template pTemplate="footer">
         <div class="botones-container">
-            <button pButton label="No, cancelar" icon="pi pi-times" class="p-button-text p-button-secondary" (click)="cerrarModal()"></button>
-            <button pButton label="Sí, eliminar" icon="pi pi-trash" class="p-button-danger p-button-raised" (click)="eliminarConfirmado()"></button>
+            <button pButton label="No, cancelar" icon="pi pi-times" class="p-button-text p-button-secondary" (click)="cerrarModal()" [disabled]="procesando"></button>
+            <button pButton [label]="procesando ? 'Eliminando...' : 'Sí, eliminar'" [icon]="procesando ? 'pi pi-spin pi-spinner' : 'pi pi-trash'" class="p-button-danger p-button-raised" (click)="eliminarConfirmado()" [disabled]="procesando"></button>
         </div>
     </ng-template>
 </p-dialog>

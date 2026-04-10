@@ -39,7 +39,7 @@ export class Funcionarios implements OnInit, OnDestroy {
   procesando = false;
   private intervalId: any;
 
-  constructor(private FuncionarioService: FuncionarioService) {}
+  constructor(private funcionarioService: FuncionarioService) {}
 
   ngOnInit(): void {
     this.cargarFuncionarios();
@@ -74,7 +74,7 @@ export class Funcionarios implements OnInit, OnDestroy {
   }
 
   cargarFuncionarios(silencioso = false) {
-    this.FuncionarioService.listar().subscribe({
+    this.funcionarioService.listar().subscribe({
       next: (data) => this.listaFuncionarios = [...data],
       error: () => {
         if (!silencioso) {
@@ -108,7 +108,7 @@ export class Funcionarios implements OnInit, OnDestroy {
       contrasena: (this.funcionarioActual.contrasena || '123456').toString()
     };
 
-    this.FuncionarioService.crear(dataToSend).subscribe({
+    this.funcionarioService.crear(dataToSend).subscribe({
       next: () => {
         this.procesando = false;
         this.resetForm();
@@ -137,7 +137,7 @@ export class Funcionarios implements OnInit, OnDestroy {
       areaId: Number(this.funcionarioActual.areaId)
     };
 
-    this.FuncionarioService.editar(this.funcionarioActual.id, dataToSend).subscribe({
+    this.funcionarioService.editar(this.funcionarioActual.id, dataToSend).subscribe({
       next: () => {
         this.procesando = false;
         this.resetForm();
@@ -164,14 +164,17 @@ export class Funcionarios implements OnInit, OnDestroy {
   }
 
   eliminarConfirmado() {
-    if (this.idAEliminar) {
-      this.FuncionarioService.eliminar(this.idAEliminar).subscribe({
+    if (this.idAEliminar !== null) {
+      this.procesando = true;
+      this.funcionarioService.eliminar(this.idAEliminar).subscribe({
         next: () => {
+          this.procesando = false;
           this.cerrarModalEliminar();
           this.cargarFuncionarios(true);
           this.lanzarToast("Funcionario eliminado");
         },
         error: () => {
+          this.procesando = false;
           this.lanzarToast("Error al eliminar");
         }
       });
