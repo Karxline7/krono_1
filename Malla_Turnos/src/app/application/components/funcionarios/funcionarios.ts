@@ -69,14 +69,18 @@ export class Funcionarios implements OnInit, OnDestroy {
 
   refresh() {
     if (!this.mostrarFormulario && !this.mostrarModalEliminar && !this.procesando) {
-      this.cargarFuncionarios();
+      this.cargarFuncionarios(true);
     }
   }
 
-  cargarFuncionarios() {
+  cargarFuncionarios(silencioso = false) {
     this.FuncionarioService.listar().subscribe({
       next: (data) => this.listaFuncionarios = [...data],
-      error: () => this.lanzarToast('Error al cargar datos')
+      error: () => {
+        if (!silencioso) {
+          this.lanzarToast('Error al cargar datos');
+        }
+      }
     });
   }
 
@@ -108,7 +112,7 @@ export class Funcionarios implements OnInit, OnDestroy {
       next: () => {
         this.procesando = false;
         this.resetForm();
-        this.cargarFuncionarios();
+        this.cargarFuncionarios(true);
         this.lanzarToast("Funcionario creado");
       },
       error: () => {
@@ -137,7 +141,7 @@ export class Funcionarios implements OnInit, OnDestroy {
       next: () => {
         this.procesando = false;
         this.resetForm();
-        this.cargarFuncionarios();
+        this.cargarFuncionarios(true);
         this.lanzarToast("Funcionario actualizado");
       },
       error: () => {
@@ -164,7 +168,7 @@ export class Funcionarios implements OnInit, OnDestroy {
       this.FuncionarioService.eliminar(this.idAEliminar).subscribe({
         next: () => {
           this.cerrarModalEliminar();
-          this.cargarFuncionarios();
+          this.cargarFuncionarios(true);
           this.lanzarToast("Funcionario eliminado");
         },
         error: () => {
@@ -203,10 +207,18 @@ export class Funcionarios implements OnInit, OnDestroy {
   lanzarToast(msg: string) {
     this.verToast = false;
     this.mensajeToast = msg;
-
+    
+    // Un retraso mínimo para permitir que el DOM detecte el cambio de false -> true
+    // y dispare la animación CSS.
     setTimeout(() => {
       this.verToast = true;
-      setTimeout(() => this.verToast = false, 3000);
-    }, 100);
+    }, 10);
+
+    // Auto-ocultar después de 3 segundos
+    setTimeout(() => {
+      if (this.mensajeToast === msg) {
+        this.verToast = false;
+      }
+    }, 3000);
   }
 }
