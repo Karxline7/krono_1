@@ -45,6 +45,11 @@
                     <input type="number" pInputText [(ngModel)]="funcionarioActual.cargoId" name="cargoId" placeholder="ID de Cargo" required>
                 </div>
 
+                <div class="form-field">
+                    <label>Área ID</label>
+                    <input type="number" pInputText [(ngModel)]="funcionarioActual.areaId" name="areaId" placeholder="ID de Área" required>
+                </div>
+
                 <div class="form-field" *ngIf="!esEdicion">
                     <label>Contraseña</label>
                     <input type="password" pInputText [(ngModel)]="funcionarioActual.contrasena" name="contrasena" placeholder="Contraseña" required>
