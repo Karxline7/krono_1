@@ -49,7 +49,6 @@
       <thead>
         <tr>
           <th>Nombre</th>
-          <th>Tipo</th>
           <th>Horario Inicio</th>
           <th>Hora Fin</th>
           <th>Almuerzo</th>
@@ -61,7 +60,6 @@
       <tbody>
         <tr *ngFor="let turno of turnos()">
           <td class="fw-bold">{{ turno.nombre }}</td>
-          <td><span class="badge">{{ turno.tipo }}</span></td>
           <td><span class="fw-bold">{{ turno.horaInicio }}</span></td>
           <td><span class="fw-bold">{{ turno.horaFin }}</span></td>
           <td><span class="fw-bold">{{ turno.horaalmuerzo }}</span></td>
@@ -87,11 +85,6 @@
   <div class="input-container">
     <small>Nombre del Turno</small>
     <input type="text" name="nombre" [(ngModel)]="modelo.nombre" placeholder="Ej: Mañana A" required>
-  </div>
-
-  <div class="input-container">
-    <small>Tipo de Turno</small>
-    <input type="text" name="tipo" [(ngModel)]="modelo.tipo" placeholder="Ej: Operativo" required>
   </div>
 
   <div class="input-container">
