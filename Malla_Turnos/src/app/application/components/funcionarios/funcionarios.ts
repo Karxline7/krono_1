@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Navbar } from '../../shared/navbar/navbar';
+import { Observable } from 'rxjs';
 import { FuncionarioService, Funcionario } from '../../../domain/services/Funcionarios/funcionarios';
 
 // PrimeNG
@@ -106,9 +107,9 @@ export class Funcionarios implements OnInit, OnDestroy {
     this.FuncionarioService.crear(dataToSend).subscribe({
       next: () => {
         this.procesando = false;
-        this.lanzarToast("Funcionario creado");
-        this.cargarFuncionarios();
         this.resetForm();
+        this.cargarFuncionarios();
+        this.lanzarToast("Funcionario creado");
       },
       error: () => {
         this.procesando = false;
@@ -135,9 +136,9 @@ export class Funcionarios implements OnInit, OnDestroy {
     this.FuncionarioService.editar(this.funcionarioActual.id, dataToSend).subscribe({
       next: () => {
         this.procesando = false;
-        this.lanzarToast("Funcionario actualizado");
-        this.cargarFuncionarios();
         this.resetForm();
+        this.cargarFuncionarios();
+        this.lanzarToast("Funcionario actualizado");
       },
       error: () => {
         this.procesando = false;
@@ -162,9 +163,9 @@ export class Funcionarios implements OnInit, OnDestroy {
     if (this.idAEliminar) {
       this.FuncionarioService.eliminar(this.idAEliminar).subscribe({
         next: () => {
-          this.lanzarToast("Funcionario eliminado");
-          this.cargarFuncionarios();
           this.cerrarModalEliminar();
+          this.cargarFuncionarios();
+          this.lanzarToast("Funcionario eliminado");
         },
         error: () => {
           this.lanzarToast("Error al eliminar");
@@ -201,12 +202,11 @@ export class Funcionarios implements OnInit, OnDestroy {
 
   lanzarToast(msg: string) {
     this.verToast = false;
+    this.mensajeToast = msg;
 
     setTimeout(() => {
-      this.mensajeToast = msg;
       this.verToast = true;
-
       setTimeout(() => this.verToast = false, 3000);
-    }, 50);
+    }, 100);
   }
 }
