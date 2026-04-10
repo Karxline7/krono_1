@@ -1,28 +1,26 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Navbar } from '../../shared/navbar/navbar';
 import { FuncionarioService, Funcionario } from '../../../domain/services/Funcionarios/funcionarios';
 
 // PrimeNG
-import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
-import { TagModule } from 'primeng/tag';
-import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-funcionarios',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, Navbar, TableModule,
-    ButtonModule, InputTextModule, DialogModule, TagModule, TooltipModule
+    CommonModule, FormsModule, Navbar,
+    ButtonModule, InputTextModule, DialogModule
   ],
   templateUrl: './funcionarios.html',
   styleUrl: './funcionarios.scss',
 })
 export class Funcionarios implements OnInit, OnDestroy {
+  @ViewChild('funcionarioForm') funcionarioForm!: NgForm;
 
   listaFuncionarios: Funcionario[] = [];
   funcionarioActual: Funcionario = this.getInitFuncionario();
@@ -180,6 +178,10 @@ export class Funcionarios implements OnInit, OnDestroy {
     this.idAEliminar = null;
   }
 
+  cerrarModal() {
+    this.cerrarModalEliminar();
+  }
+
   toggleFormulario() {
     this.mostrarFormulario = !this.mostrarFormulario;
     if (!this.mostrarFormulario) {
@@ -188,9 +190,13 @@ export class Funcionarios implements OnInit, OnDestroy {
   }
 
   resetForm() {
-    this.funcionarioActual = this.getInitFuncionario();
     this.esEdicion = false;
     this.mostrarFormulario = false;
+    if (this.funcionarioForm) {
+      this.funcionarioForm.resetForm(this.getInitFuncionario());
+    } else {
+      this.funcionarioActual = this.getInitFuncionario();
+    }
   }
 
   lanzarToast(msg: string) {

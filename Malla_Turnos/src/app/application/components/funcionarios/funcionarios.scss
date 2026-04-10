@@ -71,7 +71,7 @@ button:not(.p-button) {
     color: #64748b;
     border-radius: $radius-sm;
     padding: 10px 20px;
-    
+
     &:hover {
         background: #e2e8f0;
         color: #1e293b;
@@ -91,6 +91,14 @@ button:not(.p-button) {
 .tabla-funcionarios { 
   width: 100%; 
   border-collapse: collapse; 
+
+
+
+
+
+
+
+
 
   th { 
     background: #f8fafc; 
@@ -115,6 +123,13 @@ button:not(.p-button) {
   }
 }
 
+
+
+
+
+
+
+
 .badge { 
   background: rgba($blue-primary, 0.1); 
   color: $blue-primary; 
@@ -128,11 +143,20 @@ button:not(.p-button) {
 .btn-outline-warning { color: #f59e0b; border: none; background: transparent; padding: 8px 12px; border-radius: $radius-sm; transition: all 0.2s; &:hover { background: #fef3c7; } }
 .btn-outline-danger { color: #ef4444; border: none; background: transparent; padding: 8px 12px; border-radius: $radius-sm; transition: all 0.2s; &:hover { background: #fee2e2; } }
 
+
+
+
+
+
 .acciones {
   display: flex;
   gap: 8px;
   justify-content: center;
   align-items: center;
+
+
+
+
 }
 
 /* --- FORMULARIO GRID --- */
@@ -213,13 +237,13 @@ button:not(.p-button) {
     .p-dialog-content {
       background: white !important; /* Asegurar fondo sólido */
       padding: 24px;
-      
+
       .modal-body {
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 20px;
-        
+
         .alerta-circulo {
           width: 80px;
           height: 80px;
