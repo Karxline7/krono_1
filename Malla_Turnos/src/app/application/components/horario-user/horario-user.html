@@ -38,7 +38,10 @@
                             <div class="bloque-hora inicio">{{ asig.horaInicio }}</div>
                             <div class="bloque-romper" *ngIf="asig.horabreak || asig.horaalmuerzo">
                                 <span class="receso-badge">RECESO</span>
-                                <span class="receso-time">{{ asig.horabreak ? asig.horabreak : asig.horaalmuerzo }} | {{ asig.horaalmuerzo ? asig.horaalmuerzo : asig.horabreak }}</span>
+                                <div class="receso-time-container">
+                                    <span class="receso-time" *ngIf="asig.horabreak">B: {{ asig.horabreak | slice:0:5 }}</span>
+                                    <span class="receso-time" *ngIf="asig.horaalmuerzo">A: {{ asig.horaalmuerzo | slice:0:5 }}</span>
+                                </div>
                             </div>
                             <div class="bloque-hora fin">{{ asig.horaFin }}</div>
                         </div>
