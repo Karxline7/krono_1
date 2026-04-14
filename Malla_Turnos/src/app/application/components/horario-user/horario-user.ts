@@ -142,8 +142,8 @@ export class HorarioUser implements OnInit, OnDestroy {
               esDescanso: esDescanso,
               horaInicio: t?.horaInicio || '',
               horaFin: t?.horaFin || '',
-              horabreak: t?.horabreak || '',
-              horaalmuerzo: t?.horaalmuerzo || '',
+              horabreak: t?.horaBreak || t?.horabreak || '',
+              horaalmuerzo: t?.horaAlmuerzo || t?.horaalmuerzo || '',
               turnoNombre: t?.nombre || 'Descanso'
             };
           } else {
