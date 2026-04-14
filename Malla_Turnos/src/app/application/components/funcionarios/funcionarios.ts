@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Navbar } from '../../shared/navbar/navbar';
+import { Observable } from 'rxjs';
 import { FuncionarioService, Funcionario } from '../../../domain/services/Funcionarios/funcionarios';
 
 // PrimeNG
@@ -38,7 +39,7 @@ export class Funcionarios implements OnInit, OnDestroy {
   procesando = false;
   private intervalId: any;
 
-  constructor(private FuncionarioService: FuncionarioService) {}
+  constructor(private funcionarioService: FuncionarioService) {}
 
   ngOnInit(): void {
     this.cargarFuncionarios();
@@ -68,14 +69,18 @@ export class Funcionarios implements OnInit, OnDestroy {
 
   refresh() {
     if (!this.mostrarFormulario && !this.mostrarModalEliminar && !this.procesando) {
-      this.cargarFuncionarios();
+      this.cargarFuncionarios(true);
     }
   }
 
-  cargarFuncionarios() {
-    this.FuncionarioService.listar().subscribe({
+  cargarFuncionarios(silencioso = false) {
+    this.funcionarioService.listar().subscribe({
       next: (data) => this.listaFuncionarios = [...data],
-      error: () => this.lanzarToast('Error al cargar datos')
+      error: () => {
+        if (!silencioso) {
+          this.lanzarToast('Error al cargar datos');
+        }
+      }
     });
   }
 
@@ -103,12 +108,12 @@ export class Funcionarios implements OnInit, OnDestroy {
       contrasena: (this.funcionarioActual.contrasena || '123456').toString()
     };
 
-    this.FuncionarioService.crear(dataToSend).subscribe({
+    this.funcionarioService.crear(dataToSend).subscribe({
       next: () => {
         this.procesando = false;
-        this.lanzarToast("Funcionario creado");
-        this.cargarFuncionarios();
         this.resetForm();
+        this.cargarFuncionarios(true);
+        this.lanzarToast("Funcionario creado");
       },
       error: () => {
         this.procesando = false;
@@ -132,12 +137,12 @@ export class Funcionarios implements OnInit, OnDestroy {
       areaId: Number(this.funcionarioActual.areaId)
     };
 
-    this.FuncionarioService.editar(this.funcionarioActual.id, dataToSend).subscribe({
+    this.funcionarioService.editar(this.funcionarioActual.id, dataToSend).subscribe({
       next: () => {
         this.procesando = false;
-        this.lanzarToast("Funcionario actualizado");
-        this.cargarFuncionarios();
         this.resetForm();
+        this.cargarFuncionarios(true);
+        this.lanzarToast("Funcionario actualizado");
       },
       error: () => {
         this.procesando = false;
@@ -159,14 +164,17 @@ export class Funcionarios implements OnInit, OnDestroy {
   }
 
   eliminarConfirmado() {
-    if (this.idAEliminar) {
-      this.FuncionarioService.eliminar(this.idAEliminar).subscribe({
+    if (this.idAEliminar !== null) {
+      this.procesando = true;
+      this.funcionarioService.eliminar(this.idAEliminar).subscribe({
         next: () => {
-          this.lanzarToast("Funcionario eliminado");
-          this.cargarFuncionarios();
+          this.procesando = false;
           this.cerrarModalEliminar();
+          this.cargarFuncionarios(true);
+          this.lanzarToast("Funcionario eliminado");
         },
         error: () => {
+          this.procesando = false;
           this.lanzarToast("Error al eliminar");
         }
       });
@@ -201,12 +209,19 @@ export class Funcionarios implements OnInit, OnDestroy {
 
   lanzarToast(msg: string) {
     this.verToast = false;
-
+    this.mensajeToast = msg;
+    
+    // Un retraso mínimo para permitir que el DOM detecte el cambio de false -> true
+    // y dispare la animación CSS.
     setTimeout(() => {
-      this.mensajeToast = msg;
       this.verToast = true;
+    }, 10);
 
-      setTimeout(() => this.verToast = false, 3000);
-    }, 50);
+    // Auto-ocultar después de 3 segundos
+    setTimeout(() => {
+      if (this.mensajeToast === msg) {
+        this.verToast = false;
+      }
+    }, 3000);
   }
 }

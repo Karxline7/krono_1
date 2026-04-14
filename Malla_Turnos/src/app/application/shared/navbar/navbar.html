@@ -1,66 +1,63 @@
-
-<nav class="navbar">
+<nav class="sidebar">
  
-  <div class="nav-left">
- 
+  <div class="sidebar-header">
     <div class="logo">
       <img src="assets/Logo_Data_Center.png" alt="Logo">
     </div>
- 
-    <ul class="nav-links">
- 
-      <li>
-        <a routerLink="/cartas-turnos" routerLinkActive="active">
-          Inicio
-        </a>
-      </li>
- 
-      <li>
-        <a routerLink="/funcionarios" routerLinkActive="active">
-          Funcionario
-          <img src="assets/Funcionario.png" class="nav-icon">
-        </a>
-      </li>
- 
-      <li>
-        <a routerLink="/horario" routerLinkActive="active">
-          Turnos
-          <img src="assets/Turnos.png" class="nav-icon">
-        </a>
-      </li>
- 
-      <li>
-        <a routerLink="/solicitudes" routerLinkActive="active">
-          Solicitudes
-          <img src="assets/Solicitudes.png" class="nav-icon">
-        </a>
-      </li>
- 
-    </ul>
- 
   </div>
  
+  <ul class="nav-links">
  
-    <div class="nav-right">
+    <li>
+      <a routerLink="/cartas-turnos" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <span class="nav-icon add-icon">+</span>
+        Inicio (Crear Turnos)
+      </a>
+    </li>
  
-    <div class="user-info-text">
-      <span class="user-name">{{ userName }}</span>
-      <span class="user-role">{{ userRole }}</span>
-    </div>
+    <li>
+      <a routerLink="/funcionarios" routerLinkActive="active">
+        <img src="assets/Funcionario.png" class="nav-icon">
+        Funcionario
+      </a>
+    </li>
  
-    <!-- FOTO -->
-    <div class="user-photo-container" (click)="toggleMenu()">
-      <img src="assets/github.svg" class="user-photo">
+    <li>
+      <a routerLink="/horario" routerLinkActive="active">
+        <img src="assets/Turnos.png" class="nav-icon">
+        Horario
+      </a>
+    </li>
+ 
+    <li>
+      <a routerLink="/solicitudes" routerLinkActive="active">
+        <img src="assets/Solicitudes.png" class="nav-icon">
+        Solicitudes
+      </a>
+    </li>
+ 
+  </ul>
+ 
+  <div class="sidebar-footer">
+    
+    <!-- FOOTER TOGGLE OVERALL (Contains both avatar and text) -->
+    <div class="user-profile-toggle" (click)="toggleMenu()">
+      <div class="user-photo-container">
+        <img src="assets/github.svg" class="user-photo">
+      </div>
+      <div class="user-info-text">
+        <span class="user-name">{{ userName }}</span>
+        <span class="user-role">{{ userRole }}</span>
+      </div>
     </div>
  
     <!-- MENU -->
     <div class="dropdown-menu" [class.open]="menuAbierto">
- 
       <div class="dropdown-wrapper">
- 
-        <div class="user-info">
-          <img src="assets/github.svg ">
-          <div>
+        
+        <div class="dropdown-user-info">
+          <img src="assets/github.svg" class="dropdown-avatar">
+          <div class="dropdown-text">
             <h3>{{ userName }}</h3>
             <span class="user-role">{{ userRole }}</span>
           </div>
@@ -69,7 +66,6 @@
         <hr>
  
         <div class="menu-options">
- 
           <!-- Config -->
           <div class="menu-item">
             <img src="assets/Logo_Data_Center.png">
@@ -82,11 +78,9 @@
             <img src="assets/door.png">
             <span>Cerrar sesión</span>
           </div>
- 
         </div>
  
       </div>
- 
     </div>
  
   </div>

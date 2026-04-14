@@ -13,3 +13,18 @@ body {
 * {
   box-sizing: border-box;
 }
+
+/* Global layout for app screens using sidebar navigation */
+app-cartas-turnos,
+app-funcionarios,
+app-horario,
+app-horario-user,
+app-reportes,
+app-reportes-user,
+app-solicitudes,
+app-solicitudes-user {
+  display: block;
+  padding-left: 260px;
+  width: 100%;
+  min-height: 100vh;
+}

@@ -1,79 +1,75 @@
-<nav class="navbar">
- 
-  <div class="nav-left">
- 
+<nav class="sidebar">
+
+  <div class="sidebar-header">
     <div class="logo">
       <img src="assets/Logo_Data_Center.png" alt="Logo">
     </div>
- 
-    <ul class="nav-links">
- 
-      <li>
-        <a routerLink="/horario-user" routerLinkActive="active">
-          Turnos
-          <img src="assets/Turnos.png" class="nav-icon">
-        </a>
-      </li>
- 
-      <li>
-        <a routerLink="/solicitudes-user" routerLinkActive="active">
-          Solicitudes
-          <img src="assets/Solicitudes.png" class="nav-icon">
-        </a>
-      </li>
- 
-    </ul>
- 
   </div>
- 
- 
-  <!-- LADO DERECHO -->
-  <div class="nav-right">
- 
-    <div class="user-info-text">
-      <span class="user-name">{{ userName }}</span>
-      <span class="user-role">{{ userRole }}</span>
-    </div>
- 
-    <!-- FOTO -->
-    <div class="user-photo-container" (click)="toggleMenu()">
-      <img src="assets/github.svg" class="user-photo">
-    </div>
- 
- 
-    <!-- MENU DESPLEGABLE -->
-    <div class="dropdown-menu" [class.open]="menuAbierto">
- 
-      <div class="dropdown-wrapper">
- 
-        <div class="user-info">
-          <img src="assets/github.svg">
-          <h2>{{ userName }}</h2>
-        </div>
- 
-        <hr>
- 
-        <div class="menu-options">
- 
-          <div>
-            <img src="assets/tuerca.png">
-            <p>Configuración</p>
-            <span>›</span>
-          </div>
- 
-          <a routerLink="/" class="logout-link">
-            <img src="assets/door.png">
-            <p>Cerrar sesión</p> 
-            <span>›</span>
-          </a>
- 
-        </div>
- 
+
+  <ul class="nav-links">
+
+    <li>
+      <a routerLink="/horario-user" routerLinkActive="active">
+        <img src="assets/Turnos.png" class="nav-icon">
+        Turnos
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/solicitudes-user" routerLinkActive="active">
+        <img src="assets/Solicitudes.png" class="nav-icon">
+        Solicitudes
+      </a>
+    </li>
+
+  </ul>
+
+  <div class="sidebar-footer">
+    
+    <!-- FOOTER TOGGLE OVERALL (Contains both avatar and text) -->
+    <div class="user-profile-toggle" (click)="toggleMenu()">
+      <div class="user-photo-container">
+        <img src="assets/github.svg" class="user-photo">
       </div>
- 
+      <div class="user-info-text">
+        <span class="user-name">{{ userName }}</span>
+        <span class="user-role">{{ userRole }}</span>
+      </div>
     </div>
- 
+
+    <!-- MENU -->
+    <div class="dropdown-menu" [class.open]="menuAbierto">
+      <div class="dropdown-wrapper">
+        
+        <div class="dropdown-user-info">
+          <img src="assets/github.svg" class="dropdown-avatar">
+          <div class="dropdown-text">
+            <h3>{{ userName }}</h3>
+            <span class="user-role">{{ userRole }}</span>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="menu-options">
+          <!-- Config -->
+          <div class="menu-item">
+            <img src="assets/Logo_Data_Center.png" class="nav-icon">
+            <span>Configuración</span>
+            <span class="arrow">›</span>
+          </div>
+
+          <!-- Logout -->
+          <div class="menu-item logout" routerLink="/">
+            <img src="assets/door.png" class="nav-icon">
+            <span>Cerrar sesión</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
- 
+
 </nav>
  

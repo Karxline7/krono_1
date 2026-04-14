@@ -1,91 +1,161 @@
-/* Esto centra todo el contenido en el medio de la página */
-body, html {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    justify-content: center; /* Centro horizontal */
-    align-items: center;     /* Centro vertical */
-    background-color: #f8f9fa;
-    font-family: 'Segoe UI', sans-serif;
+/* 1. Variables */
+$dark-text: #0f172a;
+$gray-text: #64748b;
+$border-color: #cbd5e1;
+$primary-blue: #3b82f6;
+$bg-light: #f8fafc;
+
+/* 2. Configuración del Host (Importante para Angular/Web Components) */
+:host {
+  display: block;
+  width: 100%;
+  height: 100vh;
 }
 
-.contenedor-centrado {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 20px;
+/* 3. Contenedor Principal (Centrado Total) */
+.main-container-user {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  place-items: center; /* Centra horizontal y verticalmente */
+  background-color: $bg-light;
+  margin: 0;
+  padding: 20px; /* Espacio de seguridad para móviles */
+  box-sizing: border-box;
 }
 
+/* 4. Tarjeta del Formulario */
 .request-card {
-    width: 100%;
-    max-width: 550px; /* Ancho similar a tu imagen */
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
 }
 
 .main-title {
-    text-align: center;
-    font-size: 26px;
-    margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: $dark-text;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  letter-spacing: -0.3px;
 }
 
 .form-container {
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 30px;
-    padding: 40px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    text-align: center;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 2px;
+  padding: 50px 40px;
+  width: 100%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* Sutil sombra para dar profundidad */
 }
 
-/* Logo */
-.logo-placeholder { margin-bottom: 25px; }
-.logo-placeholder .data { color: #0056b3; font-size: 35px; font-weight: bold; }
-.logo-placeholder .center { color: #8cc63f; font-size: 35px; font-weight: bold; }
-.logo-placeholder .colombia { color: #0056b3; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; }
+/* 5. Logo */
+.logo-placeholder { 
+  margin-bottom: 40px; 
+  text-align: center; 
+  
+  .data { color: $dark-text; font-size: 1.1rem; font-weight: 900; }
+  .center { color: $primary-blue; font-size: 1.1rem; font-weight: 300; }
+  .colombia { 
+    color: $border-color; 
+    font-size: 0.5rem; 
+    letter-spacing: 4px; 
+    font-weight: 800; 
+    margin-top: 2px; 
+    text-transform: uppercase; 
+  }
+}
 
-/* Inputs */
-.input-group { margin-bottom: 20px; width: 100%; }
+/* 6. Inputs y Grupos */
+.input-group { 
+  margin-bottom: 25px; 
+  width: 100%; 
+  text-align: left;
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: $gray-text;
+    text-transform: uppercase;
+  }
+}
 
 .custom-select-wrapper {
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.custom-select, .description-area {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid $border-color;
+  border-radius: 2px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  color: #334155;
+  background: white;
+  font-weight: 600;
+  box-sizing: border-box;
+  
+  &::placeholder {
+    color: #94a3b8;
+    font-weight: 500;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: $primary-blue;
+  }
 }
 
 .custom-select {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #000;
-    border-radius: 12px;
-    font-size: 18px;
-    appearance: none; /* Quita flecha nativa */
-    background: #fff url('data:image/svg+xml;charset=US-ASCII,<svg%20xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%20width%3D"24"%20height%3D"24"%20viewBox%3D"0%200%2024%2024"><path%20d%3D"M7.41%208.59L12%2013.17l4.59-4.58L18%2010l-6%206-6-6%201.41-1.41z"%20fill%3D"black"%2F><%2Fsvg>') no-repeat right 15px center;
-    background-size: 25px;
+  appearance: none;
+  background: white url('data:image/svg+xml;charset=US-ASCII,<svg%20width%3D"14"%20height%3D"8"%20viewBox%3D"0%200%2014%208"%20fill%3D"none"%20xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"><path%20d%3D"M1%201L7%207L13%201"%20stroke%3D"%230F172A"%20stroke-width%3D"2"%20stroke-linecap%3D"round"%20stroke-linejoin%3D"round"%2F><%2Fsvg>') no-repeat right 15px center;
+  background-size: 10px;
 }
 
 .description-area {
-    width: 100%;
-    height: 150px;
-    border: 1px solid #ccc;
-    border-radius: 15px;
-    padding: 15px;
-    font-size: 18px;
-    resize: none;
-    box-sizing: border-box;
-}
-/* Botón Enviar */
-.btn-submit {
-    background-color: #7aff54; /* El verde neón de la imagen */
-    color: #000;
-    border: none;
-    padding: 12px 60px;
-    font-size: 24px;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.2s;
+  height: 120px;
+  resize: none;
 }
 
-.btn-submit:hover {
-    filter: brightness(0.9);
-    transform: translateY(-2px);
+/* 7. Estado Activo */
+.activo-borde {
+  border-color: #2563eb !important;
+  color: #1e293b;
+}
+
+/* 8. Botón Enviar */
+.btn-submit {
+  background-color: $border-color;
+  color: white;
+  border: none;
+  padding: 15px;
+  width: 100%;
+  font-size: 0.75rem;
+  font-weight: 800;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-top: 10px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+
+  &:not(:disabled):hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+  }
+
+  &:not(:disabled) {
+    background-color: $primary-blue;
+  }
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
 }

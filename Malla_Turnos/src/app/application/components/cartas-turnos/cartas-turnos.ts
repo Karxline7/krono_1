@@ -68,8 +68,6 @@ export class CartasTurnos implements OnInit, OnDestroy {
   }
 
   refresh() {
-    // Si no estamos editando ni agregando, refrescamos. 
-    // Quitamos 'cargando' de la condición para evitar que se bloquee si una petición falla
     if (!this.accionActual) {
       this.cargarTurnos();
     }

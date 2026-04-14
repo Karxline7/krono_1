@@ -1,69 +1,51 @@
-// 1. Configuración de Variables (Ajusta los colores a tu marca)
-$lime-primary: #d4e157;
-$lime-light: #f1f8e9;
-$lime-hover: #e6ee9c;
-$dark-text: #333333;
-$gray-text: #757575;
-$bg-main: #f5f5f5;
+// Configuración de Variables
+$dark-text: #1e293b;
+$gray-text: #64748b;
+$bg-main: #f8fafc;
+$border-color: #e2e8f0;
 $white: #ffffff;
-$red-delete: #ff5252;
-$shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
-
-// 2. Mixins para reutilización
-@mixin card-style {
-  background: $white;
-  border-radius: 12px;
-  box-shadow: $shadow-soft;
-  padding: 20px;
-}
-
-@mixin input-base {
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 10px;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-  &:focus {
-    outline: none;
-    border-color: $lime-primary;
-    box-shadow: 0 0 0 2px rgba($lime-primary, 0.2);
-  }
-}
 
 /* --- ESTRUCTURA PRINCIPAL --- */
 .main-container {
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  padding: 20px;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  padding: 30px;
   background-color: $bg-main;
   min-height: 100vh;
 
   .top-header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 
     h1 {
-      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 800;
+      text-transform: uppercase;
       color: $dark-text;
-      font-weight: 300;
       margin: 0;
+      letter-spacing: -0.5px;
     }
 
     .btn-descargar-horario {
-      position: absolute;
-      right: 0;
-      background-color: #4ebf7b;
+      background-color: #2D3748;
       color: white;
-      padding: 10px 15px;
-      font-size: 0.9rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      
+      padding: 12px 20px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      border-radius: 2px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      // Ocultar icono para igualar el mockup
+      i { display: none; }
+
       &:hover {
-        background-color: #43a86b;
-        transform: translateY(-1px);
+        background-color: #1a202c;
       }
     }
   }
@@ -71,19 +53,40 @@ $shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
 
 /* --- FILTROS --- */
 .filtros-container {
-  @include card-style;
-  margin-bottom: 20px;
+  background: $white;
+  border: 1px solid $border-color;
+  border-radius: 2px;
+  padding: 20px;
+  margin-bottom: 25px;
 
   .selector-group {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 40px;
+    align-items: flex-end;
 
-    .p-inputtext, select {
-      @include input-base;
-      min-width: 180px;
-      background: $white;
+    // Pseudo labels since HTML doesn't have them
+    position: relative;
+    
+    // Trick to visually add labels before selects without HTML changes
+    & > select:nth-child(1)::before {
+        content: "FILTRAR POR TURNO";
+    }
+
+    & > select {
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #334155;
+      min-width: 220px;
+      background: white;
+      outline: none;
+      
+      &:focus {
+        border-color: #3b82f6;
+      }
     }
   }
 }
@@ -94,149 +97,232 @@ $shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   background: $white;
-  border-radius: 12px;
   opacity: 0;
 
   &.abierto {
     max-height: 500px;
     padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid $lime-primary;
+    margin-bottom: 25px;
+    border: 1px solid #93c5fd;
+    border-radius: 4px;
+    background: #f0f9ff;
     opacity: 1;
   }
 
   .form-horizontal {
     display: flex;
-    gap: 12px;
+    gap: 15px;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 
     input, select {
-      @include input-base;
+      border: 1px solid #bfdbfe;
+      border-radius: 4px;
+      padding: 10px;
+      font-size: 0.85rem;
+    }
+    
+    button {
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      border: none;
+      cursor: pointer;
+      color: white;
+
+      &.btn-guardar-verde { background: #059669; }
+      &.btn-actualizar { background: #3b82f6; }
+      &.btn-cancelar { background: #94a3b8; }
     }
   }
 }
 
-/* --- PERSONALIZACIÓN DE PRIMENG TABLE --- */
+/* --- TABLA PRINCIPAL --- */
 :host ::ng-deep {
   .contenedor-tabla {
-    @include card-style;
-    padding: 0; // Para que la tabla llegue a los bordes del card
-
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: 2px;
+    
     .p-datatable {
+      .p-datatable-table {
+        border-collapse: collapse;
+      }
+      
       .p-datatable-thead > tr > th {
-        background: #fafafa;
+        background: $white;
         color: $dark-text;
-        text-align: center;
-        padding: 15px 10px;
-        font-size: 0.85rem;
+        font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        border-bottom: 2px solid #eee;
+        font-size: 0.75rem;
+        padding: 18px 10px;
+        border: 1px solid $border-color;
+        text-align: center;
       }
 
       .p-datatable-tbody > tr {
         background: $white;
-        transition: background 0.2s;
-
-        &:hover {
-          background-color: #f9f9f9;
-        }
 
         & > td {
-          padding: 0; // Importante para que la celda-turno ocupe todo el espacio
-          border-bottom: 1px solid #f0f0f0;
-          height: 90px; // Altura fija para uniformidad
+          border: 1px solid $border-color;
+          padding: 0;
+          height: 110px;
           vertical-align: top;
+          
+          &:first-child {
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: $dark-text;
+            text-align: center;
+            vertical-align: middle;
+            padding: 15px;
+          }
         }
       }
     }
   }
 
-  // Tags de PrimeNG
+  // Limpiar estilos del PrimeNG Tag original
   .p-tag {
-    font-weight: 500;
+    background: transparent;
+    color: #2563eb;
+    font-weight: 800;
     font-size: 0.7rem;
-    padding: 4px 8px;
+    padding: 0;
+    text-transform: uppercase;
   }
 }
 
 /* --- CELDAS DE TURNO --- */
 .celda-turno {
   position: relative;
-  padding: 10px;
-  text-align: center;
-  vertical-align: middle;
+  height: 100%;
+  width: 100%;
+  padding: 8px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.2s;
+  display: flex;
+  flex-direction: column;
 
   .dia-mes {
-    display: block;
+    position: absolute;
+    top: 6px;
+    right: 8px;
     font-size: 0.7rem;
-    color: #bbb;
-    font-weight: bold;
-    margin-bottom: 8px;
+    color: #94a3b8;
+    font-weight: 600;
   }
 
+  /* Estado cuando hay un turno asignado */
   .tag-container {
+    background-color: #eff6ff;
+    border-left: 3px solid #3b82f6;
+    margin-top: 18px; // Dejar espacio para la fecha arriba
+    padding: 8px 10px;
     display: flex;
-    justify-content: center;
-    margin-bottom: 5px;
+    flex-direction: column;
+    align-items: flex-start;
+    width: calc(100% - 16px);
+    margin-left: 8px;
+    
+    .turn-details {
+      color: #1e293b;
+      margin-top: 4px;
+      
+      .time-range {
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+      .break-info {
+        color: #64748b;
+        font-size: 0.7rem;
+        font-weight: 500;
+      }
+    }
   }
 
+  /* Icono / Texto de Asignar al hacer hover */
   .add-icon {
-    color: #e0e0e0;
-    font-size: 1.2rem;
-    opacity: 0;
-    transition: opacity 0.2s;
-    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: transparent; // Oculto por defecto
+    text-transform: uppercase;
+    transition: color 0.2s;
+    letter-spacing: 0.5px;
+    
+    i { display: none; }
+    
+    &::after {
+      content: "ASIGNAR";
+    }
   }
 
   &:hover {
-    background-color: $lime-light;
-    .add-icon { opacity: 1; }
+    background-color: #f8fafc;
+    .add-icon {
+      color: #cbd5e1; // Aparece sutil en gris
+    }
   }
 
   &.fila-seleccionada {
-    background-color: $lime-hover !important;
-    box-shadow: inset 0 0 0 2px $lime-primary;
+    background-color: #f1f5f9;
+    box-shadow: inset 0 0 0 2px #60a5fa;
   }
 }
 
-/* --- BOTONES --- */
+/* --- BOTONES INFERIORES --- */
 .acciones-container {
   display: flex;
-  justify-content: center;
-  gap: 15px;
-  padding: 25px;
-}
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 15px 20px;
+  background: $white;
+  border-top: 1px solid $border-color;
 
-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.1s, background 0.2s;
+  button {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 20px;
+    border-radius: 2px;
+    border: none;
+    font-weight: 800;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    
+    i { display: none; } // Ocultar iconos como en el mock
 
-  &:active { transform: scale(0.96); }
-  &:disabled { 
-    filter: grayscale(1); 
-    opacity: 0.5; 
-    cursor: not-allowed;
+    &.btn-guardar-verde { 
+      background: #059669; 
+      color: white; 
+    }
+    
+    &.btn-actualizar { 
+      background: #bfdbfe; 
+      color: white; 
+      // El mockup muestra el boton con texto blanco y fondo azul re-claro
+      &:disabled { background: #e2e8f0; color: #94a3b8; }
+    }
+    
+    &.btn-eliminar { 
+      background: #fca5a5; // Rosa
+      color: white; 
+      &:disabled { background: #f1f5f9; color: #cbd5e1; }
+    }
   }
-
-  &.btn-guardar-verde { background: $lime-primary; color: #1a1a1a; }
-  &.btn-actualizar    { background: #f4ff81; color: #1a1a1a; }
-  &.btn-eliminar      { background: $red-delete; color: $white; }
-  &.btn-cancelar      { background: #e0e0e0; color: #333; }
 }
 
-/* --- DIALOG / MODAL --- */
+/* --- MODAL CONFIRMACION --- */
 :host ::ng-deep .p-dialog {
   .p-dialog-header { border-bottom: none; }
   .p-dialog-footer { border-top: none; padding: 20px; }
@@ -246,37 +332,17 @@ button {
     justify-content: center;
     gap: 12px;
     width: 100%;
+    
+    button {
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      color: white;
+      
+      &.btn-cancelar { background: #94a3b8; }
+      &.btn-eliminar { background: #ef4444; }
+    }
   }
-}
-
-/* --- TOAST --- */
-.toast-success {
-  position: fixed;
-  bottom: 25px;
-  right: 25px;
-  background: #333;
-  color: $white;
-  padding: 15px 25px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  z-index: 9999;
-  animation: slideIn 0.3s ease;
-
-  i { color: $lime-primary; font-size: 1.2rem; }
-}
-
-.toast-mensaje {
-    animation: slideIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-    display: flex;
-    align-items: center;
-    min-width: 300px;
-    font-weight: 500;
-}
-
-@keyframes slideIn {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
 }

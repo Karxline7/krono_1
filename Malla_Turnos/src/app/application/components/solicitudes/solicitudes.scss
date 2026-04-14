@@ -1,176 +1,178 @@
-@use 'styles/variables' as *;
-@use 'styles/mixins' as *;
+$dark-text: #1e293b;
+$gray-text: #64748b;
+$bg-main: #f8fafc;
+$border-color: #e2e8f0;
+$white: #ffffff;
 
-.contenedor-solicitudes {
-  max-width: 1000px;
-  margin: 20px auto;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: white;
-  border-radius: $radius-lg;
-  padding: 0;
-  box-shadow: $shadow-soft;
-  overflow: hidden;
-}
+.main-container {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  padding: 30px;
+  background-color: $bg-main;
+  min-height: 100vh;
 
-.header-solicitudes {
-  padding: 20px;
-  border-bottom: 2px solid $bg-main;
-  
-  h1 {
-    text-align: center;
-    font-size: 24px;
-    margin: 0;
-    color: $dark-text;
+  .top-header {
+    margin-bottom: 25px;
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: $dark-text;
+      margin: 0;
+      letter-spacing: -0.5px;
+      text-align: left;
+    }
   }
 }
 
 .panel-solicitudes {
   display: flex;
   min-height: 500px;
+  background: white;
+  border-radius: 2px;
+  border: 1px solid $border-color;
 }
 
 /* Barra Lateral */
 .sidebar-usuarios {
-  width: 300px;
+  width: 330px;
   border-right: 1px solid $border-color;
-  background: #fafafa;
+  background: $white;
   display: flex;
   flex-direction: column;
 }
 
 .logo-container {
-  padding: 20px;
+  padding: 30px 20px;
   text-align: center;
   border-bottom: 1px solid $border-color;
+  background: #f8fafc;
   
-  .logo-img {
-    width: 100%;
-    max-width: 150px;
+  .data-center-text {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
+}
+
+.lista-usuarios {
+  overflow-y: auto;
 }
 
 .usuario-item {
   display: flex;
   align-items: center;
-  padding: 15px 20px;
-  border-bottom: 1px solid #eee;
+  padding: 20px 25px;
+  border-bottom: 1px solid #f8fafc;
   cursor: pointer;
   transition: background 0.2s;
+  background: #fdfdfd;
 
-  &:hover { background: white; }
+  &:hover { background: #f8fafc; }
   &.seleccionado {
-    background: $blue-active;
-    border-right: 4px solid $blue-primary;
+    background: #f0f9ff;
+    border-left: 3px solid #2563eb;
+    margin-left: -3px; // Fix padding offset
   }
 
   .avatar {
-    width: 40px;
-    height: 40px;
-    background: $lime-light;
-    border: 1px solid $lime-primary;
-    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    background: #e2e8f0;
+    border-radius: 2px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 12px;
-    font-weight: bold;
-    color: $dark-text;
+    margin-right: 15px;
+    font-weight: 800;
+    font-size: 0.6rem;
+    color: #475569;
   }
 
   .info {
-    .nombre { display: block; font-weight: 600; font-size: 14px; color: $dark-text; }
-    .cargo { font-size: 12px; color: $gray-text; }
+    .nombre { display: block; font-weight: 800; font-size: 0.8rem; color: $dark-text; text-transform: uppercase; }
+    .cargo { font-size: 0.65rem; color: #94a3b8; font-weight: 700; margin-top: 4px; display: block; text-transform: uppercase; }
   }
 }
 
 /* Lado Derecho */
 .detalle-solicitud {
   flex: 1;
-  padding: 40px;
+  padding: 40px 50px;
   display: flex;
   flex-direction: column;
-  gap: 25px;
   background: white;
 
   .usuario-perfil {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+    position: relative;
+    margin-bottom: 15px;
 
     .avatar-grande {
-      width: 60px;
-      height: 60px;
-      background: $lime-light;
-      border: 2px solid $lime-primary;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 15px;
-      font-size: 24px;
-      font-weight: bold;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 5px;
     }
 
     .perfil-info {
-      .nombre { font-size: 1.25rem; font-weight: 700; color: $dark-text; }
-      .cargo { color: $gray-text; font-size: 0.9rem; }
+      .nombre { font-size: 1.3rem; font-weight: 900; color: #0f172a; text-transform: uppercase; margin-bottom: 4px; }
+      .cargo { color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
     }
   }
 
-  .caja-titulo, .caja-mensaje .texto-mensaje {
-    background: white;
-    border: 1px solid $border-color;
-    border-radius: $radius-md;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  }
-
   .caja-titulo {
-    h2 { margin: 0; text-align: center; font-size: 1.5rem; color: $dark-text; }
+    h2 { margin: 0; font-size: 1.6rem; font-weight: 900; color: #2563eb; text-transform: uppercase; letter-spacing: -0.5px; margin-bottom: 40px; }
   }
 
   .caja-mensaje {
     label {
       display: block;
       margin-bottom: 12px;
-      font-weight: 600;
-      color: $dark-text;
+      font-weight: 800;
+      font-size: 0.75rem;
+      color: #64748b;
+      text-transform: uppercase;
     }
     
     .texto-mensaje {
-      min-height: 150px;
-      font-size: 0.95rem;
+      min-height: 120px;
+      font-size: 0.9rem;
       line-height: 1.6;
-      color: #444;
-      background: #fbfbfb;
+      color: #334155;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 2px;
+      padding: 20px;
     }
   }
 
   /* Botones */
   .botones-accion {
     display: flex;
-    justify-content: center;
-    gap: 30px;
+    justify-content: flex-end;
+    gap: 15px;
     margin-top: auto;
-    padding-top: 30px;
+    padding-top: 40px;
 
     button {
-      @include button-base;
-      padding: 12px 60px;
-      border-radius: 30px;
-      font-size: 1.1rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: 12px 25px;
+      border-radius: 2px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      color: white;
 
       &.btn-rechazar {
-        background-color: #ff9a8d;
-        color: #b91c1c;
-        &:hover { background: #fee2e2; }
+        background-color: #dc2626;
+        &:hover { background: #b91c1c; }
       }
 
       &.btn-aceptar {
-        background-color: $lime-primary;
-        color: #1a1a1a;
-        &:hover { background: $lime-light; }
+        background-color: #059669;
+        &:hover { background: #047857; }
       }
     }
   }
@@ -181,7 +183,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $gray-text;
-  font-style: italic;
-  font-size: 1.2rem;
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 1rem;
 }
