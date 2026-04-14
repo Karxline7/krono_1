@@ -1,156 +1,227 @@
-/* Centrado absoluto en la pantalla */
-body, html {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    justify-content: center; /* Centrado horizontal */
-    align-items: center;     /* Centrado vertical */
-    background-color: #f0f2f5;
-    font-family: Arial, sans-serif;
+$dark-text: #1e293b;
+$gray-text: #64748b;
+$bg-main: #f8fafc;
+$border-color: #e2e8f0;
+
+.horario-user-page {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  padding: 30px;
+  background-color: $bg-main;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.main-container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-/* Tarjeta Principal */
 .turnos-card {
-    background: #fff;
-    border: 1.5px solid #000;
-    border-radius: 40px;
-    display: flex;
-    width: 950px;
-    padding: 40px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  background: white;
+  border: 1px solid $border-color;
+  border-radius: 2px;
+  display: flex;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 550px;
 }
 
 /* Sidebar del Perfil */
 .perfil-sidebar {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-right: 1px solid #e0e0e0;
-    padding-right: 20px;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid $border-color;
+  padding: 40px 20px;
+  text-align: center;
+  position: relative;
 }
 
 .avatar-verde {
-    width: 120px;
-    height: 120px;
-    background-color: #90ee90;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
+  width: 100px;
+  height: 100px;
+  background-color: #ebfbf5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+
+  svg { width: 50px; fill: #059669; }
 }
 
-.avatar-verde svg { width: 70px; fill: #3b7d3b; }
+.nombre { 
+  margin: 0 0 10px 0; 
+  font-size: 1.15rem; 
+  font-weight: 900; 
+  color: #0f172a;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
 
-.nombre { margin: 10px 0 5px; font-size: 1.3rem; font-weight: bold; }
-.cargo { margin: 0; color: #5f6368; font-size: 1rem; }
+.cargo { 
+  margin: 0; 
+  color: #64748b; 
+  font-size: 0.75rem; 
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.watermark-role {
+  margin-top: 50px;
+  color: #e2e8f0;
+  font-weight: 900;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+}
 
 /* Contenedor de Horarios */
 .horario-container {
-    flex: 4;
-    padding-left: 30px;
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
 }
 
 .header-horario-user {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
 
-    .titulo-seccion {
-        margin: 0;
-        font-size: 2rem;
-        font-weight: bold;
-    }
+  .titulo-seccion {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #0f172a;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+  }
 
-    .btn-descargar-horario {
-        background-color: #4ebf7b;
-        color: white;
-        padding: 8px 16px;
-        font-size: 0.9rem;
-        font-weight: bold;
-        border-radius: 12px;
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: all 0.2s ease;
+  .btn-descargar-horario {
+    background-color: #0f172a;
+    color: white;
+    padding: 12px 20px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    border-radius: 2px;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
 
-        &:hover {
-            background-color: #43a86b;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 10px rgba(0,0,0,0.15);
-        }
-
-        &:active {
-            transform: translateY(0);
-        }
-    }
+    &:hover { background-color: #1e293b; }
+  }
 }
 
 .grilla-horario {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    border: 1px solid #000;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  border: 1px solid $border-color;
+  border-radius: 2px;
 }
 
-/* Celdas de días */
+/* Header de la grilla */
+.grilla-header {
+  display: flex;
+  border-bottom: 1px solid $border-color;
+  background: white;
+}
+
 .dia-label {
-    text-align: center;
-    font-weight: bold;
-    padding: 10px 5px;
-    font-size: 0.85rem;
-    border-right: 1px solid #000;
-    border-bottom: 1px solid #000;
+  flex: 1;
+  text-align: center;
+  padding: 15px 5px;
+  border-right: 1px solid $border-color;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &:last-child { border-right: none; }
+
+  .dia-nombre {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+  }
+  .dia-fecha {
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: #0f172a;
+  }
 }
 
-.dia-label:last-child { border-right: none; }
+/* Cuerpo de la grilla */
+.grilla-body {
+  display: flex;
+  flex: 1;
+  background: #f8fafc;
+}
 
-/* Columnas de datos */
 .columna {
-    min-height: 220px;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    color: #fff;
-    font-size: 0.75rem;
-    border-right: 1px solid #000;
-}
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  border-right: 1px solid $border-color;
+  background: white;
 
-.columna:last-child { border-right: none; }
+  &:last-child { border-right: none; }
+}
 
 /* Estados */
 .descanso {
-    background-color: #90ee90;
-    justify-content: center;
-    font-weight: bold;
+  background-color: #f8fafc;
+  justify-content: center;
+  align-items: center;
+
+  .descanso-text {
+    font-weight: 800;
+    color: #cbd5e1;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+  }
 }
 
 .trabajo {
-    background-color: #9494f0;
+  padding: 30px 10px;
+  justify-content: space-between;
 }
 
 .bloque-hora {
-    padding: 15px 0;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #0f172a;
 }
 
 .bloque-romper {
-    background-color: #0000ff;
-    padding: 6px 0;
-    font-weight: bold;
-    font-size: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  .receso-badge {
+    background: #ebfbf5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+    border-radius: 2px;
+    padding: 3px 12px;
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .receso-time {
+    color: #059669;
+    font-weight: 800;
+    font-size: 0.75rem;
+  }
+}
+
+.footer-note {
+  margin-top: 25px;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-style: italic;
+  font-weight: 500;
 }

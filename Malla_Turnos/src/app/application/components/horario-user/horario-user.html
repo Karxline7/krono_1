@@ -1,43 +1,53 @@
 <app-navbar-user></app-navbar-user>
 
-<div class="main-container">
+<div class="horario-user-page">
     <section class="turnos-card">
-        <div class="perfil-sidebar">
+        <aside class="perfil-sidebar">
             <div class="avatar-verde">
                 <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
             </div>
             <h3 class="nombre">{{ nombreUsuario }}</h3>
             <p class="cargo">{{ cargoUsuario }}</p>
-        </div>
+            <div class="watermark-role">DATACENTER SAS</div>
+        </aside>
 
         <div class="horario-container">
-            <div class="header-horario-user">
-                <h2 class="titulo-seccion">Turnos</h2>
+            <header class="header-horario-user">
+                <h2 class="titulo-seccion">CRONOGRAMA DE TURNOS</h2>
                 <button class="btn-descargar-horario" (click)="descargarReporte()">
-                    <i class="pi pi-file-excel"></i> Descargar
+                    EXPORTAR SEMANA (EXCEL)
                 </button>
-            </div>
+            </header>
+            
             <div class="grilla-horario">
-                <!-- Etiquetas de día generadas dinámicamente -->
-                <div class="dia-label" *ngFor="let dia of diasTexto">
-                    {{ dia.nombre }}<br>
-                    <span style="font-size: 0.7em; font-weight: normal; opacity: 0.8">{{ dia.fecha }}</span>
+                <!-- 7 columns container -->
+                <div class="grilla-header">
+                    <div class="dia-label" *ngFor="let dia of diasTexto">
+                         <span class="dia-nombre">{{ dia.nombre }}</span>
+                         <span class="dia-fecha">{{ dia.fecha }}</span>
+                    </div>
                 </div>
 
-                <!-- Columnas de trabajo o descanso generadas dinámicamente -->
-                <ng-container *ngFor="let asig of misAsignacionesSemana()">
-                    <div class="columna descanso" *ngIf="asig.esDescanso">
-                        Descanso
-                    </div>
-
-                    <div class="columna trabajo" *ngIf="!asig.esDescanso">
-                        <div class="bloque-hora" style="margin-bottom: 5px;">{{ asig.horaInicio }}</div>
-                        <div class="bloque-romper" *ngIf="asig.horabreak || asig.horaalmuerzo" style="font-size: 0.75em; padding: 4px; border-radius: 4px;">
-                            {{ asig.horabreak ? asig.horabreak : asig.horaalmuerzo }}|{{ asig.horaalmuerzo ? asig.horaalmuerzo : asig.horabreak }}
+                <div class="grilla-body">
+                    <ng-container *ngFor="let asig of misAsignacionesSemana()">
+                        <div class="columna descanso" *ngIf="asig.esDescanso">
+                            <span class="descanso-text">DESCANSO</span>
                         </div>
-                        <div class="bloque-hora" style="margin-top: 5px;">{{ asig.horaFin }}</div>
-                    </div>
-                </ng-container>
+
+                        <div class="columna trabajo" *ngIf="!asig.esDescanso">
+                            <div class="bloque-hora inicio">{{ asig.horaInicio }}</div>
+                            <div class="bloque-romper" *ngIf="asig.horabreak || asig.horaalmuerzo">
+                                <span class="receso-badge">RECESO</span>
+                                <span class="receso-time">{{ asig.horabreak ? asig.horabreak : asig.horaalmuerzo }} | {{ asig.horaalmuerzo ? asig.horaalmuerzo : asig.horabreak }}</span>
+                            </div>
+                            <div class="bloque-hora fin">{{ asig.horaFin }}</div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            
+            <div class="footer-note">
+                * Los horarios están sujetos a cambios según la planeación operativa de DataCenter SAS.
             </div>
         </div>
     </section>

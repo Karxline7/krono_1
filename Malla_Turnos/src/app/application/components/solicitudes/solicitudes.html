@@ -1,25 +1,24 @@
 <app-navbar></app-navbar>
 
-<section class="contenedor-solicitudes">
-    <header class="header-solicitudes">
-        <h1>Solicitudes</h1>
+<section class="main-container">
+    <header class="top-header">
+        <h1>ADMINISTRACIÓN DE SOLICITUDES</h1>
     </header>
 
     <main class="panel-solicitudes">
         <aside class="sidebar-usuarios">
             <div class="logo-container">
-                <img src="assets/Logo_Data_Center.png" alt="Data Center Colombia" class="logo-img">
+                <div class="data-center-text">DATA CENTER COLOMBIA</div>
             </div>
             <div class="lista-usuarios">
                 <div *ngFor="let solicitud of solicitudes()" 
                      class="usuario-item" 
                      [class.seleccionado]="solicitudSeleccionada?.id === solicitud.id"
                      (click)="seleccionarSolicitud(solicitud)">
-                    <div class="avatar">📝</div>
+                    <div class="avatar">DOC</div>
                     <div class="info">
                         <span class="nombre">{{ solicitud.nombreTipoSolicitud }}</span>
-                        <!-- Visualizamos el ID de la asignacion porque no hay un Usuario completo en el DTO sin llamar extra APIs -->
-                        <span class="cargo">Asig. ID: {{ solicitud.asignacionTurnoId }} | Est: {{ solicitud.estado }}</span>
+                        <span class="cargo">ID ASIG: {{ solicitud.asignacionTurnoId }} | {{ solicitud.estado }}</span>
                     </div>
                 </div>
             </div>
@@ -27,10 +26,10 @@
 
         <article class="detalle-solicitud" *ngIf="solicitudSeleccionada; else sinSeleccion">
             <div class="usuario-perfil">
-                <div class="avatar-grande">📝</div>
+                <div class="avatar-grande">DOC</div>
                 <div class="perfil-info">
-                    <div class="nombre">Asignación de Turno #{{ solicitudSeleccionada.asignacionTurnoId }}</div>
-                    <div class="cargo">Estado: {{ solicitudSeleccionada.estado }}</div>
+                    <div class="nombre">ASIGNACIÓN DE TURNO #{{ solicitudSeleccionada.asignacionTurnoId }}</div>
+                    <div class="cargo">ESTADO ACTUAL: {{ solicitudSeleccionada.estado }}</div>
                 </div>
             </div>
 
@@ -39,15 +38,15 @@
             </div>
 
             <div class="caja-mensaje">
-                <label>Motivo de la solicitud</label>
+                <label>MOTIVO DE LA SOLICITUD</label>
                 <div class="texto-mensaje">
                     {{ solicitudSeleccionada.motivoSolicitud }}
                 </div>
             </div>
 
-            <div class="botones-accion gap-2">
-                <p-button label="Denegar" styleClass="btn-rechazar" severity="danger" (onClick)="rechazar()"></p-button>
-                <p-button label="Aprobar" styleClass="btn-aceptar" severity="success" (onClick)="aceptar()"></p-button>
+            <div class="botones-accion">
+                <button class="btn-rechazar" (click)="rechazar()">DENEGAR SOLICITUD</button>
+                <button class="btn-aceptar" (click)="aceptar()">APROBAR SOLICITUD</button>
             </div>
         </article>
 
