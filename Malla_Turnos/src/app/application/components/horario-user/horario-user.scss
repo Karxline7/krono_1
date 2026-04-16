@@ -211,10 +211,17 @@ $border-color: #e2e8f0;
     text-transform: uppercase;
   }
 
+  .receso-time-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
   .receso-time {
     color: #059669;
     font-weight: 800;
-    font-size: 0.75rem;
+    font-size: 0.70rem;
   }
 }
 
