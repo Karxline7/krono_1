@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    # Vincula el servicio directamente con tu imagen seleccionada
+    image: krono_back:latest
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      - JAVA_OPTS=
+    networks:
+      - krono_net
+
+  frontend:
+    # Vincula el servicio directamente con tu imagen seleccionada
+    image: krono_front:latest
+    build:
+      context: ./Malla_Turnos
+    ports:
+      - "4200:4200"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    networks:
+      - krono_net
+
+networks:
+  krono_net:
+    driver: bridge
