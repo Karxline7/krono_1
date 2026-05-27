@@ -1,17 +1,17 @@
 package datacenter.mallaturnos.application.UseCase.asignacion;
 
-import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
-import com.datacenter.mallaturnos.application.Dto.AsignacionTurno.AsignacionTurnoDto;
-import com.datacenter.mallaturnos.application.UseCase.asignacion.ListarAsignacionesPorFechaUseCase;
-import com.datacenter.mallaturnos.infrastructure.mappers.AsignacionTurnoMapper;
-import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPort;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.datacenter.krono_12.application.Dto.AsignacionTurno.AsignacionTurnoDto;
+import com.datacenter.krono_12.application.UseCase.asignacion.ListarAsignacionesPorFechaUseCase;
+import com.datacenter.krono_12.domain.model.AsignacionTurno;
+import com.datacenter.krono_12.infrastructure.mappers.AsignacionTurnoMapper;
+import com.datacenter.krono_12.infrastructure.port.out.AsignacionRepositoryPort;
 
 import java.time.LocalDate;
 import java.util.List;

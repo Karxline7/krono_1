@@ -1,0 +1,37 @@
+package com.datacenter.krono_12.application.UseCase.Usuario;
+
+import org.springframework.stereotype.Service;
+
+import com.datacenter.krono_12.infrastructure.port.in.Usuario.EliminarUsuarioUseCasePort;
+import com.datacenter.krono_12.infrastructure.port.out.UsuarioRepositoryPort;
+
+/**
+ * Use Case: Eliminar un usuario (hard delete)
+ */
+@Service
+public class EliminarUsuarioUseCase implements EliminarUsuarioUseCasePort {
+
+    private final UsuarioRepositoryPort usuarioRepository;
+
+    public EliminarUsuarioUseCase(UsuarioRepositoryPort usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
+
+    /**
+     * Elimina un usuario de la BD (hard delete)
+     * @param id ID del usuario a eliminar
+     * @return true si se eliminó exitosamente
+     */
+    public boolean eliminarUsuario(Long id) {
+        
+        // Verificar que el usuario existe
+        if (!usuarioRepository.findById(id).isPresent()) {
+            throw new IllegalArgumentException("Usuario no encontrado con ID: " + id);
+        }
+
+        // Eliminar usuario
+        usuarioRepository.delete(id);
+        
+        return true;
+    }
+}

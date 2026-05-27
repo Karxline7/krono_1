@@ -1,17 +1,17 @@
 package datacenter.mallaturnos.application.UseCase.tiposolicitud;
 
-import com.datacenter.mallaturnos.application.Dto.TipoSolicitud.TipoSolicitudDto;
-import com.datacenter.mallaturnos.application.UseCase.tiposolicitud.CrearTipoSolicitudUseCase;
-import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
-import com.datacenter.mallaturnos.infrastructure.mappers.TipoSolicitudMapper;
-import com.datacenter.mallaturnos.infrastructure.port.out.TipoSolicitudRepositoryPort;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.datacenter.krono_12.application.Dto.TipoSolicitud.TipoSolicitudDto;
+import com.datacenter.krono_12.application.UseCase.tiposolicitud.CrearTipoSolicitudUseCase;
+import com.datacenter.krono_12.domain.model.TipoSolicitud;
+import com.datacenter.krono_12.infrastructure.mappers.TipoSolicitudMapper;
+import com.datacenter.krono_12.infrastructure.port.out.TipoSolicitudRepositoryPort;
 
 import java.util.Optional;
 

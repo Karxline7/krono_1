@@ -1,15 +1,15 @@
 package datacenter.mallaturnos.application.UseCase.tiposolicitud;
 
-import com.datacenter.mallaturnos.application.UseCase.tiposolicitud.EliminarTipoSolicitudUseCase;
-import com.datacenter.mallaturnos.domain.model.TipoSolicitud;
-import com.datacenter.mallaturnos.infrastructure.port.out.TipoSolicitudRepositoryPort;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.datacenter.krono_12.application.UseCase.tiposolicitud.EliminarTipoSolicitudUseCase;
+import com.datacenter.krono_12.domain.model.TipoSolicitud;
+import com.datacenter.krono_12.infrastructure.port.out.TipoSolicitudRepositoryPort;
 
 import java.util.Optional;
 

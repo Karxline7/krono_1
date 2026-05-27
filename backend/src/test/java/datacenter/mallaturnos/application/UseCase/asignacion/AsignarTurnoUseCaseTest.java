@@ -1,20 +1,20 @@
 package datacenter.mallaturnos.application.UseCase.asignacion;
 
-import com.datacenter.mallaturnos.application.Dto.AsignacionTurno.AsignacionTurnoDto;
-import com.datacenter.mallaturnos.application.UseCase.asignacion.AsignarTurnoUseCase;
-import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
-import com.datacenter.mallaturnos.domain.model.Turno;
-import com.datacenter.mallaturnos.domain.model.Usuario;
-import com.datacenter.mallaturnos.infrastructure.mappers.AsignacionTurnoMapper;
-import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPort;
-import com.datacenter.mallaturnos.infrastructure.port.out.TurnoRepositoryPort;
-import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.datacenter.krono_12.application.Dto.AsignacionTurno.AsignacionTurnoDto;
+import com.datacenter.krono_12.application.UseCase.asignacion.AsignarTurnoUseCase;
+import com.datacenter.krono_12.domain.model.AsignacionTurno;
+import com.datacenter.krono_12.domain.model.Turno;
+import com.datacenter.krono_12.domain.model.Usuario;
+import com.datacenter.krono_12.infrastructure.mappers.AsignacionTurnoMapper;
+import com.datacenter.krono_12.infrastructure.port.out.AsignacionRepositoryPort;
+import com.datacenter.krono_12.infrastructure.port.out.TurnoRepositoryPort;
+import com.datacenter.krono_12.infrastructure.port.out.UsuarioRepositoryPort;
 
 import java.time.LocalDate;
 import java.util.Optional;

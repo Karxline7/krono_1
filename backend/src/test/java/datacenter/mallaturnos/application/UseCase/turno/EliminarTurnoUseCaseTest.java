@@ -1,15 +1,15 @@
 package datacenter.mallaturnos.application.UseCase.turno;
 
-import com.datacenter.mallaturnos.application.UseCase.turno.EliminarTurnoUseCase;
-import com.datacenter.mallaturnos.domain.model.Turno;
-import com.datacenter.mallaturnos.infrastructure.port.out.TurnoRepositoryPort;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.datacenter.krono_12.application.UseCase.turno.EliminarTurnoUseCase;
+import com.datacenter.krono_12.domain.model.Turno;
+import com.datacenter.krono_12.infrastructure.port.out.TurnoRepositoryPort;
 
 import java.util.Optional;
 

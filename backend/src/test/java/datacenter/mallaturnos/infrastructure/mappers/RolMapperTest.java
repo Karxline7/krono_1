@@ -1,10 +1,10 @@
 package datacenter.mallaturnos.infrastructure.mappers;
 
-import com.datacenter.mallaturnos.application.Dto.Rol.RolDto;
-import com.datacenter.mallaturnos.domain.model.Rol;
-import com.datacenter.mallaturnos.infrastructure.mappers.RolMapper;
-
 import org.junit.jupiter.api.Test;
+
+import com.datacenter.krono_12.application.Dto.Rol.RolDto;
+import com.datacenter.krono_12.domain.model.Rol;
+import com.datacenter.krono_12.infrastructure.mappers.RolMapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 

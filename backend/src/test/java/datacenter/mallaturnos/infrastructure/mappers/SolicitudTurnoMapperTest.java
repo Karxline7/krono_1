@@ -1,11 +1,11 @@
 package datacenter.mallaturnos.infrastructure.mappers;
 
-import com.datacenter.mallaturnos.application.Dto.SolicitudTurno.SolicitudTurnoDto;
-import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
-import com.datacenter.mallaturnos.infrastructure.mappers.SolicitudTurnoMapper;
-import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
-
 import org.junit.jupiter.api.Test;
+
+import com.datacenter.krono_12.application.Dto.SolicitudTurno.SolicitudTurnoDto;
+import com.datacenter.krono_12.domain.model.EstadoSolicitud;
+import com.datacenter.krono_12.domain.model.SolicitudTurno;
+import com.datacenter.krono_12.infrastructure.mappers.SolicitudTurnoMapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 

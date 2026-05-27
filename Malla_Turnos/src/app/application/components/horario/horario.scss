@@ -67,7 +67,7 @@ $white: #ffffff;
 
     // Pseudo labels since HTML doesn't have them
     position: relative;
-    
+
     // Trick to visually add labels before selects without HTML changes
     & > select:nth-child(1)::before {
         content: "FILTRAR POR TURNO";
@@ -83,7 +83,7 @@ $white: #ffffff;
       min-width: 220px;
       background: white;
       outline: none;
-      
+
       &:focus {
         border-color: #3b82f6;
       }
@@ -122,7 +122,7 @@ $white: #ffffff;
       padding: 10px;
       font-size: 0.85rem;
     }
-    
+
     button {
       padding: 10px 20px;
       border-radius: 4px;
@@ -146,12 +146,12 @@ $white: #ffffff;
     background: $white;
     border: 1px solid $border-color;
     border-radius: 2px;
-    
+
     .p-datatable {
       .p-datatable-table {
         border-collapse: collapse;
       }
-      
+
       .p-datatable-thead > tr > th {
         background: $white;
         color: $dark-text;
@@ -171,7 +171,7 @@ $white: #ffffff;
           padding: 0;
           height: 110px;
           vertical-align: top;
-          
+
           &:first-child {
             font-weight: 800;
             font-size: 0.75rem;
@@ -205,11 +205,7 @@ $white: #ffffff;
   padding: 8px;
   cursor: pointer;
   transition: background 0.2s;
-<<<<<<< HEAD
- 
-=======
 
->>>>>>> b031da347480237694bd5238fb38b6e4291db7c4
   .dia-mes {
     position: absolute;
     top: 6px;
@@ -230,11 +226,11 @@ $white: #ffffff;
     align-items: flex-start;
     width: calc(100% - 16px);
     margin-left: 8px;
-    
+
     .turn-details {
       color: #1e293b;
       margin-top: 4px;
-      
+
       .time-range {
         font-size: 0.75rem;
         font-weight: 700;
@@ -260,9 +256,9 @@ $white: #ffffff;
     text-transform: uppercase;
     transition: color 0.2s;
     letter-spacing: 0.5px;
-    
+
     i { display: none; }
-    
+
     &::after {
       content: "ASIGNAR";
     }
@@ -301,24 +297,24 @@ $white: #ffffff;
     text-transform: uppercase;
     cursor: pointer;
     transition: opacity 0.2s;
-    
+
     i { display: none; } // Ocultar iconos como en el mock
 
-    &.btn-guardar-verde { 
-      background: #059669; 
-      color: white; 
+    &.btn-guardar-verde {
+      background: #059669;
+      color: white;
     }
-    
-    &.btn-actualizar { 
-      background: #bfdbfe; 
-      color: white; 
+
+    &.btn-actualizar {
+      background: #bfdbfe;
+      color: white;
       // El mockup muestra el boton con texto blanco y fondo azul re-claro
       &:disabled { background: #e2e8f0; color: #94a3b8; }
     }
-    
-    &.btn-eliminar { 
+
+    &.btn-eliminar {
       background: #fca5a5; // Rosa
-      color: white; 
+      color: white;
       &:disabled { background: #f1f5f9; color: #cbd5e1; }
     }
   }
@@ -328,13 +324,13 @@ $white: #ffffff;
 :host ::ng-deep .p-dialog {
   .p-dialog-header { border-bottom: none; }
   .p-dialog-footer { border-top: none; padding: 20px; }
-  
+
   .modal-actions {
     display: flex;
     justify-content: center;
     gap: 12px;
     width: 100%;
-    
+
     button {
       padding: 10px 20px;
       border-radius: 4px;
@@ -342,7 +338,7 @@ $white: #ffffff;
       border: none;
       cursor: pointer;
       color: white;
-      
+
       &.btn-cancelar { background: #94a3b8; }
       &.btn-eliminar { background: #ef4444; }
     }

@@ -1,11 +1,11 @@
 package datacenter.mallaturnos.infrastructure.controller;
 
-import com.datacenter.mallaturnos.application.Dto.Usuario.UsuarioDto;
-import com.datacenter.mallaturnos.application.Dto.Usuario.CrearUsuarioDto;
-import com.datacenter.mallaturnos.application.Dto.Usuario.EditarUsuarioDto;
-import com.datacenter.mallaturnos.application.Dto.Usuario.Request.CrearUsuarioRequest;
-import com.datacenter.mallaturnos.application.UseCase.Usuario.*;
-import com.datacenter.mallaturnos.infrastructure.controller.Usuario.UsuarioController;
+import com.datacenter.krono_12.application.Dto.Usuario.CrearUsuarioDto;
+import com.datacenter.krono_12.application.Dto.Usuario.EditarUsuarioDto;
+import com.datacenter.krono_12.application.Dto.Usuario.UsuarioDto;
+import com.datacenter.krono_12.application.Dto.Usuario.Request.CrearUsuarioRequest;
+import com.datacenter.krono_12.application.UseCase.Usuario.*;
+import com.datacenter.krono_12.infrastructure.controller.Usuario.UsuarioController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

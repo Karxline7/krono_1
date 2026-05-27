@@ -1,12 +1,5 @@
 package datacenter.mallaturnos.application.UseCase.Usuario;
 
-import com.datacenter.mallaturnos.application.Dto.Usuario.CrearUsuarioDto;
-import com.datacenter.mallaturnos.application.Dto.Usuario.UsuarioDto;
-import com.datacenter.mallaturnos.application.UseCase.Usuario.CrearUsuarioUseCase;
-import com.datacenter.mallaturnos.domain.model.Usuario;
-import com.datacenter.mallaturnos.infrastructure.mappers.UsuarioMapper;
-import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +7,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.datacenter.krono_12.application.Dto.Usuario.CrearUsuarioDto;
+import com.datacenter.krono_12.application.Dto.Usuario.UsuarioDto;
+import com.datacenter.krono_12.application.UseCase.Usuario.CrearUsuarioUseCase;
+import com.datacenter.krono_12.domain.model.Usuario;
+import com.datacenter.krono_12.infrastructure.mappers.UsuarioMapper;
+import com.datacenter.krono_12.infrastructure.port.out.UsuarioRepositoryPort;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

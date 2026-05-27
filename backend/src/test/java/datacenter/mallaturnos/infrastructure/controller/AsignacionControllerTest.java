@@ -1,10 +1,10 @@
 package datacenter.mallaturnos.infrastructure.controller;
 
-import com.datacenter.mallaturnos.application.Dto.AsignacionTurno.AsignacionTurnoDto;
-import com.datacenter.mallaturnos.application.Dto.Usuario.UsuarioDto;
-import com.datacenter.mallaturnos.application.UseCase.asignacion.*;
-import com.datacenter.mallaturnos.infrastructure.controller.Asignacion.AsignacionController;
-import com.datacenter.mallaturnos.application.Dto.AsignacionTurno.Request.AsignarTurnoRequest;
+import com.datacenter.krono_12.application.Dto.AsignacionTurno.AsignacionTurnoDto;
+import com.datacenter.krono_12.application.Dto.AsignacionTurno.Request.AsignarTurnoRequest;
+import com.datacenter.krono_12.application.Dto.Usuario.UsuarioDto;
+import com.datacenter.krono_12.application.UseCase.asignacion.*;
+import com.datacenter.krono_12.infrastructure.controller.Asignacion.AsignacionController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.BeforeEach;

@@ -13,12 +13,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.datacenter.mallaturnos.application.Dto.AsignacionTurno.AsignacionTurnoDto;
-import com.datacenter.mallaturnos.application.UseCase.excel.GenerarExcelAsignacionesUseCase;
-import com.datacenter.mallaturnos.infrastructure.port.out.TurnoRepositoryPort;
-import com.datacenter.mallaturnos.infrastructure.port.out.UsuarioRepositoryPort;
-import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPort;
-import com.datacenter.mallaturnos.infrastructure.port.out.ExcelGeneratorPort;
+import com.datacenter.krono_12.application.Dto.AsignacionTurno.AsignacionTurnoDto;
+import com.datacenter.krono_12.application.UseCase.excel.GenerarExcelAsignacionesUseCase;
+import com.datacenter.krono_12.infrastructure.port.out.AsignacionRepositoryPort;
+import com.datacenter.krono_12.infrastructure.port.out.ExcelGeneratorPort;
+import com.datacenter.krono_12.infrastructure.port.out.TurnoRepositoryPort;
+import com.datacenter.krono_12.infrastructure.port.out.UsuarioRepositoryPort;
 
 @ExtendWith(MockitoExtension.class)
 class GenerarExcelAsignacionesUseCaseTest {

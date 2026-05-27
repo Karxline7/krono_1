@@ -1,11 +1,11 @@
 package datacenter.mallaturnos.infrastructure.controller;
 
-import com.datacenter.mallaturnos.application.Dto.TipoSolicitud.TipoSolicitudDto;
-import com.datacenter.mallaturnos.application.Dto.TipoSolicitud.Request.CrearTipoSolicitudRequest;
-import com.datacenter.mallaturnos.application.Dto.TipoSolicitud.Request.EditarTipoSolicitudRequest;
-import com.datacenter.mallaturnos.application.UseCase.tiposolicitud.*;
-import com.datacenter.mallaturnos.infrastructure.controller.TipoSolicitud.TipoSolicitudController;
-import com.datacenter.mallaturnos.infrastructure.mappers.TipoSolicitudMapper;
+import com.datacenter.krono_12.application.Dto.TipoSolicitud.TipoSolicitudDto;
+import com.datacenter.krono_12.application.Dto.TipoSolicitud.Request.CrearTipoSolicitudRequest;
+import com.datacenter.krono_12.application.Dto.TipoSolicitud.Request.EditarTipoSolicitudRequest;
+import com.datacenter.krono_12.application.UseCase.tiposolicitud.*;
+import com.datacenter.krono_12.infrastructure.controller.TipoSolicitud.TipoSolicitudController;
+import com.datacenter.krono_12.infrastructure.mappers.TipoSolicitudMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,11 +1,11 @@
 package datacenter.mallaturnos.infrastructure.mappers;
 
 
-import com.datacenter.mallaturnos.application.Dto.AsignacionTurno.AsignacionTurnoDto;
-import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
-import com.datacenter.mallaturnos.infrastructure.mappers.AsignacionTurnoMapper;
-
 import org.junit.jupiter.api.Test;
+
+import com.datacenter.krono_12.application.Dto.AsignacionTurno.AsignacionTurnoDto;
+import com.datacenter.krono_12.domain.model.AsignacionTurno;
+import com.datacenter.krono_12.infrastructure.mappers.AsignacionTurnoMapper;
 
 import java.time.LocalDate;
 

@@ -1,15 +1,15 @@
 package datacenter.mallaturnos.application.UseCase.asignacion;
 
-import com.datacenter.mallaturnos.application.UseCase.asignacion.EliminarTurnoAsignadoUseCase;
-import com.datacenter.mallaturnos.domain.model.AsignacionTurno;
-import com.datacenter.mallaturnos.infrastructure.port.out.AsignacionRepositoryPort;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.datacenter.krono_12.application.UseCase.asignacion.EliminarTurnoAsignadoUseCase;
+import com.datacenter.krono_12.domain.model.AsignacionTurno;
+import com.datacenter.krono_12.infrastructure.port.out.AsignacionRepositoryPort;
 
 import java.util.Optional;
 

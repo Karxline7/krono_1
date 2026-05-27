@@ -1,17 +1,17 @@
 package datacenter.mallaturnos.application.UseCase.Rol;
 
-import com.datacenter.mallaturnos.application.Dto.Rol.RolDto;
-import com.datacenter.mallaturnos.application.UseCase.Rol.ListarRolesUseCase;
-import com.datacenter.mallaturnos.domain.model.Rol;
-import com.datacenter.mallaturnos.infrastructure.mappers.RolMapper;
-import com.datacenter.mallaturnos.infrastructure.port.out.RolRepositoryPort;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.datacenter.krono_12.application.Dto.Rol.RolDto;
+import com.datacenter.krono_12.application.UseCase.Rol.ListarRolesUseCase;
+import com.datacenter.krono_12.domain.model.Rol;
+import com.datacenter.krono_12.infrastructure.mappers.RolMapper;
+import com.datacenter.krono_12.infrastructure.port.out.RolRepositoryPort;
 
 import java.util.List;
 

@@ -1,14 +1,14 @@
 package datacenter.mallaturnos.application.UseCase.Solicitud;
 
-import com.datacenter.mallaturnos.application.UseCase.Solicitud.EliminarSolicitudUseCase;
-import com.datacenter.mallaturnos.infrastructure.port.out.SolicitudRepositoryPort;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.datacenter.krono_12.application.UseCase.Solicitud.EliminarSolicitudUseCase;
+import com.datacenter.krono_12.infrastructure.port.out.SolicitudRepositoryPort;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

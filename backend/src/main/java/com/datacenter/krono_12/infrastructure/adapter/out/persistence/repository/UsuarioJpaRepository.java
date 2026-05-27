@@ -1,0 +1,31 @@
+package com.datacenter.krono_12.infrastructure.adapter.out.persistence.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import com.datacenter.krono_12.infrastructure.adapter.out.persistence.entity.UsuarioJpaEntity;
+
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * Repository JPA para usuarios
+ */
+@Repository
+public interface UsuarioJpaRepository extends JpaRepository<UsuarioJpaEntity, Long> {
+
+    @Query("SELECT u FROM UsuarioJpaEntity u JOIN FETCH u.cargo")
+    List<UsuarioJpaEntity> findAllWithCargo();
+    
+    Optional<UsuarioJpaEntity> findByNumeroDocumento(Long numeroDocumento);
+    
+    boolean existsByNumeroDocumento(Long numeroDocumento);
+    
+    List<UsuarioJpaEntity> findByAreaIdAndRolId(Long areaId, Long rolId);
+    
+    List<UsuarioJpaEntity> findByAreaId(Long areaId);
+
+    List<UsuarioJpaEntity> findByCargoId(Long cargoId);
+
+}

@@ -1,18 +1,18 @@
 package datacenter.mallaturnos.application.UseCase.Solicitud;
 
-import com.datacenter.mallaturnos.application.Dto.SolicitudTurno.SolicitudTurnoDto;
-import com.datacenter.mallaturnos.application.UseCase.Solicitud.DenegarSolicitudUseCase;
-import com.datacenter.mallaturnos.domain.model.SolicitudTurno;
-import com.datacenter.mallaturnos.domain.model.EstadoSolicitud;
-import com.datacenter.mallaturnos.infrastructure.mappers.SolicitudTurnoMapper;
-import com.datacenter.mallaturnos.infrastructure.port.out.SolicitudRepositoryPort;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.datacenter.krono_12.application.Dto.SolicitudTurno.SolicitudTurnoDto;
+import com.datacenter.krono_12.application.UseCase.Solicitud.DenegarSolicitudUseCase;
+import com.datacenter.krono_12.domain.model.EstadoSolicitud;
+import com.datacenter.krono_12.domain.model.SolicitudTurno;
+import com.datacenter.krono_12.infrastructure.mappers.SolicitudTurnoMapper;
+import com.datacenter.krono_12.infrastructure.port.out.SolicitudRepositoryPort;
 
 import java.util.Optional;
 

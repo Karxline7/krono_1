@@ -1,11 +1,11 @@
 package datacenter.mallaturnos.infrastructure.controller;
 
-import com.datacenter.mallaturnos.application.Dto.SolicitudTurno.SolicitudTurnoDto;
-import com.datacenter.mallaturnos.application.Dto.SolicitudTurno.Request.AprobarSolicitudRequest;
-import com.datacenter.mallaturnos.application.Dto.SolicitudTurno.Request.DenegarSolicitudRequest;
-import com.datacenter.mallaturnos.application.UseCase.Solicitud.*;
-import com.datacenter.mallaturnos.infrastructure.controller.Solicitud.SolicitudController;
-import com.datacenter.mallaturnos.infrastructure.mappers.SolicitudTurnoMapper;
+import com.datacenter.krono_12.application.Dto.SolicitudTurno.SolicitudTurnoDto;
+import com.datacenter.krono_12.application.Dto.SolicitudTurno.Request.AprobarSolicitudRequest;
+import com.datacenter.krono_12.application.Dto.SolicitudTurno.Request.DenegarSolicitudRequest;
+import com.datacenter.krono_12.application.UseCase.Solicitud.*;
+import com.datacenter.krono_12.infrastructure.controller.Solicitud.SolicitudController;
+import com.datacenter.krono_12.infrastructure.mappers.SolicitudTurnoMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

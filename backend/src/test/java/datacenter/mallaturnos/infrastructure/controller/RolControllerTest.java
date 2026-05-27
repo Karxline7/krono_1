@@ -1,10 +1,10 @@
 package datacenter.mallaturnos.infrastructure.controller;
 
-import com.datacenter.mallaturnos.application.Dto.Rol.CrearRolRequest;
-import com.datacenter.mallaturnos.application.Dto.Rol.EditarRolRequest;
-import com.datacenter.mallaturnos.application.Dto.Rol.RolDto;
-import com.datacenter.mallaturnos.application.UseCase.Rol.*;
-import com.datacenter.mallaturnos.infrastructure.controller.Rol.RolController;
+import com.datacenter.krono_12.application.Dto.Rol.CrearRolRequest;
+import com.datacenter.krono_12.application.Dto.Rol.EditarRolRequest;
+import com.datacenter.krono_12.application.Dto.Rol.RolDto;
+import com.datacenter.krono_12.application.UseCase.Rol.*;
+import com.datacenter.krono_12.infrastructure.controller.Rol.RolController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,14 +1,14 @@
 package datacenter.mallaturnos.infrastructure.mappers;
 
-import com.datacenter.mallaturnos.application.Dto.Usuario.UsuarioDto;
-import com.datacenter.mallaturnos.domain.model.Usuario;
-import com.datacenter.mallaturnos.infrastructure.adapter.out.persistence.repository.CargoJpaRepository;
-import com.datacenter.mallaturnos.infrastructure.mappers.UsuarioMapper;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import com.datacenter.krono_12.application.Dto.Usuario.UsuarioDto;
+import com.datacenter.krono_12.domain.model.Usuario;
+import com.datacenter.krono_12.infrastructure.adapter.out.persistence.repository.CargoJpaRepository;
+import com.datacenter.krono_12.infrastructure.mappers.UsuarioMapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
