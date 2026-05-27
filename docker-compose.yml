@@ -11,6 +11,9 @@ services:
     restart: unless-stopped
     environment:
       - JAVA_OPTS=
+    # Permite al contenedor ver el localhost de tu máquina física Windows
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - krono_net
 
