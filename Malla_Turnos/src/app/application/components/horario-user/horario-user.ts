@@ -30,7 +30,7 @@ interface DiaInfo {
   styleUrl: './horario-user.scss',
 })
 export class HorarioUser implements OnInit, OnDestroy {
-  private baseApiUrl = 'http://localhost:8081/api';
+  private baseApiUrl = 'http://localhost:8090/api';
 
   syncInterval: any;
 

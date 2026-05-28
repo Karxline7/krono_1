@@ -16,7 +16,7 @@ export interface Funcionario {
 
 @Injectable({ providedIn: 'root' })
 export class FuncionarioService {
-  private apiUrl = 'http://localhost:8081/api/usuarios';
+  private apiUrl = 'http://localhost:8090/api/usuarios';
 
   constructor(private http: HttpClient) {}
 

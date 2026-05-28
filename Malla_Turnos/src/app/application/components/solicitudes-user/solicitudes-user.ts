@@ -15,10 +15,10 @@ import { catchError } from 'rxjs/operators';
   styleUrl: './solicitudes-user.scss',
 })
 export class SolicitudesUser implements OnInit {
-  private apiUrl = 'http://localhost:8081/api/solicitudes';
-  private asignacionesUrl = 'http://localhost:8081/api/asignaciones';
-  private turnosUrl = 'http://localhost:8081/api/turnos';
-  private tiposSolicitudUrl = 'http://localhost:8081/api/tipos-solicitud';
+  private apiUrl = 'http://localhost:8090/api/solicitudes';
+  private asignacionesUrl = 'http://localhost:8090/api/asignaciones';
+  private turnosUrl = 'http://localhost:8090/api/turnos';
+  private tiposSolicitudUrl = 'http://localhost:8090/api/tipos-solicitud';
 
   // El usuario actual para el que se gestionan las solicitudes (Funcionario ID = 1)
   funcionarioId = 1;

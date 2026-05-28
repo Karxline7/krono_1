@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ReportesService {
-  private apiUrl = 'http://localhost:8081/api/excel';
+  private apiUrl = 'http://localhost:8090/api/excel';
 
   constructor(private http: HttpClient) {}
 

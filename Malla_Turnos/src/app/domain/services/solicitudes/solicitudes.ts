@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class Solicitudes {
 
-  private apiUrl = 'http://localhost:8081/api/tipos-solicitud'; // Cambia esto a tu URL real
+  private apiUrl = 'http://localhost:8090/api/tipos-solicitud'; // Cambia esto a tu URL real
   constructor(private http: HttpClient) {}
   usuario: any = {
   };

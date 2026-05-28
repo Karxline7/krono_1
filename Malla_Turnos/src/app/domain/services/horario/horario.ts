@@ -14,7 +14,7 @@ export interface Asignacion {
 })
 export class AsignacionService {
 
-  private apiUrl = 'http://localhost:8081/api/asignaciones';
+  private apiUrl = 'http://localhost:8090/api/asignaciones';
   
   constructor(private http: HttpClient) {}
 

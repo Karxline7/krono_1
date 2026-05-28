@@ -27,8 +27,8 @@ export interface SolicitudUI extends SolicitudTurnoDto {
 })
 export class Solicitudes implements OnInit, OnDestroy {
   
-  private apiUrl = 'http://localhost:8081/api/solicitudes';
-  private tiposUrl = 'http://localhost:8081/api/tipos-solicitud';
+  private apiUrl = 'http://localhost:8090/api/solicitudes';
+  private tiposUrl = 'http://localhost:8090/api/tipos-solicitud';
 
   syncInterval: any;
 
